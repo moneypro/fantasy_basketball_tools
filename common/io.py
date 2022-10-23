@@ -15,7 +15,7 @@ def find_credential_folder() -> str:
 def find_root_folder() -> str:
     curr_path = os.getcwd()
     directory = "fantasy_basketball_tools"
-    index = curr_path.find(directory)
+    index = curr_path.rfind(directory)
     if index == -1:
         raise Exception("Cannot find fatasy_basketball_tools")
     return curr_path[: index + len(directory)]
