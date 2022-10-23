@@ -36,6 +36,7 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: save secrets to files
       run: |
+        pwd
         echo "$EMAIL_ACCESS_KEY_ID" >> /home/runner/work/fantasy_basketball_tools/credentials/email_access_key_id.txt
         echo "$SECRET_ACCESS_KEY" >> /home/runner/work/fantasy_basketball_tools/credentials/email_secret_access_key.secret
         echo "$ESPN_S2" >> /home/runner/work/fantasy_basketball_tools/credentials/espn_s2.secret
