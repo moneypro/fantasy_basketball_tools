@@ -1,4 +1,5 @@
 import tabulate
+from IPython.display import HTML
 from espn_api.basketball import League
 
 from common.aws_email import send_email
@@ -7,7 +8,6 @@ from common.styling import get_table_css
 from common.week import Week
 from predict.internal.roster_week_predictor import RosterWeekPredictor
 from test_utils.create_league import create_league
-from IPython.display import HTML, display
 
 
 def get_tuple_average(tup):
@@ -53,6 +53,7 @@ def predict_all(week_index: int = 1):
     with open(get_match_up_output_html_path(league.league_id, week_index), 'w') as f:
         f.write(data)
     send_email("Week {} Outlook for League {}".format(week_index, league.league_id), data)
+
 
 if __name__ == '__main__':
     predict_all(2)
