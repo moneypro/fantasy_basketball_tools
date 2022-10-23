@@ -1,4 +1,5 @@
 import tabulate
+from espn_api.basketball import League
 
 from common.aws_email import send_email
 from common.io import get_match_up_output_html_path
@@ -11,6 +12,19 @@ from IPython.display import HTML, display
 
 def get_tuple_average(tup):
     return (tup[0] + tup[1]) / 2
+
+def predict_match_up(league: League, week_index, team_scores, number_of_games_team_name_map) -> str:
+    match_up_points = []
+    match_up_points.append(
+        ["Home Team", "Estimate Points", "# of Games", "Away Team", "Estimate Points", "# of Games", "+/-"])
+    for matchup in league.scoreboard(week_index):
+        home_team_average = team_scores[matchup.home_team.team_name][-1]
+        away_team_average = team_scores[matchup.away_team.team_name][-1]
+        match_up_points.append(
+            [matchup.home_team.team_name, home_team_average, number_of_games_team_name_map[matchup.home_team.team_name],
+             matchup.away_team.team_name, away_team_average, number_of_games_team_name_map[matchup.away_team.team_name],
+             home_team_average - away_team_average])
+    return tabulate.tabulate(match_up_points, tablefmt='html')
 
 
 def predict_all(week_index: int = 1):
@@ -32,7 +46,7 @@ def predict_all(week_index: int = 1):
         table_output.append((team_name, number_of_games_team_name_map[team_name], lo, hi, avg))
     table_output.sort(reverse=True, key=lambda x: x[-1])
     table_output.insert(0, ("Team Name", "# of games", "Low", "High", "Avg"))
-    table_content = tabulate.tabulate(table_output, tablefmt='html') + get_table_css()
+    table_content = tabulate.tabulate(table_output, tablefmt='html') + get_table_css() + predict_match_up(league, week_index, team_scores, number_of_games_team_name_map)
     html = HTML(table_content)
 
     data = html.data
@@ -41,4 +55,4 @@ def predict_all(week_index: int = 1):
     send_email("Week {} Outlook for League {}".format(week_index, league.league_id), data)
 
 if __name__ == '__main__':
-    predict_all()
+    predict_all(2)
