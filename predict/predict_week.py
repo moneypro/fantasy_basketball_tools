@@ -2,12 +2,12 @@ import tabulate
 from IPython.display import HTML
 from espn_api.basketball import League
 
+from predict.internal.roster_week_predictor import RosterWeekPredictor
+from test_utils.create_league import create_league
 from common.aws_email import send_email
 from common.io import get_match_up_output_html_path
 from common.styling import get_table_css
 from common.week import Week
-from predict.internal.roster_week_predictor import RosterWeekPredictor
-from test_utils.create_league import create_league
 
 
 def get_tuple_average(tup):
