@@ -53,3 +53,5 @@ jobs:
         pytest
     - name: Predict this week
       run: python predict/predict_week.py
+      env:
+        PYTHONPATH: /home/runner/work/fantasy_basketball_tools/fantasy_basketball_tools
