@@ -1,3 +1,5 @@
+from typing import Optional
+
 import tabulate
 from IPython.display import HTML
 from espn_api.basketball import League
@@ -27,10 +29,11 @@ def predict_match_up(league: League, week_index, team_scores, number_of_games_te
     return tabulate.tabulate(match_up_points, tablefmt='html')
 
 
-def predict_all(week_index: int = 1):
+def predict_all(week_index_override: Optional[int] = None):
     predicted_points_team_name_map = {}
     number_of_games_team_name_map = {}
     league = create_league()
+    week_index = week_index_override if week_index_override else league.current_week
     team_scores = {}
     week = Week(league, week_index)
     for team in league.teams:
@@ -56,4 +59,4 @@ def predict_all(week_index: int = 1):
 
 
 if __name__ == '__main__':
-    predict_all(2)
+    predict_all()

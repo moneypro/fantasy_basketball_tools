@@ -1,6 +1,5 @@
-import datetime
-from espn_api.basketball.league import League
 from espn_api.basketball.constant import PRO_TEAM_MAP
+from espn_api.basketball.league import League
 
 
 class Week:
@@ -30,4 +29,3 @@ class Week:
             for team_name in game_day:
                 number_of_games_for_team[team_name] = number_of_games_for_team.get(team_name, 0) + 1
         return number_of_games_for_team
-
