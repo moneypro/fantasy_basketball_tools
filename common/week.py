@@ -1,3 +1,5 @@
+from typing import Optional
+
 from espn_api.basketball.constant import PRO_TEAM_MAP
 from espn_api.basketball.league import League
 
@@ -11,6 +13,10 @@ class Week:
         self.league = league
         self.scoring_period = self._match_up_week_to_scoring_period_convert(match_up_week)
         self.team_game_list = self._get_team_game_list()
+
+    @classmethod
+    def create(cls, league: League, week_index: Optional[int]):
+        return Week(league, week_index if week_index else league.currentMatchupPeriod)
 
     def _get_team_game_list(self):
         return [[PRO_TEAM_MAP[team_id] for team_id in self.league._get_pro_schedule(scoring_period).keys()] \

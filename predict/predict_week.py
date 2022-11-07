@@ -33,7 +33,7 @@ def predict_all(week_index_override: Optional[int] = None):
     predicted_points_team_name_map = {}
     number_of_games_team_name_map = {}
     league = create_league()
-    week_index = week_index_override if week_index_override else league.current_week
+    week_index = week_index_override if week_index_override else league.currentMatchupPeriod
     team_scores = {}
     week = Week(league, week_index)
     for team in league.teams:
