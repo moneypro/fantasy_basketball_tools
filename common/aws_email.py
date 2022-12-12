@@ -1,15 +1,19 @@
+import os
+
 import boto3
 from botocore.exceptions import ClientError
 
 # Replace sender@example.com with your "From" address.
 # This address must be verified with Amazon SES.
-from common.io import get_single_line_string_from_file, get_file_content_from_crendential_folder
+from common.io import get_single_line_string_from_file, get_file_content_from_crendential_folder, \
+    find_configs_folder
 
 SENDER = "Fantasy Basketball <fantasybasketball@chenghong.info>"
 
 # Replace recipient@example.com with a "To" address. If your account
 # is still in the sandbox, this address must be verified.
-RECIPIENT = "money.pro.ch@gmail.com"
+with open(os.path.join(find_configs_folder(), "recipient_emails.txt")) as f:
+    RECIPIENTS = f.readlines()
 
 # If necessary, replace us-west-2 with the AWS Region you're using for Amazon SES.
 AWS_REGION = "us-west-2"
@@ -44,9 +48,8 @@ def send_email(subject, body):
         # Provide the contents of the email.
         response = client.send_email(
             Destination={
-                'ToAddresses': [
-                    RECIPIENT,
-                ],
+                'ToAddresses':
+                    RECIPIENTS,
             },
             Message={
                 'Body': {
