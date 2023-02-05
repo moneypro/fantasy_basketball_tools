@@ -47,22 +47,32 @@ def predict_week(league: League, week_index: int):
 def predict_all(week_index_override: Optional[int] = None):
     league = create_league()
     week_index = week_index_override if week_index_override else league.currentMatchupPeriod
-    number_of_games_team_name_map, team_scores = predict_week(league, week_index)
-    table_output = []
-    for team_name, scores in team_scores.items():
-        lo, hi, avg = scores
-        table_output.append((team_name, number_of_games_team_name_map[team_name], lo, hi, avg))
-    table_output.sort(reverse=True, key=lambda x: x[-1])
-    table_output.insert(0, ("Team Name", "# of games", "Low", "High", "Avg"))
-    table_content = (tabulate.tabulate(table_output, tablefmt='html') + get_table_css()
+    number_of_games_team_name_map, table_output, team_scores = get_table_output_for_week(league, week_index)
+    number_of_games_team_name_map_next, table_output_next, team_scores_next = get_table_output_for_week(league, week_index + 1)
+    table_content = (tabulate.tabulate(table_output, tablefmt='html')
+    + tabulate.tabulate(table_output_next, tablefmt='html')
+                     + get_table_css()
                      + predict_match_up(league, week_index, team_scores, number_of_games_team_name_map)
-                     + predict_match_up(league, week_index + 1, team_scores, number_of_games_team_name_map))
+                     + predict_match_up(league, week_index + 1, team_scores_next, number_of_games_team_name_map_next))
     html = HTML(table_content)
 
     data = html.data
     with open(get_match_up_output_html_path(league.league_id, week_index), 'w') as f:
         f.write(data)
     send_email("Week {} Outlook for League {}".format(week_index, league.league_id), data)
+
+
+def get_table_output_for_week(league, week_index):
+    number_of_games_team_name_map, team_scores = predict_week(league, week_index)
+    table_output = []
+    for team_name, scores in team_scores.items():
+        lo, hi, avg = scores
+        table_output.append((team_name, number_of_games_team_name_map[team_name], lo, hi, avg))
+    table_output.sort(reverse=True, key=lambda x: x[-1])
+    table_output.insert(0, (
+    "Team Name", "# of games", "Week {} Low".format(week_index), "Week {} High".format(week_index),
+    "Week {} Avg".format(week_index)))
+    return number_of_games_team_name_map, table_output, team_scores
 
 
 if __name__ == '__main__':
