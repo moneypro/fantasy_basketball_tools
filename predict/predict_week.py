@@ -29,26 +29,26 @@ def predict_match_up(league: League, week_index, team_scores, number_of_games_te
     return tabulate.tabulate(match_up_points, tablefmt='html')
 
 
-def predict_week(league: League, week_index: int):
+def predict_week(league: League, week_index: int, day_of_week_override: int = 0):
     predicted_points_team_name_map = {}
     number_of_games_team_name_map = {}
     team_scores = {}
     week = Week(league, week_index)
     for team in league.teams:
         predictor = RosterWeekPredictor(team.roster, week)
-        predicted_points_team_name_map[team.team_name] = predictor.predict()
-        number_of_games_team_name_map[team.team_name] = predictor.get_total_number_of_games()
+        predicted_points_team_name_map[team.team_name] = predictor.predict(daily_active_size=9, starting_day=day_of_week_override)
+        number_of_games_team_name_map[team.team_name] = predictor.get_total_number_of_games(starting_day=day_of_week_override)
     for team in league.teams:
         predicted_points = predicted_points_team_name_map[team.team_name]
         team_scores[team.team_name] = predicted_points[0], predicted_points[1], get_tuple_average(predicted_points)
     return number_of_games_team_name_map, team_scores
 
 
-def predict_all(week_index_override: Optional[int] = None):
+def predict_all(week_index_override: Optional[int] = None, day_of_week_override: int = 0):
     league = create_league()
     week_index = week_index_override if week_index_override else league.currentMatchupPeriod
-    number_of_games_team_name_map, table_output, team_scores = get_table_output_for_week(league, week_index)
-    number_of_games_team_name_map_next, table_output_next, team_scores_next = get_table_output_for_week(league, week_index + 1)
+    number_of_games_team_name_map, table_output, team_scores = get_table_output_for_week(league, week_index, day_of_week_override)
+    number_of_games_team_name_map_next, table_output_next, team_scores_next = get_table_output_for_week(league, week_index + 1, day_of_week_override)
     table_content = (tabulate.tabulate(table_output, tablefmt='html')
     + tabulate.tabulate(table_output_next, tablefmt='html')
                      + get_table_css()
@@ -61,9 +61,8 @@ def predict_all(week_index_override: Optional[int] = None):
         f.write(data)
     send_email("Week {} Outlook for League {}".format(week_index, league.league_id), data)
 
-
-def get_table_output_for_week(league, week_index):
-    number_of_games_team_name_map, team_scores = predict_week(league, week_index)
+def get_table_output_for_week(league, week_index, day_of_week_override: int = 0):
+    number_of_games_team_name_map, team_scores = predict_week(league, week_index, day_of_week_override)
     table_output = []
     for team_name, scores in team_scores.items():
         lo, hi, avg = scores
@@ -76,4 +75,4 @@ def get_table_output_for_week(league, week_index):
 
 
 if __name__ == '__main__':
-    predict_all()
+    predict_all(day_of_week_override=4)

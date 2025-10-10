@@ -14,10 +14,10 @@ class RosterWeekPredictor:
         team_playing = self.week.team_game_list[day]
         return [player for player in self.roster if player.proTeam in team_playing]
 
-    def predict(self, daily_active_size=10) -> (int, int):
+    def predict(self, daily_active_size=10, starting_day = 0) -> (int, int):
         lo = 0
         hi = 0
-        for day in range(0, self.week.scoring_period[1] - self.week.scoring_period[0]+1):
+        for day in range(starting_day, self.week.scoring_period[1] - self.week.scoring_period[0]+1):
             players_with_game = self.players_with_game(day)
             daily_lo = []
             daily_hi = []
@@ -32,9 +32,9 @@ class RosterWeekPredictor:
             hi += sum(daily_hi[:min(len(daily_hi), daily_active_size)])
         return lo, hi
 
-    def get_total_number_of_games(self, daily_active_size=9) -> int:
+    def get_total_number_of_games(self, daily_active_size=9, starting_day=0) -> int:
         total = 0
-        for day in range(0, self.week.scoring_period[1] - self.week.scoring_period[0]+1):
+        for day in range(starting_day, self.week.scoring_period[1] - self.week.scoring_period[0]+1):
             players_with_game = self.players_with_game(day)
             healthy_players = [player for player in players_with_game if player.injuryStatus == 'ACTIVE']
             total += min(len(healthy_players), daily_active_size)
