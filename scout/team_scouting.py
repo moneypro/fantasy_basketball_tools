@@ -1,4 +1,3 @@
-from espn_api.basketball import League
 from test_utils.create_league import create_league
 from collections import defaultdict
 from nba_api.stats.endpoints import leaguedashteamstats
