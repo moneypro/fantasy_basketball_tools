@@ -1,0 +1,28 @@
+name: Publish Weekly Forecast
+
+on:
+  schedule:
+    - cron: '0 12 * * 1'  # Every Monday at 12:00 UTC
+  workflow_dispatch:
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+      - name: Run forecast script
+        run: python path/to/your_script.py
+      - name: Commit and push forecast
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+          git add forecasts/
+          git commit -m "Update weekly forecast [skip ci]" || echo "No changes to commit"
+          git push

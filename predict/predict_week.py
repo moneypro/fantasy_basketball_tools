@@ -10,6 +10,7 @@ from common.aws_email import send_email
 from common.io import get_match_up_output_html_path
 from common.styling import get_table_css
 from common.week import Week
+import os
 
 
 def get_tuple_average(tup):
@@ -44,22 +45,23 @@ def predict_week(league: League, week_index: int, day_of_week_override: int = 0)
     return number_of_games_team_name_map, team_scores
 
 
-def predict_all(week_index_override: Optional[int] = None, day_of_week_override: int = 0):
+def predict_all(week_index_override: Optional[int] = None, day_of_week_override: int = 0, output_dir: str = "./forecasts"):
     league = create_league()
     week_index = week_index_override if week_index_override else league.currentMatchupPeriod
     number_of_games_team_name_map, table_output, team_scores = get_table_output_for_week(league, week_index, day_of_week_override)
     number_of_games_team_name_map_next, table_output_next, team_scores_next = get_table_output_for_week(league, week_index + 1, day_of_week_override)
     table_content = (tabulate.tabulate(table_output, tablefmt='html')
-    + tabulate.tabulate(table_output_next, tablefmt='html')
+                     + tabulate.tabulate(table_output_next, tablefmt='html')
                      + get_table_css()
                      + predict_match_up(league, week_index, team_scores, number_of_games_team_name_map)
                      + predict_match_up(league, week_index + 1, team_scores_next, number_of_games_team_name_map_next))
     html = HTML(table_content)
-
     data = html.data
-    with open(get_match_up_output_html_path(league.league_id, week_index), 'w') as f:
+    os.makedirs(output_dir, exist_ok=True)
+    output_path = os.path.join(output_dir, f"week_{week_index}_forecast.html")
+    with open(output_path, 'w') as f:
         f.write(data)
-    send_email("Week {} Outlook for League {}".format(week_index, league.league_id), data)
+    print(f"Forecast written to {output_path}")
 
 def get_table_output_for_week(league, week_index, day_of_week_override: int = 0):
     number_of_games_team_name_map, team_scores = predict_week(league, week_index, day_of_week_override)
