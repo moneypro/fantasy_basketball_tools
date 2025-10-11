@@ -8,6 +8,7 @@ on:
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v3
 
@@ -20,6 +21,23 @@ jobs:
         run: |
           pip install -r requirements.txt
 
+      # --- BEGIN: Prerequisite - Save secrets to files ---
+      - name: Save secrets to files
+        run: |
+          echo "$EMAIL_ACCESS_KEY_ID" >> /home/runner/work/fantasy_basketball_tools/fantasy_basketball_tools/credentials/email_access_key_id.txt
+          echo "$SECRET_ACCESS_KEY" >> /home/runner/work/fantasy_basketball_tools/fantasy_basketball_tools/credentials/email_secret_access_key.secret
+          echo "$ESPN_S2" >> /home/runner/work/fantasy_basketball_tools/fantasy_basketball_tools/credentials/espn_s2.secret
+          echo "$SWID" >> /home/runner/work/fantasy_basketball_tools/fantasy_basketball_tools/credentials/swid.secret
+          echo "$LEAGUE_ID" >> /home/runner/work/fantasy_basketball_tools/fantasy_basketball_tools/credentials/league_id.txt
+        shell: bash
+        env:
+          EMAIL_ACCESS_KEY_ID: ${{secrets.email_access_key_id}}
+          SECRET_ACCESS_KEY: ${{secrets.email_secret_access_key}}
+          ESPN_S2: ${{secrets.espn_s2}}
+          SWID: ${{secrets.swid}}
+          LEAGUE_ID: ${{secrets.league_id}}
+      # --- END: Prerequisite ---
+
       - name: Run forecast script
         run: python predict/predict_week.py
         env:
@@ -29,7 +47,7 @@ jobs:
         run: |
           git clone https://x-access-token:${{ secrets.WEBSITE_REPO_TOKEN }}@github.com/moneypro/website.git website-repo
 
-      - name: Copy forecast HTML filesgi
+      - name: Copy forecast HTML files
         run: |
           cp forecasts/*.html website-repo/forecasts/
 
