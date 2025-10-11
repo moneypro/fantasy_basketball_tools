@@ -1,4 +1,4 @@
-name: Publish Weekly Forecast
+name: Publish Forecast to Website
 
 on:
   schedule:
@@ -10,19 +10,32 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
+
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
+
       - name: Run forecast script
-        run: python path/to/your_script.py
-      - name: Commit and push forecast
+        run: python predict/predict_week.py
+
+      - name: Clone website repo
         run: |
-          git config --global user.name 'github-actions'
-          git config --global user.email 'github-actions@github.com'
+          git clone https://x-access-token:${{ secrets.WEBSITE_REPO_TOKEN }}@github.com/moneypro/website.git website-repo
+
+      - name: Copy forecast HTML filesgi
+        run: |
+          cp forecasts/*.html website-repo/forecasts/
+
+      - name: Commit and push to website repo
+        run: |
+          cd website-repo
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
           git add forecasts/
-          git commit -m "Update weekly forecast [skip ci]" || echo "No changes to commit"
+          git commit -m "Update forecast [skip ci]" || echo "No changes to commit"
           git push
