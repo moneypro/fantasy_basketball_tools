@@ -49,7 +49,7 @@ jobs:
 
       - name: Copy forecast HTML files
         run: |
-          cp forecasts/*.html website-repo/forecasts/
+          cp forecasts/*.html website-repo/assets/
 
       - name: Commit and push to website repo
         run: |
