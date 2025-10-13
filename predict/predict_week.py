@@ -82,25 +82,25 @@ def build_week_html(league, week_index, day_of_week_override=0):
     )
     return HTML(html).data
 
-def predict_all(week_index_override: Optional[int] = None, day_of_week_override: int = 0, output_dir: str = "./forecasts"):
+def save_week_forecast(league, week_index, day_of_week_override, output_dir):
+    week_folder = os.path.join(output_dir, f"week_{week_index}_forecast")
+    os.makedirs(week_folder, exist_ok=True)
+    week_html = build_week_html(league, week_index, day_of_week_override)
+    output_path = os.path.join(week_folder, "index.html")
+    with open(output_path, 'w') as f:
+        f.write(week_html)
+    print(f"Forecast for week {week_index} written to {output_path}")
+
+def predict_all(
+        week_index_override: Optional[int] = None,
+        day_of_week_override: int = 0,
+        output_dir: str = "./forecasts"
+):
     league = create_league(use_local_cache=False)
     week_index = week_index_override if week_index_override else league.currentMatchupPeriod
 
-    os.makedirs(output_dir, exist_ok=True)
-
-    # Week N
-    week_n_html = build_week_html(league, week_index, day_of_week_override)
-    output_path_n = os.path.join(output_dir, f"week_{week_index}_forecast.html")
-    with open(output_path_n, 'w') as f:
-        f.write(week_n_html)
-    print(f"Forecast for week {week_index} written to {output_path_n}")
-
-    # Week N+1
-    week_np1_html = build_week_html(league, week_index + 1, day_of_week_override)
-    output_path_np1 = os.path.join(output_dir, f"week_{week_index+1}_forecast.html")
-    with open(output_path_np1, 'w') as f:
-        f.write(week_np1_html)
-    print(f"Forecast for week {week_index+1} written to {output_path_np1}")
+    save_week_forecast(league, week_index, day_of_week_override, output_dir)
+    save_week_forecast(league, week_index + 1, day_of_week_override, output_dir)
 
 if __name__ == '__main__':
     predict_all(day_of_week_override=4)
