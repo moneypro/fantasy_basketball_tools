@@ -26,11 +26,13 @@ class RosterWeekPredictor:
                     lo_stats, hi_stats = self.get_lo_hi_stats(player)
                     daily_lo.append(lo_stats)
                     daily_hi.append(hi_stats)
+                else:
+                    print(player.injuryStatus)
             daily_hi.sort(reverse=True)
             daily_lo.sort(reverse=True)
             lo += sum(daily_lo[:min(len(daily_lo), daily_active_size)])
             hi += sum(daily_hi[:min(len(daily_hi), daily_active_size)])
-        return lo, hi
+        return round(lo), round(hi)
 
     def get_total_number_of_games(self, daily_active_size=9, starting_day=0) -> int:
         total = 0
@@ -42,7 +44,7 @@ class RosterWeekPredictor:
 
     @staticmethod
     def get_lo_hi_stats(player: Player) -> (int, int):
-        stat_period_list = ['2022', '2023_projected', '2023', '2023_last_15', '2023_last_7']
+        stat_period_list = ['2025', '2026_projected']
         fpts_for_stat_period = [RosterWeekPredictor.get_stat_from_stat_period(player, stat_period) for stat_period in stat_period_list]
         ignore_none_fpts_list = [fpts for fpts in fpts_for_stat_period if fpts is not None]
         if len(ignore_none_fpts_list) == 0:

@@ -21,8 +21,8 @@ def predict_match_up(league: League, week_index, team_scores, number_of_games_te
     match_up_points = [
         ["Home Team", "Estimate Points", "# of Games", "Away Team", "Estimate Points", "# of Games", "+/-"]]
     for matchup in league.scoreboard(week_index):
-        home_team_average = team_scores[matchup.home_team.team_name][-1]
-        away_team_average = team_scores[matchup.away_team.team_name][-1]
+        home_team_average = round(team_scores[matchup.home_team.team_name][-1])
+        away_team_average = round(team_scores[matchup.away_team.team_name][-1])
         match_up_points.append(
             [matchup.home_team.team_name, home_team_average, number_of_games_team_name_map[matchup.home_team.team_name],
              matchup.away_team.team_name, away_team_average, number_of_games_team_name_map[matchup.away_team.team_name],
@@ -46,7 +46,7 @@ def predict_week(league: League, week_index: int, day_of_week_override: int = 0)
 
 
 def predict_all(week_index_override: Optional[int] = None, day_of_week_override: int = 0, output_dir: str = "./forecasts"):
-    league = create_league()
+    league = create_league(use_local_cache=False)
     week_index = week_index_override if week_index_override else league.currentMatchupPeriod
     number_of_games_team_name_map, table_output, team_scores = get_table_output_for_week(league, week_index, day_of_week_override)
     number_of_games_team_name_map_next, table_output_next, team_scores_next = get_table_output_for_week(league, week_index + 1, day_of_week_override)
