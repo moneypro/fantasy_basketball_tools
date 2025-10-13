@@ -7,7 +7,7 @@ from test_utils.create_league import create_league
 
 class TestRosterWeekPredictor(TestCase):
     def test_predict_sanity(self):
-        league = create_league(year=2023)
+        league = create_league()
         currWeek = Week(league, 1)
         predictor = RosterWeekPredictor(league.teams[1].roster, currWeek)
         scores = predictor.predict()
