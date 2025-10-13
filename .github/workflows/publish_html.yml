@@ -1,9 +1,10 @@
 name: Publish Forecast to Website
 
 on:
-  schedule:
-    - cron: '0 12 * * 1'  # Every Monday at 12:00 UTC
-  workflow_dispatch:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
 
 jobs:
   build-and-publish:
@@ -43,19 +44,17 @@ jobs:
         env:
           PYTHONPATH: /home/runner/work/fantasy_basketball_tools/fantasy_basketball_tools
 
-      - name: Clone website repo
+      - name: Clone website repo (dev branch)
         run: |
-          git clone https://x-access-token:${{ secrets.WEBSITE_REPO_TOKEN }}@github.com/moneypro/website.git website-repo
-
+          git clone --branch dev https://x-access-token:${{ secrets.WEBSITE_REPO_TOKEN }}@github.com/moneypro/website.git website-repo
       - name: Copy forecast HTML files
         run: |
-          cp forecasts/*.html website-repo/assets/
-
-      - name: Commit and push to website repo
+          cp forecasts/*.html website-repo/forecasts/
+      - name: Commit and push to website repo (dev branch)
         run: |
           cd website-repo
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git add assets/
           git commit -m "Update forecast [skip ci]" || echo "No changes to commit"
-          git push
+          git push origin dev

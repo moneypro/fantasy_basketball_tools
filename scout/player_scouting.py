@@ -141,7 +141,7 @@ def main(limit):
 
     # 4. Get team context
     team_talent, team_off_rating, max_team_talent, avg_off_rating = get_team_context(players_2026, player_scores)
-
+    player_rank = get_team_rankings(player_points, standardized, players_2026)
     # 5. Calculate potential_upside for each player
     player_points_with_upside = []
     for i, row in enumerate(player_points):
@@ -149,19 +149,19 @@ def main(limit):
         player_score = standardized[i]
         player_obj = players_2026.get(player_id)
         team = getattr(player_obj, 'proTeam', 'Unknown') if player_obj else 'Unknown'
-        # Exclude self from team talent if needed
         team_score = team_talent.get(team, 0.0) - player_score
         off_rating = team_off_rating.get(team, avg_off_rating)
         potential_upside = player_score * (1 + ALPHA * (1 - team_score / max_team_talent)) * (off_rating / avg_off_rating) ** BETA
-        player_points_with_upside.append(row[:9] + (standardized[i], potential_upside) + row[9:])
+        rank = player_rank.get(player_id, "")
+        player_points_with_upside.append(row[:9] + (standardized[i], potential_upside, rank) + row[9:])
 
     # 6. Sort by standardized score descending
     player_points_with_upside.sort(key=lambda x: x[9], reverse=True)
 
     # 7. Output header
-    print("Player\tAvg FPTS (recent)\tTotal FPTS (30d)\tGP (Last 30)\tGP\t2026 Avg FPTS\tGP projected\tStandardized Score\tPotential Upside\tPG\tSG\tSF\tPF\tC\tG\tF")
+    # print("Player\tAvg FPTS (recent)\tTotal FPTS (30d)\tGP (Last 30)\tGP\t2026 Avg FPTS\tGP projected\tStandardized Score\tPotential Upside\tPG\tSG\tSF\tPF\tC\tG\tF")
+    print("Player\tAvg FPTS (recent)\tTotal FPTS (30d)\tGP (Last 30)\tGP\t2026 Avg FPTS\tGP projected\tStandardized Score\tPotential Upside\tTeam Rank\tPG\tSG\tSF\tPF\tC\tG\tF")
     for row in player_points_with_upside[:limit]:
-        # row: (player_id, name, avg_recent, total_30, gp_30, gp_year, avg_proj, gp_proj, final_score, standardized_score, potential_upside, *eligibility)
         output_row = [
                          row[1],  # name
                          row[2],  # avg_recent
@@ -172,7 +172,8 @@ def main(limit):
                          row[7],  # gp_proj
                          f"{int(round(row[9]))}",   # standardized_score as integer
                          f"{int(round(row[10]))}",  # potential_upside as integer
-                     ] + list(row[11:])  # eligibility columns
+                         row[11],                   # team rank
+                     ] + list(row[12:])  # eligibility columns
         print("\t".join([str(x) for x in output_row]))
     print(print_biggest_upside_differences(player_points_with_upside, limit=20))
 
@@ -198,6 +199,27 @@ def print_biggest_upside_differences(player_points_with_upside, limit=20):
     print("Diff\tPlayer\tStandardized Score\tPotential Upside")
     for diff, name, standardized_score, potential_upside, row in diffs[:limit]:
         print(f"{diff:+.2f}\t{name}\t{standardized_score:.2f}\t{potential_upside:.2f}")
+
+
+
+def get_team_rankings(player_points, standardized_scores, players_2026):
+    """
+    Returns a dict: player_id -> rank (1 = top option on team)
+    """
+    # Build team -> list of (player_id, standardized_score)
+    team_to_players = defaultdict(list)
+    for i, row in enumerate(player_points):
+        player_id = row[0]
+        player_obj = players_2026.get(player_id)
+        team = getattr(player_obj, 'proTeam', 'Unknown') if player_obj else 'Unknown'
+        team_to_players[team].append((player_id, standardized_scores[i]))
+    # For each team, sort and assign rank
+    player_rank = {}
+    for team, plist in team_to_players.items():
+        plist_sorted = sorted(plist, key=lambda x: x[1], reverse=True)
+        for rank, (pid, _) in enumerate(plist_sorted, 1):
+            player_rank[pid] = rank
+    return player_rank
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Scout and rank fantasy basketball players by custom score, potential upside, and team context.")
