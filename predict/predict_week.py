@@ -58,9 +58,6 @@ def build_week_html(league, week_index, day_of_week_override=0):
     _, table_dtd, team_scores_dtd = get_table_output_for_week(league, week_index, day_of_week_override, ['ACTIVE', 'DAY_TO_DAY'])
     # Table 3: Active + DTD + OUT
     _, table_out, team_scores_out = get_table_output_for_week(league, week_index, day_of_week_override, ['ACTIVE', 'DAY_TO_DAY', 'OUT'])
-    team_scores_active_dict = {row[0]: row[-1] for row in table_active[1:]}
-    team_scores_dtd_dict = {row[0]: row[-1] for row in table_dtd[1:]}
-    team_scores_out_dict = {row[0]: row[-1] for row in table_out[1:]}
     num_games_active_dict = {row[0]: row[1] for row in table_active[1:]}
     num_games_dtd_dict = {row[0]: row[1] for row in table_dtd[1:]}
     num_games_out_dict = {row[0]: row[1] for row in table_out[1:]}
