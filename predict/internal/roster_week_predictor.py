@@ -14,32 +14,30 @@ class RosterWeekPredictor:
         team_playing = self.week.team_game_list[day]
         return [player for player in self.roster if player.proTeam in team_playing]
 
-    def predict(self, daily_active_size=10, starting_day = 0) -> (int, int):
+    def predict(self, daily_active_size=10, starting_day=0, injuryStatusList=['ACTIVE']) -> (int, int):
         lo = 0
         hi = 0
-        for day in range(starting_day, self.week.scoring_period[1] - self.week.scoring_period[0]+1):
+        for day in range(starting_day, self.week.scoring_period[1] - self.week.scoring_period[0] + 1):
             players_with_game = self.players_with_game(day)
             daily_lo = []
             daily_hi = []
             for player in players_with_game:
-                if player.injuryStatus == 'ACTIVE':
+                if getattr(player, 'injuryStatus', 'ACTIVE') in injuryStatusList:
                     lo_stats, hi_stats = self.get_lo_hi_stats(player)
                     daily_lo.append(lo_stats)
                     daily_hi.append(hi_stats)
-                else:
-                    print(player.injuryStatus)
             daily_hi.sort(reverse=True)
             daily_lo.sort(reverse=True)
             lo += sum(daily_lo[:min(len(daily_lo), daily_active_size)])
             hi += sum(daily_hi[:min(len(daily_hi), daily_active_size)])
         return round(lo), round(hi)
 
-    def get_total_number_of_games(self, daily_active_size=9, starting_day=0) -> int:
+    def get_total_number_of_games(self, daily_active_size=9, starting_day=0, injuryStatusList=['ACTIVE']) -> int:
         total = 0
-        for day in range(starting_day, self.week.scoring_period[1] - self.week.scoring_period[0]+1):
+        for day in range(starting_day, self.week.scoring_period[1] - self.week.scoring_period[0] + 1):
             players_with_game = self.players_with_game(day)
-            healthy_players = [player for player in players_with_game if player.injuryStatus == 'ACTIVE']
-            total += min(len(healthy_players), daily_active_size)
+            eligible_players = [player for player in players_with_game if getattr(player, 'injuryStatus', 'ACTIVE') in injuryStatusList]
+            total += min(len(eligible_players), daily_active_size)
         return total
 
     @staticmethod
@@ -60,12 +58,19 @@ class RosterWeekPredictor:
 
     @staticmethod
     def get_fantasy_pts(stats: dict) -> float:
-        return RosterWeekPredictor.get_stat_in_category(stats, 'PTS') + RosterWeekPredictor.get_stat_in_category(stats, '3PTM') - stats['FGA'] + stats[
-            'FGM'] * 2 - stats['FTA'] + stats['FTM'] \
-               + stats['REB'] + stats['AST'] * 2 + stats['STL'] * 4 + RosterWeekPredictor.get_stat_in_category(stats, 'BLK') * 4 - stats['TO'] * 2
-
+        return (
+                RosterWeekPredictor.get_stat_in_category(stats, 'PTS')
+                + RosterWeekPredictor.get_stat_in_category(stats, '3PTM')
+                - stats['FGA']
+                + stats['FGM'] * 2
+                - stats['FTA']
+                + stats['FTM']
+                + stats['REB']
+                + stats['AST'] * 2
+                + stats['STL'] * 4
+                + RosterWeekPredictor.get_stat_in_category(stats, 'BLK') * 4
+                - stats['TO'] * 2
+        )
     @staticmethod
     def get_stat_in_category(stats: dict, cat: str) -> float:
-        if cat in stats:
-            return stats[cat]
-        return 0
+        return stats.get(cat, 0)
