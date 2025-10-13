@@ -13,15 +13,23 @@ def get_tuple_average(tup):
 
 def predict_match_up(league: League, week_index, team_scores, number_of_games_team_name_map) -> str:
     match_up_points = [
-        ["Home Team", "Estimate Points", "# of Games", "Away Team", "Estimate Points", "# of Games", "+/-"]]
+        ["Home Team", "Estimate Points", "# of Games", "Away Team", "Estimate Points", "# of Games", "+/-"]
+    ]
     for matchup in league.scoreboard(week_index):
         home_team_average = round(team_scores[matchup.home_team.team_name][-1])
         away_team_average = round(team_scores[matchup.away_team.team_name][-1])
         match_up_points.append(
-            [matchup.home_team.team_name, home_team_average, number_of_games_team_name_map[matchup.home_team.team_name],
-             matchup.away_team.team_name, away_team_average, number_of_games_team_name_map[matchup.away_team.team_name],
-             home_team_average - away_team_average])
-    return tabulate.tabulate(match_up_points, tablefmt='html')
+            [
+                matchup.home_team.team_name,
+                home_team_average,
+                number_of_games_team_name_map[matchup.home_team.team_name],
+                matchup.away_team.team_name,
+                away_team_average,
+                number_of_games_team_name_map[matchup.away_team.team_name],
+                home_team_average - away_team_average
+            ]
+        )
+    return tabulate.tabulate(match_up_points, tablefmt='html', headers="firstrow")
 
 def predict_week(league: League, week_index: int, day_of_week_override: int = 0, injuryStatusList=['ACTIVE']):
     predicted_points_team_name_map = {}
@@ -64,11 +72,11 @@ def build_week_html(league, week_index, day_of_week_override=0):
 
     html = (
             f"<h2>Week {week_index} - Active Players Only</h2>"
-            + tabulate.tabulate(table_active, tablefmt='html')
+            + tabulate.tabulate(table_active, tablefmt='html', headers="firstrow")
             + f"<h2>Week {week_index} - Including Day-to-Day (DTD)</h2>"
-            + tabulate.tabulate(table_dtd, tablefmt='html')
+            + tabulate.tabulate(table_dtd, tablefmt='html', headers="firstrow")
             + f"<h2>Week {week_index} - Including OUT</h2>"
-            + tabulate.tabulate(table_out, tablefmt='html')
+            + tabulate.tabulate(table_out, tablefmt='html', headers="firstrow")
             + get_table_css()
             + f"<h2>Week {week_index} Matchups (Active Only)</h2>"
             + predict_match_up(league, week_index, team_scores_active, num_games_active_dict)
