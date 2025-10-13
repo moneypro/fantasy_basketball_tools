@@ -51,7 +51,7 @@ jobs:
           git clone --branch dev https://x-access-token:${{ secrets.WEBSITE_REPO_TOKEN }}@github.com/moneypro/website.git website-repo
       - name: Copy forecast HTML files
         run: |
-          cp forecasts/*.html website-repo/forecasts/
+          cp -r forecasts/* website-repo/forecasts/
       - name: Commit and push to website repo (dev branch)
         run: |
           cd website-repo
