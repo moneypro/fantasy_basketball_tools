@@ -122,4 +122,4 @@ def predict_all(
     save_week_forecast(league, week_index + 1, day_of_week_override, output_dir)
 
 if __name__ == '__main__':
-    predict_all(day_of_week_override=4)
+    predict_all(day_of_week_override=0)
