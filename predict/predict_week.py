@@ -70,14 +70,13 @@ def build_week_html(league, week_index, day_of_week_override=0):
     num_games_dtd_dict = {row[0]: row[1] for row in table_dtd[1:]}
     num_games_out_dict = {row[0]: row[1] for row in table_out[1:]}
 
-    html = (
+    body_html = (
             f"<h2>Week {week_index} - Active Players Only</h2>"
             + tabulate.tabulate(table_active, tablefmt='html', headers="firstrow")
             + f"<h2>Week {week_index} - Including Day-to-Day (DTD)</h2>"
             + tabulate.tabulate(table_dtd, tablefmt='html', headers="firstrow")
             + f"<h2>Week {week_index} - Including OUT</h2>"
             + tabulate.tabulate(table_out, tablefmt='html', headers="firstrow")
-            + get_table_css()
             + f"<h2>Week {week_index} Matchups (Active Only)</h2>"
             + predict_match_up(league, week_index, team_scores_active, num_games_active_dict)
             + f"<h2>Week {week_index} Matchups (DTD Included)</h2>"
@@ -85,7 +84,23 @@ def build_week_html(league, week_index, day_of_week_override=0):
             + f"<h2>Week {week_index} Matchups (OUT Included)</h2>"
             + predict_match_up(league, week_index, team_scores_out, num_games_out_dict)
     )
-    return HTML(html).data
+
+    # Use absolute path for CSS!
+    html = f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Week {week_index} Fantasy Forecast</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/assets/css/main.css" />
+    {get_table_css()}
+</head>
+<body>
+    {body_html}
+</body>
+</html>
+"""
+    return html
 
 def save_week_forecast(league, week_index, day_of_week_override, output_dir):
     week_folder = os.path.join(output_dir, f"week_{week_index}_forecast")
