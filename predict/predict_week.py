@@ -43,20 +43,18 @@ def predict_week(league: League, week_index: int, day_of_week_override: int = 0,
         number_of_games_team_name_map[team.team_name] = predictor.get_total_number_of_games(
             starting_day=day_of_week_override, injuryStatusList=injuryStatusList)
     for team in league.teams:
-        predicted_points = predicted_points_team_name_map[team.team_name]
-        team_scores[team.team_name] = predicted_points[0], predicted_points[1], get_tuple_average(predicted_points)
+        team_scores[team.team_name] = predicted_points_team_name_map[team.team_name]
     return number_of_games_team_name_map, team_scores
 
 def get_table_output_for_week(league, week_index, day_of_week_override: int = 0, injuryStatusList=['ACTIVE']):
     number_of_games_team_name_map, team_scores = predict_week(league, week_index, day_of_week_override, injuryStatusList)
     table_output = []
     for team_name, scores in team_scores.items():
-        lo, hi, avg = scores
-        table_output.append((team_name, number_of_games_team_name_map[team_name], lo, hi, avg))
-    table_output.sort(reverse=True, key=lambda x: x[-1])
+        avg, std = scores
+        table_output.append((team_name, number_of_games_team_name_map[team_name], round(avg), round(std)))
+    table_output.sort(reverse=True, key=lambda x: x[-2])
     table_output.insert(0, (
-        "Team Name", "# of games", "Week {} Low".format(week_index), "Week {} High".format(week_index),
-        "Week {} Avg".format(week_index)))
+        "Team Name", "# of games", "Week {} Mean".format(week_index), "Week {} Standard Deviation".format(week_index)))
     return number_of_games_team_name_map, table_output, team_scores
 
 def build_week_html(league, week_index, day_of_week_override=0):
@@ -70,7 +68,7 @@ def build_week_html(league, week_index, day_of_week_override=0):
     num_games_dtd_dict = {row[0]: row[1] for row in table_dtd[1:]}
     num_games_out_dict = {row[0]: row[1] for row in table_out[1:]}
 
-    non_healthy_table = get_non_healthy_players_table(league, week_index)
+    non_healthy_table = get_non_healthy_players_table(league)
     non_healthy_html = (
             f"<h2>Week {week_index} - Non-Healthy Players by Status</h2>"
             + tabulate.tabulate(non_healthy_table, tablefmt='html', headers="firstrow")
@@ -118,7 +116,7 @@ def save_week_forecast(league, week_index, day_of_week_override, output_dir):
         f.write(week_html)
     print(f"Forecast for week {week_index} written to {output_path}")
 
-def get_non_healthy_players_table(league, week_index):
+def get_non_healthy_players_table(league):
     status_columns = ['DAY_TO_DAY', 'OUT']
     table = []
     header = ['Team Name'] + status_columns
