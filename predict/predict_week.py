@@ -138,7 +138,7 @@ def predict_all(
         day_of_week_override: int = 0,
         output_dir: str = "./forecasts"
 ):
-    league = create_league(use_local_cache=False)
+    league = create_league(use_local_cache=True)
     week_index = week_index_override if week_index_override else league.currentMatchupPeriod
 
     save_week_forecast(league, week_index, day_of_week_override, output_dir)
