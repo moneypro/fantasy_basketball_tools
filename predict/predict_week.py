@@ -1,6 +1,6 @@
 from typing import Optional
 import tabulate
-from IPython.display import HTML
+import html
 from espn_api.basketball import League
 from predict.internal.roster_week_predictor import RosterWeekPredictor
 from test_utils.create_league import create_league
@@ -70,9 +70,17 @@ def build_week_html(league, week_index, day_of_week_override=0):
     num_games_dtd_dict = {row[0]: row[1] for row in table_dtd[1:]}
     num_games_out_dict = {row[0]: row[1] for row in table_out[1:]}
 
+    non_healthy_table = get_non_healthy_players_table(league, week_index)
+    non_healthy_html = (
+            f"<h2>Week {week_index} - Non-Healthy Players by Status</h2>"
+            + tabulate.tabulate(non_healthy_table, tablefmt='html', headers="firstrow")
+    )
+    non_healthy_html = html.unescape(non_healthy_html)
+
     body_html = (
             f"<h1>Week {week_index} Summary</h1>"
-            f"<h2>Week {week_index} - Active Players Only</h2>"
+            + non_healthy_html
+            + f"<h2>Week {week_index} - Active Players Only</h2>"
             + tabulate.tabulate(table_active, tablefmt='html', headers="firstrow")
             + f"<h2>Week {week_index} - Including Day-to-Day (DTD)</h2>"
             + tabulate.tabulate(table_dtd, tablefmt='html', headers="firstrow")
@@ -86,7 +94,7 @@ def build_week_html(league, week_index, day_of_week_override=0):
             + predict_match_up(league, week_index, team_scores_out, num_games_out_dict)
     )
 
-    html = f"""<!DOCTYPE html>
+    _html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -99,7 +107,7 @@ def build_week_html(league, week_index, day_of_week_override=0):
 </body>
 </html>
 """
-    return html
+    return _html
 
 def save_week_forecast(league, week_index, day_of_week_override, output_dir):
     week_folder = os.path.join(output_dir, f"week_{week_index}_forecast")
@@ -109,6 +117,23 @@ def save_week_forecast(league, week_index, day_of_week_override, output_dir):
     with open(output_path, 'w') as f:
         f.write(week_html)
     print(f"Forecast for week {week_index} written to {output_path}")
+
+def get_non_healthy_players_table(league, week_index):
+    status_columns = ['DAY_TO_DAY', 'OUT']
+    table = []
+    header = ['Team Name'] + status_columns
+    for team in league.teams:
+        # Group players by status
+        status_to_names = {status: [] for status in status_columns}
+        for player in team.roster:
+            status = getattr(player, 'injuryStatus', 'ACTIVE')
+            if status in status_columns:
+                status_to_names[status].append(player.name)
+        row = [team.team_name] + [", ".join(status_to_names[status]) for status in status_columns]
+        table.append(row)
+    table.sort(key=lambda x: x[0])  # Sort by team name
+    table.insert(0, header)
+    return table
 
 def predict_all(
         week_index_override: Optional[int] = None,
