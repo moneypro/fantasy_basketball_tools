@@ -71,6 +71,7 @@ def build_week_html(league, week_index, day_of_week_override=0):
     num_games_out_dict = {row[0]: row[1] for row in table_out[1:]}
 
     body_html = (
+            f"<h1>Week {week_index} Summary</h1>"
             f"<h2>Week {week_index} - Active Players Only</h2>"
             + tabulate.tabulate(table_active, tablefmt='html', headers="firstrow")
             + f"<h2>Week {week_index} - Including Day-to-Day (DTD)</h2>"
@@ -85,14 +86,12 @@ def build_week_html(league, week_index, day_of_week_override=0):
             + predict_match_up(league, week_index, team_scores_out, num_games_out_dict)
     )
 
-    # Use absolute path for CSS!
     html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Week {week_index} Fantasy Forecast</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="/assets/css/main.css" />
     {get_table_css()}
 </head>
 <body>
