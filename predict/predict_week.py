@@ -16,8 +16,8 @@ def predict_match_up(league: League, week_index, team_scores, number_of_games_te
         ["Home Team", "Estimate Points", "# of Games", "Away Team", "Estimate Points", "# of Games", "+/-"]
     ]
     for matchup in league.scoreboard(week_index):
-        home_team_average = round(team_scores[matchup.home_team.team_name][-1])
-        away_team_average = round(team_scores[matchup.away_team.team_name][-1])
+        home_team_average = round(team_scores[matchup.home_team.team_name][-2])
+        away_team_average = round(team_scores[matchup.away_team.team_name][-2])
         match_up_points.append(
             [
                 matchup.home_team.team_name,
