@@ -1,7 +1,9 @@
+from typing import List, Any
+
 from espn_api.basketball import League, Player
 from espn_api.basketball.constant import POSITION_MAP
 
-from utils.league_post import EspnFantasyRequestWithPost, EspnFantasyBasketballRequestWithPost
+from utils.basketball_espn_request import BasketballEspnFantasyRequests
 from .game_day_player_getter import GameDayPlayerGetter
 
 '''
@@ -25,12 +27,12 @@ class LineUpEditor:
         self.roster = self.league.get_team_data(self.team_id).roster
         self.game_day_player_getter = GameDayPlayerGetter(league, self.roster, team_id)
 
-    def change_line_up(self, payload):
-        request = EspnFantasyBasketballRequestWithPost.from_espn_fantasy_request(self.league.espn_request)
+    def change_line_up(self, payload) -> Any:
+        request = BasketballEspnFantasyRequests.from_espn_fantasy_request(self.league.espn_request)
         data = request.post(payload=payload, extend="/transactions/")
         return data
 
-    def bench_all_players(self, scoring_period):
+    def bench_all_players(self, scoring_period: int) -> None:
         """
         This breaks if you have someone on the current roster but you have already dropped. i.e. inconsistency between current roster and future roster
         """
@@ -46,7 +48,7 @@ class LineUpEditor:
                        "items": move_to_bench_command}
         self.change_line_up(payload)
 
-    def fill_line_up(self, scoring_period, ignore_injury=False):
+    def fill_line_up(self, scoring_period: int, ignore_injury=False) -> None:
         """
         Undefined behavior for active player > 10. TODO: Manage by avg stats.
         """
@@ -61,11 +63,10 @@ class LineUpEditor:
         payload = {"isLeagueManager": "false", "teamId": self.team_id, "type": "FUTURE_ROSTER", "memberId": self.swid,
                    "scoringPeriodId": scoring_period, "executionType": "EXECUTE",
                    "items": move_command}
-        # TODO: Breaks when no one is playing that day
-        print(payload)
+        # print(payload)
         self.change_line_up(payload)
 
-    def get_optimized_line_up(self, active_players: [Player]) -> [(str, int)]:
+    def get_optimized_line_up(self, active_players: List[Player]) -> List[(str, int)]:
         """
         Return list of tuple (player id, to line up slot id).
         This currently only supports when your line up is of PG, SG, SF, PF, C and 5 UTILs.
@@ -94,13 +95,13 @@ class LineUpEditor:
         return line_up
 
     @staticmethod
-    def get_available_position(eligible_slots: [str]):
+    def get_available_position(eligible_slots: List[str]) -> List[str]:
         # PG, SG, SF, PF, C
         available_positions = [POSITION_MAP[i] for i in range(5)]
         return [eligible_slot for eligible_slot in eligible_slots if eligible_slot in available_positions]
 
 
-    def complete_line_up(self, scoring_periods: [int]):
+    def complete_line_up(self, scoring_periods: List[int]):
         """
         Finish a line up. Return the ones failed.
         """
