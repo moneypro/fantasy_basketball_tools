@@ -1,8 +1,7 @@
-import requests
 from espn_api.basketball import League, Player
 from espn_api.basketball.constant import POSITION_MAP
-from espn_api.requests.espn_requests import checkRequestStatus
 
+from utils.league_post import EspnFantasyRequestWithPost, EspnFantasyBasketballRequestWithPost
 from .game_day_player_getter import GameDayPlayerGetter
 
 '''
@@ -17,15 +16,6 @@ UTIL: 11.
 '''
 
 
-def league_post(espn_request, payload: dict = None, headers: dict = None, extend: str = ''):
-    endpoint = espn_request.LEAGUE_ENDPOINT + extend
-    r = requests.post(endpoint, json=payload, headers=headers, cookies=espn_request.cookies)
-    print(str(r.json()))
-    checkRequestStatus(r.status_code)
-    if espn_request.logger:
-        espn_request.logger.log_request(endpoint=endpoint, params=payload, headers=headers, response=r.json())
-    return r.json() if espn_request.year > 2017 else r.json()[0]
-
 class LineUpEditor:
 
     def __init__(self, league: League, team_id: int):
@@ -36,7 +26,8 @@ class LineUpEditor:
         self.game_day_player_getter = GameDayPlayerGetter(league, self.roster, team_id)
 
     def change_line_up(self, payload):
-        data = league_post(self.league.espn_request, payload=payload, extend="/transactions/")
+        request = EspnFantasyBasketballRequestWithPost.from_espn_fantasy_request(self.league.espn_request)
+        data = request.post(payload=payload, extend="/transactions/")
         return data
 
     def bench_all_players(self, scoring_period):
@@ -55,7 +46,7 @@ class LineUpEditor:
                        "items": move_to_bench_command}
         self.change_line_up(payload)
 
-    def fill_line_up(self, scoring_period, sort_stats_by='002021', ignore_injury=False):
+    def fill_line_up(self, scoring_period, ignore_injury=False):
         """
         Undefined behavior for active player > 10. TODO: Manage by avg stats.
         """
@@ -74,7 +65,7 @@ class LineUpEditor:
         print(payload)
         self.change_line_up(payload)
 
-    def get_optimized_line_up(self, active_players: [Player], sort_stats_by='002021') -> [(str, int)]:
+    def get_optimized_line_up(self, active_players: [Player]) -> [(str, int)]:
         """
         Return list of tuple (player id, to line up slot id).
         This currently only supports when your line up is of PG, SG, SF, PF, C and 5 UTILs.
