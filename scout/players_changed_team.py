@@ -1,5 +1,5 @@
 from espn_api.basketball import League
-from test_utils.create_league import create_league
+from utils.create_league import create_league
 
 def get_all_players_team_map(league, year):
     player_team = {}

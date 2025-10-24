@@ -3,7 +3,7 @@ import tabulate
 import html
 from espn_api.basketball import League
 from predict.internal.roster_week_predictor import RosterWeekPredictor
-from test_utils.create_league import create_league
+from utils.create_league import create_league
 from common.styling import get_table_css
 from common.week import Week
 import os

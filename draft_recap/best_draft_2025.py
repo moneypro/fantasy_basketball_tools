@@ -1,6 +1,6 @@
 import collections
 from predict.internal.roster_week_predictor import RosterWeekPredictor
-from test_utils.create_league import create_league
+from utils.create_league import create_league
 
 def get_player_2025_points(league, player_id):
     return league.player_info(playerId=player_id).stats["2025_total"]['applied_total']

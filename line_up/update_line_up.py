@@ -1,10 +1,11 @@
 from line_up.line_up_editer import LineUpEditor
-from test_utils.create_league import create_league
+from utils.create_league import create_league
 
+MONEY_PRO_TEAM_ID = 2
 
 def change_line_up_for_next_7_days():
     league = create_league()
-    editor = LineUpEditor(league, 14)
+    editor = LineUpEditor(league, MONEY_PRO_TEAM_ID)
     editor.fill_line_up(81, ignore_injury=True)
 
 

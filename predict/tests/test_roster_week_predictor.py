@@ -2,7 +2,7 @@ from unittest import TestCase
 
 from common.week import Week
 from predict.internal.roster_week_predictor import RosterWeekPredictor
-from test_utils.create_league import create_league
+from utils.create_league import create_league
 
 
 class TestRosterWeekPredictor(TestCase):

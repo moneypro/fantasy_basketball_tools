@@ -1,6 +1,6 @@
 import argparse
 from collections import defaultdict
-from test_utils.create_league import create_league
+from utils.create_league import create_league
 from nba_api.stats.endpoints import leaguedashteamstats
 from nba_api.stats.static import teams as nba_teams_static
 
