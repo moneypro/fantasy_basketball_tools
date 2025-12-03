@@ -48,13 +48,14 @@ class LineUpEditor:
                        "items": move_to_bench_command}
         self.change_line_up(payload)
 
-    def fill_line_up(self, scoring_period: int, ignore_injury=False) -> None:
+    def fill_line_up(self, scoring_period: int, ignore_injury=False, player_cap=9) -> None:
         """
-        Undefined behavior for active player > 10. TODO: Manage by avg stats.
+        Player cap would only return the best possible combination of the players that can play.
         """
         self.bench_all_players(scoring_period)
         players_playing_that_day = self.game_day_player_getter.get_players_playing(scoring_period)
         if not ignore_injury:
+            # TODO: Set levels, OUT and DTD can be put up there as long as there are spots, just lower priority.
             players_playing_that_day = [player for player in players_playing_that_day if player.injuryStatus == 'ACTIVE']
         line_up = self.get_optimized_line_up(players_playing_that_day)
         move_command = [{"playerId": player_id, "type": "LINEUP", "toLineupSlotId": to_line_up_slot_id} for player_id, to_line_up_slot_id in line_up]
@@ -66,20 +67,27 @@ class LineUpEditor:
         # print(payload)
         self.change_line_up(payload)
 
-    def get_optimized_line_up(self, active_players: List[Player]) -> List[(str, int)]:
+    def get_optimized_line_up(self, players: List[Player]) -> List[(str, int)]:
         """
         Return list of tuple (player id, to line up slot id).
         This currently only supports when your line up is of PG, SG, SF, PF, C and 5 UTILs.
+        We need to consider these factors: players' avg points and their injury status.
+        If total player is less than the player cap, we can keep using the current logic.
+        If there are more, think of a better strategy...
+        Strategy: grouper players by category for a greedy algorithm:
+        For each position, list available players, if multiple players are eligible for one spot,
+        pick the one that's either only available at that position, or the highest avg score
+        if there are multiple.
         """
         fixed_slots = {}
         util_list = []
         assigned_player_id_set = set()
-        for player in active_players:
+        for player in players:
             positions = LineUpEditor.get_available_position(player.eligibleSlots)
             if len(positions) == 1 and positions[0] not in fixed_slots: # single position, put into the slot
                 assigned_player_id_set.add(player.playerId)
                 fixed_slots[positions[0]] = player.playerId
-        for player in active_players:
+        for player in players:
             if player.playerId not in assigned_player_id_set and len(assigned_player_id_set) < 10:
                 positions = LineUpEditor.get_available_position(player.eligibleSlots)
                 for position in positions:
