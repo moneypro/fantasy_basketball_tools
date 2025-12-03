@@ -1,4 +1,4 @@
-from typing import List, Any
+from typing import List, Any, Tuple
 
 from espn_api.basketball import League, Player
 from espn_api.basketball.constant import POSITION_MAP
@@ -67,7 +67,7 @@ class LineUpEditor:
         # print(payload)
         self.change_line_up(payload)
 
-    def get_optimized_line_up(self, players: List[Player]) -> List[(str, int)]:
+    def get_optimized_line_up(self, players: List[Player]) -> List[Tuple[int, int]]:
         """
         Return list of tuple (player id, to line up slot id).
         This currently only supports when your line up is of PG, SG, SF, PF, C and 5 UTILs.
