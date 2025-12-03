@@ -1,18 +1,43 @@
+"""League creation and caching utilities."""
 import os
 import pickle
+from typing import Optional
+
 from espn_api.basketball import League
 from common.io import get_file_content_from_crendential_folder
 
-def get_cache_path(year):
-    # You can customize this path as needed
-    cache_dir = os.path.expanduser("~/.fantasy_league_cache")
+
+def get_cache_path(year: int) -> str:
+    """Get the cache file path for a given year.
+    
+    Args:
+        year: The league year
+        
+    Returns:
+        The full path to the cache file
+    """
+    cache_dir: str = os.path.expanduser("~/.fantasy_league_cache")
     os.makedirs(cache_dir, exist_ok=True)
     return os.path.join(cache_dir, f"league_{year}.pkl")
 
-def create_league(year: int = 2026, use_local_cache: bool = True) -> League:
-    cache_path = get_cache_path(year)
-    league = None
 
+def create_league(year: int = 2026, use_local_cache: bool = True) -> League:
+    """Create or load a fantasy basketball league.
+    
+    Attempts to load from local cache first if use_local_cache is True.
+    Falls back to fetching from ESPN if cache is not available.
+    
+    Args:
+        year: The league year (default: 2026)
+        use_local_cache: Whether to use local cache (default: True)
+        
+    Returns:
+        The League object
+    """
+    cache_path: str = get_cache_path(year)
+    league: Optional[League] = None
+
+    # Try to load from cache
     if use_local_cache and os.path.exists(cache_path):
         try:
             with open(cache_path, "rb") as f:
@@ -22,7 +47,7 @@ def create_league(year: int = 2026, use_local_cache: bool = True) -> League:
         except Exception as e:
             print(f"Failed to load cache for {year}: {e}. Will fetch from ESPN.")
 
-    # If not using cache or cache failed, fetch from ESPN
+    # Fetch from ESPN if not cached
     league = League(
         league_id=int(get_file_content_from_crendential_folder("league_id.txt")),
         year=year,
