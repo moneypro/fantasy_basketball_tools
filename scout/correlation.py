@@ -1,40 +1,35 @@
-import argparse
-from espn_api.basketball import League
-from utils.create_league import create_league
+"""Team correlation analysis for fantasy basketball."""
 from collections import defaultdict
+from typing import List
+
 from nba_api.stats.endpoints import leaguedashteamstats
-from nba_api.stats.static import teams as nba_teams_static
 import pandas as pd
-from scipy.stats import pearsonr
 from sklearn.decomposition import PCA
 
-def get_all_players(league):
-    players = []
-    for team in league.teams:
-        players.extend(team.roster)
-    players.extend(league.free_agents(size=1000))
-    unique_players = {p.playerId: p for p in players}
-    return list(unique_players.values())
+from utils.create_league import create_league
+from utils.shared_player_utils import get_all_players, build_team_id_map
+import config
 
-def get_team_advanced_stats(season='2024-25'):
+
+def get_team_advanced_stats(season: str = '2024-25') -> pd.DataFrame:
+    """Get advanced team statistics from NBA API.
+    
+    Args:
+        season: The season to get stats for (default: 2024-25)
+        
+    Returns:
+        DataFrame with team advanced stats indexed by TEAM_ID
+    """
     stats = leaguedashteamstats.LeagueDashTeamStats(
         season=season,
         measure_type_detailed_defense='Advanced',
         last_n_games=30,
     )
     df = stats.get_data_frames()[0]
-    # Use TEAM_ID for matching
     return df.set_index('TEAM_ID')[['TEAM_NAME', 'OFF_RATING', 'DEF_RATING', 'PACE']]
 
-def build_team_id_map():
-    nba_teams = nba_teams_static.get_teams()
-    # Map abbreviation to TEAM_ID
-    abbr_to_id = {}
-    for t in nba_teams:
-        abbr_to_id[t['abbreviation']] = t['id']
-    return abbr_to_id
 
-def main():
+def main() -> None:
     league = create_league(year=2025)
     players = get_all_players(league)
 

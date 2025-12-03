@@ -1,24 +1,15 @@
-from utils.create_league import create_league
+"""Team scouting and analysis utilities."""
 from collections import defaultdict
+from typing import Dict
+
 from nba_api.stats.endpoints import leaguedashteamstats
-from nba_api.stats.static import teams as nba_teams_static
 
-def get_all_players(league):
-    players = []
-    for team in league.teams:
-        players.extend(team.roster)
-    players.extend(league.free_agents(size=1000))
-    unique_players = {p.playerId: p for p in players}
-    return unique_players
+from utils.create_league import create_league
+from utils.shared_player_utils import get_all_players, build_team_id_map
+import config
 
-def build_team_id_map():
-    nba_teams = nba_teams_static.get_teams()
-    abbr_to_id = {}
-    for t in nba_teams:
-        abbr_to_id[t['abbreviation']] = t['id']
-    return abbr_to_id
 
-def main():
+def main() -> None:
     league_2025 = create_league(year=2025)
     league_2026 = create_league(year=2026)
     players_2025 = get_all_players(league_2025)
