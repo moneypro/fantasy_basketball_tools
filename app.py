@@ -15,7 +15,7 @@ from predict.predict_week import (
     get_table_output_for_week,
 )
 from utils.create_league import create_league
-from scout.player_scouting import main as scout_players
+from scout.player_scouting_refactored import scout_players
 from scout.team_scouting import main as scout_teams
 from scout.correlation import get_team_advanced_stats
 from scout.players_changed_team import main as get_players_changed_team
@@ -273,20 +273,34 @@ def scout_player_endpoint():
     {
         "limit": 20
     }
+    
+    Returns structured data with:
+    - players: List of analyzed players with scores and eligibility
+    - upside_differences: Players with biggest upside/downside potential
+    - total_players_analyzed: Total players processed
+    - limit_returned: Number of players returned
     """
     try:
+        from dataclasses import asdict
+        
         data = request.json or {}
         limit = data.get('limit', 20)
         
-        # Scout players returns data to stdout, so we capture it
+        # Scout players returns structured ScoutingResult
         result = scout_players(limit=limit)
         
         return jsonify({
             "status": "success",
-            "message": "Player scouting completed",
-            "limit": limit
+            "data": {
+                "total_players_analyzed": result.total_players_analyzed,
+                "limit_returned": result.limit_returned,
+                "players": [asdict(p) for p in result.players],
+                "upside_differences": [asdict(u) for u in result.upside_differences]
+            }
         }), 200
     except Exception as e:
+        import traceback
+        traceback.print_exc()
         return jsonify({
             "status": "error",
             "message": f"Scout players failed: {str(e)}"
