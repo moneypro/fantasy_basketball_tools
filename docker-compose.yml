@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  fantasy-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    
+    container_name: fantasy-basketball-api
+    
+    ports:
+      - "8000:5000"
+    
+    environment:
+      ESPN_S2: ${ESPN_S2}
+      SWID: ${SWID}
+      LEAGUE_ID: ${LEAGUE_ID}
+      FLASK_APP: app.py
+      FLASK_HOST: 0.0.0.0
+      FLASK_PORT: 5000
+      FLASK_ENV: production
+      FLASK_DEBUG: 'False'
+      PYTHONUNBUFFERED: 1
+    
+    volumes:
+      - .:/app
+    
+    restart: unless-stopped
+    
+    networks:
+      - fantasy-network
+
+networks:
+  fantasy-network:
+    driver: bridge

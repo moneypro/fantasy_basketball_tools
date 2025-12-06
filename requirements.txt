@@ -7,3 +7,5 @@ nba_api >= 1.10.2
 pandas
 scipy
 scikit-learn
+flask >= 2.3.0
+gunicorn >= 20.1.0
