@@ -53,7 +53,3 @@ services:
 networks:
   fantasy-network:
     driver: bridge
-
-# Volumes (for future use if needed)
-volumes:
-  # Reserved for persistent data if needed
