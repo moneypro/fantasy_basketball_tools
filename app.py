@@ -18,7 +18,7 @@ from utils.create_league import create_league
 from scout.player_scouting_refactored import scout_players
 from scout.team_scouting import main as scout_teams
 from scout.correlation import get_team_advanced_stats
-from scout.players_changed_team import main as get_players_changed_team
+from scout.players_changed_team_refactored import analyze_team_changes
 from line_up.update_line_up import change_line_up_for_next_7_days
 from draft_recap.best_draft_2025 import calculate_drafted_team_points_and_top_and_worst_scorers
 from scheduling.post_free_agent_transaction import post_transaction
@@ -330,7 +330,7 @@ def advanced_stats_endpoint():
     - season: NBA season (default: 2024-25)
     """
     try:
-        season = request.args.get('season', '2024-25')
+        season = request.args.get('season', '2025-26')
         stats = get_team_advanced_stats(season=season)
         
         return jsonify({
@@ -347,14 +347,33 @@ def advanced_stats_endpoint():
 @app.route('/api/v1/scout/team-changes', methods=['GET'])
 @require_league
 def team_changes_endpoint():
-    """Get players who changed teams"""
+    """Get players who changed NBA teams between 2025 and 2026
+    
+    Returns:
+    - changed_teams: Players who switched teams (filtered by avg_fpts >= 10)
+    - rookies: New players in 2026 (not in 2025)
+    - departures: Players who left the league
+    - Total counts for each category
+    """
     try:
-        get_players_changed_team()
+        from dataclasses import asdict
+        
+        result = analyze_team_changes()
+        
         return jsonify({
             "status": "success",
-            "message": "Team changes analysis completed"
+            "data": {
+                "total_changed": result.total_changed,
+                "total_rookies": result.total_rookies,
+                "total_departures": result.total_departures,
+                "changed_teams": [asdict(c) for c in result.changed_teams],
+                "rookies": [asdict(r) for r in result.rookies],
+                "departures": [asdict(d) for d in result.departures]
+            }
         }), 200
     except Exception as e:
+        import traceback
+        traceback.print_exc()
         return jsonify({
             "status": "error",
             "message": f"Failed to get team changes: {str(e)}"
