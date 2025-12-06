@@ -23,16 +23,6 @@ app = Flask(__name__)
 # Global league instance (loaded once at module import time)
 league = None
 
-# Initialize league at module load time (before any requests)
-print("🚀 Initializing Flask app...")
-league = create_league_from_env()
-if league is None:
-    print("🔍 Environment variables not available, trying file-based credentials...")
-    try:
-        league = create_league()
-    except Exception as e:
-        print(f"⚠️  Warning: Could not load league at startup: {e}")
-
 def create_league_from_env():
     """Create league directly from environment variables (Docker-specific).
     
@@ -93,6 +83,9 @@ def init_league():
         traceback.print_exc()
         return False
 
+# Initialize league at module load time (before any requests)
+print("🚀 Initializing Flask app...")
+init_league()
 
 def require_league(f):
     """Decorator to check if league is loaded"""
