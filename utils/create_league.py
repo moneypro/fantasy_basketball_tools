@@ -48,11 +48,26 @@ def create_league(year: int = 2026, use_local_cache: bool = True) -> League:
             print(f"Failed to load cache for {year}: {e}. Will fetch from ESPN.")
 
     # Fetch from ESPN if not cached
+    # Try to get credentials from files first, fall back to environment variables
+    try:
+        league_id = int(get_file_content_from_crendential_folder("league_id.txt"))
+        espn_s2 = get_file_content_from_crendential_folder("espn_s2.secret")
+        swid = get_file_content_from_crendential_folder("swid.secret")
+    except Exception:
+        # Fall back to environment variables (Docker deployment)
+        league_id = os.getenv('LEAGUE_ID')
+        espn_s2 = os.getenv('ESPN_S2')
+        swid = os.getenv('SWID')
+        
+        if not all([league_id, espn_s2, swid]):
+            raise ValueError("Could not find credentials in credential files or environment variables (LEAGUE_ID, ESPN_S2, SWID)")
+        league_id = int(league_id)
+    
     league = League(
-        league_id=int(get_file_content_from_crendential_folder("league_id.txt")),
+        league_id=league_id,
         year=year,
-        espn_s2=get_file_content_from_crendential_folder("espn_s2.secret"),
-        swid=get_file_content_from_crendential_folder("swid.secret")
+        espn_s2=espn_s2,
+        swid=swid
     )
 
     # Cache the league object for future use
