@@ -20,8 +20,18 @@ from espn_api.basketball import League
 # Initialize Flask app
 app = Flask(__name__)
 
-# Global league instance (loaded once at startup)
+# Global league instance (loaded once at module import time)
 league = None
+
+# Initialize league at module load time (before any requests)
+print("🚀 Initializing Flask app...")
+league = create_league_from_env()
+if league is None:
+    print("🔍 Environment variables not available, trying file-based credentials...")
+    try:
+        league = create_league()
+    except Exception as e:
+        print(f"⚠️  Warning: Could not load league at startup: {e}")
 
 def create_league_from_env():
     """Create league directly from environment variables (Docker-specific).
@@ -83,17 +93,6 @@ def init_league():
         traceback.print_exc()
         return False
 
-# Flag to track if league has been initialized
-_league_initialized = False
-
-# Initialize league when app starts
-@app.before_request
-def load_league_once():
-    """Load league once before first request"""
-    global league, _league_initialized
-    if not _league_initialized:
-        init_league()
-        _league_initialized = True
 
 def require_league(f):
     """Decorator to check if league is loaded"""
