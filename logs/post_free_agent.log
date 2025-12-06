@@ -1,0 +1,5 @@
+Starting transaction loop for playerId=5211175, teamId=2, scoringPeriodId=45
+2025-12-04T22:23:09.295453 - Request 1/45
+Request 1/45 failed: 409 Client Error:  for url: https://lm-api-writes.fantasy.espn.com/apis/v3/games/fba/seasons/2026/segments/0/leagues/30695/transactions/
+2025-12-04T22:24:10.172155 - Request 2/45
+Request 2/45 failed: 409 Client Error:  for url: https://lm-api-writes.fantasy.espn.com/apis/v3/games/fba/seasons/2026/segments/0/leagues/30695/transactions/
