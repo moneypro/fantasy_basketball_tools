@@ -83,13 +83,17 @@ def init_league():
         traceback.print_exc()
         return False
 
+# Flag to track if league has been initialized
+_league_initialized = False
+
 # Initialize league when app starts
 @app.before_request
 def load_league_once():
     """Load league once before first request"""
-    global league
-    if league is None:
+    global league, _league_initialized
+    if not _league_initialized:
         init_league()
+        _league_initialized = True
 
 def require_league(f):
     """Decorator to check if league is loaded"""
