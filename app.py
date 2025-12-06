@@ -31,9 +31,11 @@ def init_league():
     - Falls back to environment variables if credential files don't exist
     """
     global league
+    if league is not None:
+        return True  # Already initialized
+    
     try:
-        print("🚀 Initializing Flask app...")
-        print(f"🔍 Attempting to load league with LEAGUE_ID={os.getenv('LEAGUE_ID')}")
+        print(f"🔍 Loading league with LEAGUE_ID={os.getenv('LEAGUE_ID')}")
         league = create_league()
         print("✅ League loaded successfully")
         return True
@@ -43,8 +45,13 @@ def init_league():
         traceback.print_exc()
         return False
 
-# Initialize league at module load time (before any requests)
-init_league()
+# Initialize league lazily on first request
+@app.before_request
+def ensure_league_loaded():
+    """Ensure league is loaded before handling requests"""
+    global league
+    if league is None:
+        init_league()
 
 def require_league(f):
     """Decorator to check if league is loaded"""
