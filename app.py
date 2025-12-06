@@ -15,6 +15,7 @@ from predict.predict_week import (
     get_table_output_for_week,
 )
 from utils.create_league import create_league
+from espn_api.basketball import League
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -22,14 +23,60 @@ app = Flask(__name__)
 # Global league instance (loaded once at startup)
 league = None
 
+def create_league_from_env():
+    """Create league directly from environment variables (Docker-specific).
+    
+    This is used in Docker deployments where credentials are passed via env vars.
+    For local usage, use utils.create_league.create_league() instead.
+    
+    Returns:
+        League object or None if credentials not available
+    """
+    league_id = os.getenv('LEAGUE_ID')
+    espn_s2 = os.getenv('ESPN_S2')
+    swid = os.getenv('SWID')
+    
+    if not all([league_id, espn_s2, swid]):
+        print(f"⚠️  Missing credentials. LEAGUE_ID={league_id}, ESPN_S2={'set' if espn_s2 else 'not set'}, SWID={swid}")
+        return None
+    
+    try:
+        print(f"🔍 Creating league from environment variables (LEAGUE_ID={league_id})")
+        league_obj = League(
+            league_id=int(league_id),
+            year=2026,
+            espn_s2=espn_s2,
+            swid=swid
+        )
+        print("✅ League loaded successfully from environment variables")
+        return league_obj
+    except Exception as e:
+        print(f"❌ Failed to create league from environment: {e}")
+        import traceback
+        traceback.print_exc()
+        return None
+
 def init_league():
-    """Initialize league from environment variables"""
+    """Initialize league - tries Docker env vars first, then file-based credentials"""
     global league
     try:
         print(f"🔍 Attempting to load league with LEAGUE_ID={os.getenv('LEAGUE_ID')}")
-        league = create_league()
-        print("✅ League loaded successfully")
-        return True
+        
+        # Try environment variables first (Docker)
+        league = create_league_from_env()
+        
+        # Fall back to file-based credentials (local development)
+        if league is None:
+            print("🔍 Environment variables not available, trying file-based credentials...")
+            league = create_league()
+        
+        if league is not None:
+            print("✅ League loaded successfully")
+            return True
+        else:
+            print("⚠️  Could not load league from either environment or files")
+            return False
+            
     except Exception as e:
         print(f"⚠️  Warning: Could not load league: {e}")
         import traceback
