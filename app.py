@@ -15,6 +15,14 @@ from predict.predict_week import (
     get_table_output_for_week,
 )
 from utils.create_league import create_league
+from scout.player_scouting import main as scout_players
+from scout.team_scouting import main as scout_teams
+from scout.correlation import get_team_advanced_stats
+from scout.players_changed_team import main as get_players_changed_team
+from line_up.update_line_up import change_line_up_for_next_7_days
+from draft_recap.best_draft_2025 import calculate_drafted_team_points_and_top_and_worst_scorers
+from scheduling.post_free_agent_transaction import post_transaction
+from scheduling.schedule_free_agent_add import schedule_with_at
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -253,6 +261,231 @@ def get_tools_schema():
             }
         ]
     })
+
+# ===== Scout Endpoints =====
+
+@app.route('/api/v1/scout/players', methods=['POST'])
+@require_league
+def scout_player_endpoint():
+    """Scout players - analyze player stats and rankings
+    
+    Request body:
+    {
+        "limit": 20
+    }
+    """
+    try:
+        data = request.json or {}
+        limit = data.get('limit', 20)
+        
+        # Scout players returns data to stdout, so we capture it
+        result = scout_players(limit=limit)
+        
+        return jsonify({
+            "status": "success",
+            "message": "Player scouting completed",
+            "limit": limit
+        }), 200
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": f"Scout players failed: {str(e)}"
+        }), 500
+
+@app.route('/api/v1/scout/teams', methods=['GET'])
+@require_league
+def scout_team_endpoint():
+    """Scout teams - analyze team stats and performance"""
+    try:
+        scout_teams()
+        return jsonify({
+            "status": "success",
+            "message": "Team scouting completed"
+        }), 200
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": f"Scout teams failed: {str(e)}"
+        }), 500
+
+@app.route('/api/v1/scout/advanced-stats', methods=['GET'])
+def advanced_stats_endpoint():
+    """Get team advanced stats
+    
+    Query params:
+    - season: NBA season (default: 2024-25)
+    """
+    try:
+        season = request.args.get('season', '2024-25')
+        stats = get_team_advanced_stats(season=season)
+        
+        return jsonify({
+            "status": "success",
+            "season": season,
+            "data": stats.to_dict(orient='records')
+        }), 200
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": f"Failed to get advanced stats: {str(e)}"
+        }), 500
+
+@app.route('/api/v1/scout/team-changes', methods=['GET'])
+@require_league
+def team_changes_endpoint():
+    """Get players who changed teams"""
+    try:
+        get_players_changed_team()
+        return jsonify({
+            "status": "success",
+            "message": "Team changes analysis completed"
+        }), 200
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": f"Failed to get team changes: {str(e)}"
+        }), 500
+
+# ===== Lineup Endpoints =====
+
+@app.route('/api/v1/lineup/update', methods=['POST'])
+@require_league
+def update_lineup_endpoint():
+    """Update lineup for next 7 days"""
+    try:
+        change_line_up_for_next_7_days()
+        return jsonify({
+            "status": "success",
+            "message": "Lineup updated for next 7 days"
+        }), 200
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": f"Failed to update lineup: {str(e)}"
+        }), 500
+
+# ===== Draft Recap Endpoints =====
+
+@app.route('/api/v1/draft/analysis', methods=['GET'])
+@require_league
+def draft_analysis_endpoint():
+    """Analyze draft performance
+    
+    Query params:
+    - top_n: Number of top scorers to include (default: 5)
+    - worst_n: Number of worst scorers to include (default: 3)
+    - worst_round_limit: Round limit for worst performers (default: 10)
+    """
+    try:
+        top_n = request.args.get('top_n', 5, type=int)
+        worst_n = request.args.get('worst_n', 3, type=int)
+        worst_round_limit = request.args.get('worst_round_limit', 10, type=int)
+        
+        analysis = calculate_drafted_team_points_and_top_and_worst_scorers(
+            league,
+            top_n=top_n,
+            worst_n=worst_n,
+            worst_round_limit=worst_round_limit
+        )
+        
+        return jsonify({
+            "status": "success",
+            "data": analysis
+        }), 200
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": f"Draft analysis failed: {str(e)}"
+        }), 500
+
+# ===== Scheduling Endpoints =====
+
+@app.route('/api/v1/scheduling/post-transaction', methods=['POST'])
+def post_transaction_endpoint():
+    """Post a free agent transaction
+    
+    Request body:
+    {
+        "player_id": 12345,
+        "team_id": 1,
+        "scoring_period_id": 1
+    }
+    """
+    try:
+        data = request.json or {}
+        player_id = data.get('player_id')
+        team_id = data.get('team_id')
+        scoring_period_id = data.get('scoring_period_id')
+        
+        if not all([player_id, team_id, scoring_period_id]):
+            return jsonify({
+                "status": "error",
+                "message": "Missing required fields: player_id, team_id, scoring_period_id"
+            }), 400
+        
+        # Post transaction (this makes actual ESPN API calls)
+        result = post_transaction(
+            url="https://lm-api-reads.platform.espn.com/transactions",
+            player_id=player_id,
+            team_id=team_id,
+            scoring_period_id=scoring_period_id,
+            espn_s2=os.getenv('ESPN_S2'),
+            swid=os.getenv('SWID')
+        )
+        
+        return jsonify({
+            "status": "success",
+            "message": "Transaction posted successfully",
+            "data": result
+        }), 200
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": f"Failed to post transaction: {str(e)}"
+        }), 500
+
+@app.route('/api/v1/scheduling/schedule-add', methods=['POST'])
+def schedule_add_endpoint():
+    """Schedule a free agent add for future date
+    
+    Request body:
+    {
+        "player_id": 12345,
+        "date": "2025-12-15",
+        "team_id": 1,
+        "scoring_period_id": 1
+    }
+    """
+    try:
+        data = request.json or {}
+        player_id = data.get('player_id')
+        date = data.get('date')
+        team_id = data.get('team_id')
+        scoring_period_id = data.get('scoring_period_id')
+        
+        if not all([player_id, date, team_id, scoring_period_id]):
+            return jsonify({
+                "status": "error",
+                "message": "Missing required fields: player_id, date, team_id, scoring_period_id"
+            }), 400
+        
+        result = schedule_with_at(
+            player_id=player_id,
+            date_string=date,
+            team_id=team_id,
+            scoring_period_id=scoring_period_id
+        )
+        
+        return jsonify({
+            "status": "success",
+            "message": "Add scheduled successfully",
+            "data": result
+        }), 200
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": f"Failed to schedule add: {str(e)}"
+        }), 500
 
 # ===== Error Handlers =====
 
