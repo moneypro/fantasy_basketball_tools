@@ -26,11 +26,14 @@ def init_league():
     """Initialize league from environment variables"""
     global league
     try:
+        print(f"🔍 Attempting to load league with LEAGUE_ID={os.getenv('LEAGUE_ID')}")
         league = create_league()
         print("✅ League loaded successfully")
         return True
     except Exception as e:
         print(f"⚠️  Warning: Could not load league: {e}")
+        import traceback
+        traceback.print_exc()
         return False
 
 def require_league(f):
