@@ -116,8 +116,8 @@ class TestPassesFilters(unittest.TestCase):
         
         result = passes_filters(player_2025, player_2026)
         
-        # Should pass since it's >= 10
-        self.assertFalse(result)  # But < 10 is the filter, so 10.0 should pass
+        # Filter is < 10, so 10.0 should pass the filter (returns True)
+        self.assertTrue(result)
 
 
 class TestDataClasses(unittest.TestCase):
