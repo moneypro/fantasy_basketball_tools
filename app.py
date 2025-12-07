@@ -234,7 +234,7 @@ def get_tools_schema():
                 "type": "function",
                 "function": {
                     "name": "calculate_fantasy_predictions",
-                    "description": "Calculate fantasy basketball predictions for a given week. Returns team scores, remaining days analysis, and game counts.",
+                    "description": "Calculate fantasy basketball predictions for a given week",
                     "parameters": {
                         "type": "object",
                         "properties": {
@@ -248,17 +248,189 @@ def get_tools_schema():
                                 "type": "integer",
                                 "description": "Override current day (0=Monday, 6=Sunday)",
                                 "minimum": 0,
-                                "maximum": 6,
-                                "default": 0
+                                "maximum": 6
                             },
                             "injury_status": {
                                 "type": "array",
                                 "items": {"type": "string"},
-                                "description": "Filter players by injury status: ACTIVE, DAY_TO_DAY, OUT, etc.",
-                                "default": ["ACTIVE"]
+                                "description": "Filter by injury status"
                             }
                         },
                         "required": ["week_index"]
+                    }
+                }
+            },
+            {
+                "type": "function",
+                "function": {
+                    "name": "get_week_analysis",
+                    "description": "Get detailed week analysis including table output",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "week_index": {
+                                "type": "integer",
+                                "description": "Fantasy week number (1-17)"
+                            },
+                            "day_of_week_override": {
+                                "type": "integer",
+                                "description": "Override current day"
+                            },
+                            "injury_status": {
+                                "type": "array",
+                                "items": {"type": "string"},
+                                "description": "Filter by injury status"
+                            }
+                        },
+                        "required": ["week_index"]
+                    }
+                }
+            },
+            {
+                "type": "function",
+                "function": {
+                    "name": "scout_players",
+                    "description": "Scout and analyze players with scoring and upside analysis",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "limit": {
+                                "type": "integer",
+                                "description": "Number of top players to return",
+                                "default": 20
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                "type": "function",
+                "function": {
+                    "name": "scout_teams",
+                    "description": "Scout teams and analyze team performance",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {}
+                    }
+                }
+            },
+            {
+                "type": "function",
+                "function": {
+                    "name": "get_advanced_stats",
+                    "description": "Get team advanced stats from NBA",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "season": {
+                                "type": "string",
+                                "description": "NBA season (e.g., '2024-25')",
+                                "default": "2025-26"
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                "type": "function",
+                "function": {
+                    "name": "get_team_changes",
+                    "description": "Get players who changed NBA teams, rookies, and departures",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {}
+                    }
+                }
+            },
+            {
+                "type": "function",
+                "function": {
+                    "name": "update_lineup",
+                    "description": "Update lineup for next 7 days",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {}
+                    }
+                }
+            },
+            {
+                "type": "function",
+                "function": {
+                    "name": "analyze_draft",
+                    "description": "Analyze draft performance with top and worst scorers",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "top_n": {
+                                "type": "integer",
+                                "description": "Number of top scorers",
+                                "default": 5
+                            },
+                            "worst_n": {
+                                "type": "integer",
+                                "description": "Number of worst scorers",
+                                "default": 3
+                            },
+                            "worst_round_limit": {
+                                "type": "integer",
+                                "description": "Round limit for worst performers",
+                                "default": 10
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                "type": "function",
+                "function": {
+                    "name": "post_transaction",
+                    "description": "Post a free agent transaction",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "player_id": {
+                                "type": "integer",
+                                "description": "Player ID"
+                            },
+                            "team_id": {
+                                "type": "integer",
+                                "description": "Team ID"
+                            },
+                            "scoring_period_id": {
+                                "type": "integer",
+                                "description": "Scoring period ID"
+                            }
+                        },
+                        "required": ["player_id", "team_id", "scoring_period_id"]
+                    }
+                }
+            },
+            {
+                "type": "function",
+                "function": {
+                    "name": "schedule_free_agent_add",
+                    "description": "Schedule a free agent add for a future date",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "player_id": {
+                                "type": "integer",
+                                "description": "Player ID"
+                            },
+                            "date": {
+                                "type": "string",
+                                "description": "Date to schedule add (YYYY-MM-DD)"
+                            },
+                            "team_id": {
+                                "type": "integer",
+                                "description": "Team ID"
+                            },
+                            "scoring_period_id": {
+                                "type": "integer",
+                                "description": "Scoring period ID"
+                            }
+                        },
+                        "required": ["player_id", "date", "team_id", "scoring_period_id"]
                     }
                 }
             }
