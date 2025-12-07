@@ -233,11 +233,17 @@ def get_tools_schema():
     Authentication: Pass API key as query parameter ?api_key=<your_key>
     All endpoints require: ?api_key=fba_mjfwAOKGkneKbFLai7NyGwejuBxyrogBcMCndiww8x0
     """
+    base_url = "https://leanora-unmumbling-noncontroversially.ngrok-free.dev"
+    api_key = "fba_mjfwAOKGkneKbFLai7NyGwejuBxyrogBcMCndiww8x0"
+    
     return jsonify({
         "info": {
+            "service": "Fantasy Basketball Predictions API",
+            "base_url": base_url,
             "authentication": "Query parameter: ?api_key=<your_api_key>",
-            "api_key_example": "fba_mjfwAOKGkneKbFLai7NyGwejuBxyrogBcMCndiww8x0",
-            "note": "All endpoints require the api_key query parameter for authentication"
+            "api_key_example": api_key,
+            "note": "All endpoints require the api_key query parameter for authentication",
+            "example_request": f"{base_url}/api/v1/predictions/calculate?api_key={api_key}"
         },
         "tools": [
             {
