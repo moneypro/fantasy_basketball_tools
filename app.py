@@ -1237,7 +1237,7 @@ def get_scoreboard(week_index):
             }), 400
         
         # Check if week is within final scoring period
-        final_period = league.finalScoringPeriod if hasattr(league, 'finalScoringPeriod') else 47
+        final_period = league.finalScoringPeriod if hasattr(league, 'finalScoringPeriod') else 200
         if week_index > final_period:
             return jsonify({
                 "status": "error",
