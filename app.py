@@ -543,15 +543,14 @@ def get_tools_schema():
                     "description": "Get players from a team who have games on a specific scoring period. Scoring periods: 1=Oct 21, 2=Oct 22, ..., 47=Dec 6, 2026",
                     "x-endpoint": "/api/v1/players-playing/{scoring_period}",
                     "x-method": "GET",
-                    "x-scoring-period-reference": "Scoring period 1 starts Oct 21, 2026. Each scoring period is 1 day. Period 47 is Dec 6, 2026.",
+                    "x-scoring-period-reference": "Scoring period 1 starts Oct 21, 2026. Each scoring period is 1 day. Period 47 is Dec 6, 2026. Can query any future period.",
                     "parameters": {
                         "type": "object",
                         "properties": {
                             "scoring_period": {
                                 "type": "integer",
-                                "description": "Scoring period ID (1-47). 1=Oct 21, 2=Oct 22, ..., 47=Dec 6, 2026",
-                                "minimum": 1,
-                                "maximum": 47
+                                "description": "Scoring period ID (any positive integer >= 1). 1=Oct 21, 2=Oct 22, ..., 47=Dec 6, 2026",
+                                "minimum": 1
                             },
                             "team_id": {
                                 "type": "integer",
@@ -1106,10 +1105,10 @@ def get_players_playing_for_scoring_period(scoring_period):
             }), 404
         
         # Validate scoring period
-        if not isinstance(scoring_period, int) or scoring_period < 1 or scoring_period > 47:
+        if not isinstance(scoring_period, int) or scoring_period < 1:
             return jsonify({
                 "status": "error",
-                "message": "scoring_period must be an integer between 1 and 47"
+                "message": "scoring_period must be a positive integer (1 or greater)"
             }), 400
         
         # Get the game day player getter
