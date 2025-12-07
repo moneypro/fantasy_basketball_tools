@@ -496,7 +496,7 @@ def get_tools_schema():
                             },
                             "week_index": {
                                 "type": "integer",
-                                "description": "Fantasy week number (1-23), defaults to current week",
+                                "description": "Fantasy week number (1-23). Week 1 starts Oct 20, 2026 (Monday). Each week = 7 days. Currently in week 7. Defaults to current week.",
                                 "minimum": 1,
                                 "maximum": 23
                             },
@@ -549,7 +549,7 @@ def get_tools_schema():
                         "properties": {
                             "scoring_period": {
                                 "type": "integer",
-                                "description": "Scoring period ID (any positive integer >= 1). 1=Oct 21, 2=Oct 22, ..., 47=Dec 6, 2026",
+                                "description": "Scoring period ID (any positive integer >= 1). Each period = 1 day. 1=Oct 21, 2=Oct 22, ..., 47=Dec 6, 2026",
                                 "minimum": 1
                             },
                             "team_id": {
