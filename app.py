@@ -181,14 +181,14 @@ def calculate_predictions():
 @require_league
 def week_analysis():
     """
-    Get detailed week analysis including table output
+    Get detailed week analysis with HTML tables for all injury statuses
     
     Query params:
-    - week_index: Week number (required)
-    - day_of_week_override: Override current day (optional)
-    - injury_status: Filter by injury status (optional)
+    - week_index: Week number (required, 1-17)
     """
     try:
+        from predict.predict_week import build_week_html
+        
         data = request.args.to_dict()
         week_index = int(data.get('week_index', 0)) if data.get('week_index') else None
         
@@ -198,20 +198,17 @@ def week_analysis():
                 "message": "week_index is required"
             }), 400
         
-        day_of_week = int(data.get('day_of_week_override', 0))
-        injury_status_str = data.get('injury_status', 'ACTIVE')
-        injury_status = [injury_status_str] if isinstance(injury_status_str, str) else injury_status_str
+        # day_of_week_override is always 0 for current analysis
+        day_of_week_override = 0
         
-        # Get table output
-        table_output = get_table_output_for_week(
-            league, week_index, day_of_week, injury_status
-        )
+        # Get HTML analysis (includes all injury statuses and tables)
+        html_content = build_week_html(league, week_index, day_of_week_override)
         
         return jsonify({
             "status": "success",
             "data": {
                 "week_index": week_index,
-                "table_output": table_output
+                "html": html_content
             }
         }), 200
     
