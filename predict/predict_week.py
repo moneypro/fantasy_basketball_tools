@@ -223,6 +223,56 @@ def build_week_html(league, week_index, day_of_week_override=0):
 """
     return _html
 
+def build_week_json(league: League, week_index: int, day_of_week_override: int = 0) -> Dict:
+    """Build week analysis data as JSON (agent-friendly format).
+    
+    Returns structured data instead of HTML for better agent compatibility.
+    Includes all three injury status configurations (Active, DTD, OUT).
+    """
+    # Table 1: Active only
+    _, table_active, team_scores_active = get_table_output_for_week(league, week_index, day_of_week_override, ['ACTIVE'])
+    # Table 2: Active + DTD
+    _, table_dtd, team_scores_dtd = get_table_output_for_week(league, week_index, day_of_week_override, ['ACTIVE', 'DAY_TO_DAY'])
+    # Table 3: Active + DTD + OUT
+    _, table_out, team_scores_out = get_table_output_for_week(league, week_index, day_of_week_override, ['ACTIVE', 'DAY_TO_DAY', 'OUT'])
+    num_games_active_dict = {row[0]: row[1] for row in table_active[1:]}
+    num_games_dtd_dict = {row[0]: row[1] for row in table_dtd[1:]}
+    num_games_out_dict = {row[0]: row[1] for row in table_out[1:]}
+
+    # Get remaining days cumulative scores tables
+    remaining_days_active = get_remaining_days_table_output(league, week_index, day_of_week_override, ['ACTIVE'])
+    remaining_days_dtd = get_remaining_days_table_output(league, week_index, day_of_week_override, ['ACTIVE', 'DAY_TO_DAY'])
+    remaining_days_out = get_remaining_days_table_output(league, week_index, day_of_week_override, ['ACTIVE', 'DAY_TO_DAY', 'OUT'])
+
+    non_healthy_table = get_non_healthy_players_table(league)
+
+    def table_to_dict(table_data):
+        """Convert tabulate table to list of dicts"""
+        if not table_data or len(table_data) < 2:
+            return []
+        headers = table_data[0]
+        rows = table_data[1:]
+        return [dict(zip(headers, row)) for row in rows]
+
+    return {
+        "week_index": week_index,
+        "summary": {
+            "non_healthy_players": table_to_dict(non_healthy_table)
+        },
+        "active_only": {
+            "predictions": table_to_dict(table_active),
+            "remaining_days": table_to_dict(remaining_days_active)
+        },
+        "day_to_day_included": {
+            "predictions": table_to_dict(table_dtd),
+            "remaining_days": table_to_dict(remaining_days_dtd)
+        },
+        "out_included": {
+            "predictions": table_to_dict(table_out),
+            "remaining_days": table_to_dict(remaining_days_out)
+        }
+    }
+
 def save_week_forecast(league, week_index, day_of_week_override, output_dir):
     week_folder = os.path.join(output_dir, f"week_{week_index}_forecast")
     os.makedirs(week_folder, exist_ok=True)

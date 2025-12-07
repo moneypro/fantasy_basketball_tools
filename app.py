@@ -187,7 +187,7 @@ def week_analysis():
     - week_index: Week number (required, 1-17)
     """
     try:
-        from predict.predict_week import build_week_html
+        from predict.predict_week import build_week_json
         
         data = request.args.to_dict()
         week_index = int(data.get('week_index', 0)) if data.get('week_index') else None
@@ -201,15 +201,12 @@ def week_analysis():
         # day_of_week_override is always 0 for current analysis
         day_of_week_override = 0
         
-        # Get HTML analysis (includes all injury statuses and tables)
-        html_content = build_week_html(league, week_index, day_of_week_override)
+        # Get JSON analysis (includes all injury statuses and tables as structured data)
+        analysis_data = build_week_json(league, week_index, day_of_week_override)
         
         return jsonify({
             "status": "success",
-            "data": {
-                "week_index": week_index,
-                "html": html_content
-            }
+            "data": analysis_data
         }), 200
     
     except Exception as e:
