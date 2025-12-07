@@ -39,6 +39,16 @@
             "description": "API authentication key"
           }
         ],
+        "requestBody": {
+          "description": "Optional request body (currently no parameters required)",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Successful response with matchup scores",
@@ -120,15 +130,6 @@
             "description": "Scoring period ID. Each period = 1 day. 1=Oct 21, 2=Oct 22, ..., 47=Dec 6, 2026"
           },
           {
-            "name": "team_id",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            },
-            "description": "Fantasy team ID"
-          },
-          {
             "name": "api_key",
             "in": "query",
             "required": true,
@@ -138,6 +139,24 @@
             "description": "API authentication key"
           }
         ],
+        "requestBody": {
+          "required": true,
+          "description": "Request body containing team_id",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "team_id": {
+                    "type": "integer",
+                    "description": "Fantasy team ID (required)"
+                  }
+                },
+                "required": ["team_id"]
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Successful response with player data",
@@ -223,17 +242,6 @@
             "description": "Fantasy team ID"
           },
           {
-            "name": "week_index",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 23
-            },
-            "description": "Fantasy week number (1-23), defaults to current week"
-          },
-          {
             "name": "api_key",
             "in": "query",
             "required": true,
@@ -243,6 +251,34 @@
             "description": "API authentication key"
           }
         ],
+        "requestBody": {
+          "description": "Optional request body with prediction parameters",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "week_index": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 23,
+                    "description": "Fantasy week number (1-23), defaults to current week if not provided"
+                  },
+                  "day_of_week_override": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 6,
+                    "description": "Override starting day (0=Monday, 6=Sunday), default=0"
+                  },
+                  "injury_status": {
+                    "type": "string",
+                    "description": "Comma-separated injury statuses (e.g., 'ACTIVE,PROBABLE'), default='ACTIVE'"
+                  }
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Successful response with team and matchup data"
@@ -278,6 +314,16 @@
             "description": "API authentication key"
           }
         ],
+        "requestBody": {
+          "description": "Optional request body (no parameters required)",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Successful response with roster data"

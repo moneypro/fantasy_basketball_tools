@@ -1025,8 +1025,13 @@ def get_team_roster(team_id):
     
     Path params:
     - team_id: Team ID (integer)
+    
+    Request body params (optional):
+    - None required
     """
     try:
+        # Request body is optional for this endpoint
+        data = request.get_json() or {}
         # Find the team by ID
         target_team = None
         for team in league.teams:
@@ -1100,14 +1105,15 @@ def get_players_playing_for_scoring_period(scoring_period):
     Path params:
     - scoring_period: Scoring period ID (1=Oct 21, 2=Oct 22, ..., 47=Dec 6, 2026)
     
-    Query params:
+    Request body params:
     - team_id: Team ID (required) - Get players only for this team
     """
     try:
         from line_up.game_day_player_getter import GameDayPlayerGetter
         
-        # Get team_id from query params
-        team_id = request.args.get('team_id', type=int)
+        # Get team_id from request body or query params (for backward compatibility)
+        data = request.get_json() or {}
+        team_id = data.get('team_id') or request.args.get('team_id', type=int)
         if not team_id:
             return jsonify({
                 "status": "error",
@@ -1227,8 +1233,14 @@ def get_scoreboard(week_index):
     
     Path params:
     - week_index: Fantasy week number (1-23)
+    
+    Request body params (optional):
+    - None required
     """
     try:
+        # Request body is optional for this endpoint
+        data = request.get_json() or {}
+        
         # Validate week index
         if not isinstance(week_index, int) or week_index < 1 or week_index > 23:
             return jsonify({
@@ -1343,10 +1355,11 @@ def get_team_info(team_id):
     - injury_status: Comma-separated injury statuses (optional, default=ACTIVE)
     """
     try:
-        # Get query parameters
-        week_index = request.args.get('week_index', type=int)
-        day_of_week_override = request.args.get('day_of_week_override', default=0, type=int)
-        injury_status_param = request.args.get('injury_status', 'ACTIVE')
+        # Get parameters from request body (POST) or query params (for backward compatibility)
+        data = request.get_json() or {}
+        week_index = data.get('week_index') or request.args.get('week_index', type=int)
+        day_of_week_override = data.get('day_of_week_override') or request.args.get('day_of_week_override', default=0, type=int)
+        injury_status_param = data.get('injury_status') or request.args.get('injury_status', 'ACTIVE')
         injury_status = [s.strip().upper() for s in injury_status_param.split(',')]
         
         # Use current week if not provided
