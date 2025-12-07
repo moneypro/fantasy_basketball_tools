@@ -900,11 +900,24 @@ def refresh_league():
     
     This endpoint requires admin authentication.
     Useful when the cached league data is stale.
+    Deletes the cache file and fetches fresh data from ESPN.
     """
     try:
         global league
+        import os
         
         print("🔄 Admin requested league refresh...")
+        
+        # Delete the cache file to force fresh fetch
+        from utils.create_league import get_cache_path
+        cache_path = get_cache_path(2026)  # Default year
+        
+        if os.path.exists(cache_path):
+            try:
+                os.remove(cache_path)
+                print(f"✅ Deleted stale cache: {cache_path}")
+            except Exception as e:
+                print(f"⚠️  Could not delete cache: {e}")
         
         # Create a new league instance without using cache
         from utils.create_league import create_league
@@ -917,9 +930,10 @@ def refresh_league():
             print("✅ League refreshed successfully from ESPN")
             return jsonify({
                 "status": "success",
-                "message": "League refreshed successfully from ESPN API",
+                "message": "League refreshed successfully from ESPN API (cache cleared)",
                 "league_name": league.league_name if hasattr(league, 'league_name') else "Unknown",
-                "year": league.year if hasattr(league, 'year') else "Unknown"
+                "year": league.year if hasattr(league, 'year') else "Unknown",
+                "cache_cleared": True
             }), 200
         else:
             print("❌ Failed to refresh league")
