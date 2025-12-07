@@ -10,6 +10,7 @@ def require_api_key(f):
     API key can be provided via:
     - Header: X-API-Key: <key>
     - Query param: ?api_key=<key>
+    - Request body: {"api_key": "<key>"} (for POST requests)
     
     Usage:
         @app.route('/api/v1/protected', methods=['GET'])
@@ -21,14 +22,22 @@ def require_api_key(f):
     def decorated_function(*args, **kwargs):
         manager = get_api_key_manager()
         
-        # Get API key from header or query param
+        # Get API key from header, query param, or request body
         api_key = request.headers.get('X-API-Key') or request.args.get('api_key')
+        
+        # For POST requests, also check request body
+        if not api_key and request.method == 'POST':
+            try:
+                data = request.get_json() or {}
+                api_key = data.get('api_key')
+            except:
+                pass
         
         if not api_key:
             return jsonify({
                 "status": "error",
                 "message": "API key required",
-                "help": "Provide X-API-Key header or ?api_key= query param"
+                "help": "Provide one of: X-API-Key header, ?api_key= query param, or api_key in request body"
             }), 401
         
         # Verify key exists and is active
