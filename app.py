@@ -89,7 +89,8 @@ def root():
             "health": "GET /api/v1/health",
             "calculate_predictions": "POST /api/v1/predictions/calculate",
             "tools_schema": "GET /api/v1/tools/schema",
-            "week_analysis": "POST /api/v1/predictions/week-analysis"
+            "week_analysis": "POST /api/v1/predictions/week-analysis",
+            "team_info": "GET /api/v1/team/{team_id}"
         }
     })
 
@@ -848,6 +849,148 @@ def revoke_api_key():
             "status": "error",
             "message": f"Failed to revoke API key: {str(e)}"
         }), 500
+
+# ===== Team Endpoints =====
+
+@app.route('/api/v1/team/<int:team_id>', methods=['GET'])
+@require_api_key
+@require_league
+def get_team_info(team_id):
+    """
+    Get team information and matchup details for a specific week
+    
+    Path params:
+    - team_id: Team ID (integer)
+    
+    Query params:
+    - week_index: Week number (optional, defaults to current week if not provided, 1-17)
+    - day_of_week_override: Starting day override (optional, 0=Monday, 6=Sunday, default=0)
+    - injury_status: Comma-separated injury statuses (optional, default=ACTIVE)
+    """
+    try:
+        # Get query parameters
+        week_index = request.args.get('week_index', type=int)
+        day_of_week_override = request.args.get('day_of_week_override', default=0, type=int)
+        injury_status_param = request.args.get('injury_status', 'ACTIVE')
+        injury_status = [s.strip().upper() for s in injury_status_param.split(',')]
+        
+        # Use current week if not provided
+        if week_index is None:
+            week_index = league.currentMatchupPeriod
+        
+        # Validate week range
+        if not isinstance(week_index, int) or week_index < 1 or week_index > 17:
+            return jsonify({
+                "status": "error",
+                "message": "week_index must be an integer between 1 and 17"
+            }), 400
+        
+        # Validate day_of_week
+        if not isinstance(day_of_week_override, int) or day_of_week_override < 0 or day_of_week_override > 6:
+            return jsonify({
+                "status": "error",
+                "message": "day_of_week_override must be 0-6 (0=Monday, 6=Sunday)"
+            }), 400
+        
+        # Find the team by ID
+        target_team = None
+        for team in league.teams:
+            if team.team_id == team_id:
+                target_team = team
+                break
+        
+        if not target_team:
+            return jsonify({
+                "status": "error",
+                "message": f"Team with ID {team_id} not found in league"
+            }), 404
+        
+        # Get week predictions for all teams
+        num_games, team_scores = predict_week(
+            league, week_index, day_of_week_override, injury_status
+        )
+        
+        # Find the matchup for this team
+        matchup_data = None
+        for matchup in league.scoreboard(week_index):
+            if matchup.home_team.team_id == team_id:
+                matchup_data = {
+                    "home_team": matchup.home_team.team_name,
+                    "away_team": matchup.away_team.team_name,
+                    "is_home": True,
+                    "opponent_id": matchup.away_team.team_id,
+                    "opponent_name": matchup.away_team.team_name
+                }
+                break
+            elif matchup.away_team.team_id == team_id:
+                matchup_data = {
+                    "home_team": matchup.home_team.team_name,
+                    "away_team": matchup.away_team.team_name,
+                    "is_home": False,
+                    "opponent_id": matchup.home_team.team_id,
+                    "opponent_name": matchup.home_team.team_name
+                }
+                break
+        
+        # Build response with performance metrics
+        team_name = target_team.team_name
+        team_avg, team_std = team_scores.get(team_name, (0, 0))
+        
+        opponent_avg = 0
+        opponent_std = 0
+        if matchup_data:
+            opponent_name = matchup_data['opponent_name']
+            opponent_avg, opponent_std = team_scores.get(opponent_name, (0, 0))
+        
+        response_data = {
+            "team": {
+                "id": target_team.team_id,
+                "name": target_team.team_name,
+                "owner": target_team.owner,
+                "rank": target_team.position,
+                "wins": target_team.wins,
+                "losses": target_team.losses,
+                "points_for": round(target_team.points_for, 2),
+                "points_against": round(target_team.points_against, 2)
+            },
+            "week": {
+                "index": week_index,
+                "day_of_week_override": day_of_week_override,
+                "injury_status_filter": injury_status
+            },
+            "performance_metrics": {
+                "predicted_average_points": round(team_avg, 2),
+                "predicted_std_dev": round(team_std, 2),
+                "number_of_games": num_games.get(team_name, 0)
+            },
+            "matchup": matchup_data if matchup_data else {
+                "message": "No matchup found for this week"
+            },
+            "opponent_metrics": {
+                "predicted_average_points": round(opponent_avg, 2),
+                "predicted_std_dev": round(opponent_std, 2),
+                "number_of_games": num_games.get(matchup_data['opponent_name'], 0) if matchup_data else 0
+            } if matchup_data else None,
+            "matchup_analysis": {
+                "point_differential": round(team_avg - opponent_avg, 2),
+                "point_differential_std_dev": round((team_std ** 2 + opponent_std ** 2) ** 0.5, 2)
+            } if matchup_data else None
+        }
+        
+        return jsonify({
+            "status": "success",
+            "data": response_data
+        }), 200
+    
+    except Exception as e:
+        print(f"Error in get_team_info: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({
+            "status": "error",
+            "message": f"Failed to retrieve team information: {str(e)}"
+        }), 500
+
 
 # ===== Error Handlers =====
 
