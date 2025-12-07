@@ -1129,27 +1129,39 @@ def get_players_playing_for_scoring_period(scoring_period):
             owner = target_team.owners[0]
             owner_name = owner.get('displayName') if isinstance(owner, dict) else owner.displayName
         
-        # Build player data
-        playing_players = [
-            {
+        # Get player stats using RosterWeekPredictor
+        from predict.internal.roster_week_predictor import RosterWeekPredictor
+        from common.week import Week
+        
+        # Build player data with stats
+        playing_players = []
+        for player in players_playing:
+            avg_points, variance = RosterWeekPredictor.get_avg_variance_stats(player)
+            player_info = {
+                "player_id": player.player_id if hasattr(player, 'player_id') else None,
                 "name": player.name,
                 "position": player.position if hasattr(player, 'position') else None,
                 "nba_team": player.proTeam if hasattr(player, 'proTeam') else None,
                 "injury_status": player.injuryStatus if hasattr(player, 'injuryStatus') and player.injuryStatus else "ACTIVE",
-                "player_id": player.player_id if hasattr(player, 'player_id') else None
+                "projected_avg_points": round(avg_points, 2),
+                "projected_variance": round(variance, 2)
             }
-            for player in players_playing
-        ]
+            playing_players.append(player_info)
         
-        not_playing_players = [
-            {
-                "name": p.name,
-                "position": p.position if hasattr(p, 'position') else None,
-                "nba_team": p.proTeam if hasattr(p, 'proTeam') else None,
-                "injury_status": p.injuryStatus if hasattr(p, 'injuryStatus') and p.injuryStatus else "ACTIVE"
-            }
-            for p in all_active_players if p not in players_playing
-        ]
+        not_playing_players = []
+        for p in all_active_players:
+            if p not in players_playing:
+                avg_points, variance = RosterWeekPredictor.get_avg_variance_stats(p)
+                player_info = {
+                    "player_id": p.player_id if hasattr(p, 'player_id') else None,
+                    "name": p.name,
+                    "position": p.position if hasattr(p, 'position') else None,
+                    "nba_team": p.proTeam if hasattr(p, 'proTeam') else None,
+                    "injury_status": p.injuryStatus if hasattr(p, 'injuryStatus') and p.injuryStatus else "ACTIVE",
+                    "projected_avg_points": round(avg_points, 2),
+                    "projected_variance": round(variance, 2)
+                }
+                not_playing_players.append(player_info)
         
         response_data = {
             "team": {
