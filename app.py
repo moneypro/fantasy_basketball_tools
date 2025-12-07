@@ -106,6 +106,7 @@ def health():
 # ===== Prediction Endpoints =====
 
 @app.route('/api/v1/predictions/calculate', methods=['POST'])
+@require_api_key
 @require_league
 def calculate_predictions():
     """
@@ -176,6 +177,7 @@ def calculate_predictions():
         }), 500
 
 @app.route('/api/v1/predictions/week-analysis', methods=['POST'])
+@require_api_key
 @require_league
 def week_analysis():
     """
@@ -440,6 +442,7 @@ def get_tools_schema():
 # ===== Scout Endpoints =====
 
 @app.route('/api/v1/scout/players', methods=['POST'])
+@require_api_key
 @require_league
 def scout_player_endpoint():
     """Scout players - analyze player stats and rankings
@@ -482,6 +485,7 @@ def scout_player_endpoint():
         }), 500
 
 @app.route('/api/v1/scout/teams', methods=['GET'])
+@require_api_key
 @require_league
 def scout_team_endpoint():
     """Scout teams - analyze team stats and performance"""
@@ -498,6 +502,7 @@ def scout_team_endpoint():
         }), 500
 
 @app.route('/api/v1/scout/advanced-stats', methods=['GET'])
+@require_api_key
 def advanced_stats_endpoint():
     """Get team advanced stats
     
@@ -520,6 +525,7 @@ def advanced_stats_endpoint():
         }), 500
 
 @app.route('/api/v1/scout/team-changes', methods=['GET'])
+@require_api_key
 @require_league
 def team_changes_endpoint():
     """Get players who changed NBA teams between 2025 and 2026
@@ -557,6 +563,7 @@ def team_changes_endpoint():
 # ===== Lineup Endpoints =====
 
 @app.route('/api/v1/lineup/update', methods=['POST'])
+@require_api_key
 @require_league
 def update_lineup_endpoint():
     """Update lineup for next 7 days"""
@@ -575,6 +582,7 @@ def update_lineup_endpoint():
 # ===== Draft Recap Endpoints =====
 
 @app.route('/api/v1/draft/analysis', methods=['GET'])
+@require_api_key
 @require_league
 def draft_analysis_endpoint():
     """Analyze draft performance
@@ -609,6 +617,7 @@ def draft_analysis_endpoint():
 # ===== Scheduling Endpoints =====
 
 @app.route('/api/v1/scheduling/post-transaction', methods=['POST'])
+@require_api_key
 def post_transaction_endpoint():
     """Post a free agent transaction
     
@@ -653,6 +662,7 @@ def post_transaction_endpoint():
         }), 500
 
 @app.route('/api/v1/scheduling/schedule-add', methods=['POST'])
+@require_api_key
 def schedule_add_endpoint():
     """Schedule a free agent add for future date
     
