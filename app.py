@@ -23,6 +23,8 @@ from line_up.update_line_up import change_line_up_for_next_7_days
 from draft_recap.best_draft_2025 import calculate_drafted_team_points_and_top_and_worst_scorers
 from scheduling.post_free_agent_transaction import post_transaction
 from scheduling.schedule_free_agent_add import schedule_with_at
+from auth.decorators import require_api_key, optional_api_key
+from auth.api_key import get_api_key_manager
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -518,6 +520,106 @@ def schedule_add_endpoint():
         return jsonify({
             "status": "error",
             "message": f"Failed to schedule add: {str(e)}"
+        }), 500
+
+# ===== Authentication Endpoints =====
+
+@app.route('/api/v1/auth/keys/generate', methods=['POST'])
+def generate_api_key():
+    """Generate a new API key.
+    
+    Request body:
+    {
+        "name": "my-app",
+        "rate_limit": 100
+    }
+    
+    Returns the new API key (shown only once!)
+    """
+    try:
+        manager = get_api_key_manager()
+        data = request.json or {}
+        
+        name = data.get('name', 'Unnamed Key')
+        rate_limit = data.get('rate_limit', 100)
+        
+        if not name or len(name) < 3:
+            return jsonify({
+                "status": "error",
+                "message": "name is required (min 3 characters)"
+            }), 400
+        
+        new_key = manager.generate_key(name, rate_limit)
+        
+        return jsonify({
+            "status": "success",
+            "message": "API key generated successfully",
+            "data": {
+                "api_key": new_key,
+                "name": name,
+                "rate_limit": rate_limit,
+                "warning": "Save this key now - you won't see it again!"
+            }
+        }), 201
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": f"Failed to generate API key: {str(e)}"
+        }), 500
+
+@app.route('/api/v1/auth/keys', methods=['GET'])
+def list_api_keys():
+    """List all API keys (keys are truncated for security)"""
+    try:
+        manager = get_api_key_manager()
+        keys = manager.list_keys()
+        
+        return jsonify({
+            "status": "success",
+            "data": keys,
+            "count": len(keys)
+        }), 200
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": f"Failed to list API keys: {str(e)}"
+        }), 500
+
+@app.route('/api/v1/auth/keys/revoke', methods=['POST'])
+def revoke_api_key():
+    """Revoke an API key
+    
+    Request body:
+    {
+        "api_key": "fba_..."
+    }
+    """
+    try:
+        data = request.json or {}
+        api_key = data.get('api_key')
+        
+        if not api_key:
+            return jsonify({
+                "status": "error",
+                "message": "api_key is required in request body"
+            }), 400
+        
+        manager = get_api_key_manager()
+        
+        if manager.revoke_key(api_key):
+            return jsonify({
+                "status": "success",
+                "message": "API key revoked successfully"
+            }), 200
+        else:
+            return jsonify({
+                "status": "error",
+                "message": "API key not found"
+            }), 404
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": f"Failed to revoke API key: {str(e)}"
         }), 500
 
 # ===== Error Handlers =====
