@@ -15,19 +15,22 @@ A fantasy basketball player wants to know:
 
 ## Solution Flow
 
-### Step 1: Get Current Week Scoreboard
+### Step 1: Get Current Week Scoreboard (with Live Scores)
 **Endpoint:** `GET /api/v1/scoreboard/{week_index}`
 
-**Purpose:** Retrieve all current matchups and scores for the week
+**Purpose:** Retrieve all current matchups and **live** scores for the week
 
 **Query:**
 ```bash
 GET /api/v1/scoreboard/7?api_key={API_KEY}
 ```
 
+**Important Implementation Detail:**
+The endpoint uses `league.box_scores(week, current_scoring_period, matchup_total=True)` to get live scores as games progress, not final scores. Scores are matched to matchups by comparing team IDs, not array index, ensuring accuracy regardless of box_scores ordering.
+
 **Response Data Used:**
-- Current score for your team
-- Current score for opponent
+- Current **live** score for your team (updated as games progress)
+- Current **live** score for opponent
 - Point differential
 - Opponent ID and name
 
@@ -55,7 +58,29 @@ GET /api/v1/players-playing/48?team_id=15&api_key={API_KEY}
 - Opponent's projected points for tomorrow
 - Opponent's players with games
 
-### Step 3: Calculate Final Projections
+### Step 3: Get Detailed Player Matchup Analysis
+**Endpoint:** `GET /api/v1/players-playing/{scoring_period}?team_id={team_id}`
+
+**Purpose:** See exactly which players have games and their individual projections
+
+**Queries:**
+```bash
+# Your team's players tomorrow
+GET /api/v1/players-playing/48?team_id=5&api_key={API_KEY}
+
+# Opponent's players tomorrow
+GET /api/v1/players-playing/48?team_id=10&api_key={API_KEY}
+```
+
+**Response Data Used:**
+- List of players with games (and without)
+- Individual projected points per player
+- Injury status for each player
+- Total projected points for the team
+
+**Insight:** This reveals the **matchup quality** - if opponent has 7 top-tier players vs your 5, they'll likely outscore you even if you're currently winning.
+
+### Step 4: Calculate Final Projections
 **Calculation Logic:**
 ```
 Your Final Score = Current Score + Tomorrow's Projection
@@ -66,20 +91,59 @@ Winner = "YES" if Point Differential > 0 else "NO"
 
 ## Results Example
 
-### Current Status (Week 7, Dec 6)
+### Example 1: Shanghai Stretchers vs Kanagawa (Week 7, Dec 6)
+
+#### Current Status
 ```
-Your Team (SEA MoNeYPro):     1,027.00
-Opponent (Dragon City Tiedan):  943.00
-Current Lead:                    +84.00
+Shanghai Stretchers:        1,195.00 ✅ LEADING
+Kanagawa Medical Center:    1,177.00
+Current Lead:                 +18.00
 ```
 
-### Tomorrow's Projections (Dec 7)
+#### Tomorrow's Player Matchup
+```
+Shanghai (5 players, 152.57 pts):
+  - Jalen Suggs (34.15)
+  - Deandre Ayton (32.75)
+  - Nikola Vucevic (31.48)
+  - De'Anthony Melton (28.10)
+  - Ryan Kalkbrenner (26.09)
+
+Kanagawa (7 players, 218.72 pts):
+  - Josh Giddey (41.28)
+  - Zach Edey (37.26)
+  - Immanuel Quickley (33.76)
+  - Coby White (30.78)
+  - Robert Williams III (27.67)
+  - Toumani Camara (24.89)
+  - Brandon Miller (23.08)
+```
+
+#### Projected Final
+```
+Shanghai Final:    1,347.57
+Kanagawa Final:    1,395.72
+Result:            ❌ LOSE by 48.15 points
+```
+
+**Key Insight:** Despite leading by 18 points, Shanghai has fewer players (5 vs 7) and lower projections (152 vs 218). Kanagawa's matchup is significantly stronger, resulting in a projected loss.
+
+### Example 2: SEA MoNeYPro vs Dragon City Tiedan (Week 7)
+
+#### Current Status
+```
+SEA MoNeYPro (You):         1,027.00 ✅ LEADING
+Dragon City Tiedan:           943.00
+Current Lead:                 +84.00
+```
+
+#### Tomorrow's Projections (Dec 7)
 ```
 Your Projection:      +95.33 pts (3 players with games)
 Opponent Projection:  +119.43 pts (5 players with games)
 ```
 
-### Projected Final
+#### Projected Final
 ```
 Your Final:           1,122.33
 Opponent Final:       1,062.43
@@ -104,9 +168,10 @@ Result:               ✅ WIN by 59.90 points
 
 ## API Endpoints Used
 
-1. `GET /api/v1/scoreboard/{week_index}` - Current scores
-2. `GET /api/v1/players-playing/{scoring_period}?team_id={team_id}` - Tomorrow's projections
-3. Repeated for opponent team (same endpoint, different team_id)
+1. `GET /api/v1/scoreboard/{week_index}` - Current live scores (uses league.box_scores() for accuracy)
+2. `GET /api/v1/players-playing/{scoring_period}?team_id={team_id}` - Players with games and projections
+3. Repeat endpoint 2 for opponent team with their team_id
+4. Calculate final scores by adding projections to current scores
 
 ## Implementation Details
 
