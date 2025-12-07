@@ -92,7 +92,8 @@ def root():
             "week_analysis": "POST /api/v1/predictions/week-analysis",
             "team_info": "GET /api/v1/team/{team_id}",
             "team_roster": "GET /api/v1/team/{team_id}/roster",
-            "players_playing_for_scoring_period": "GET /api/v1/players-playing/{scoring_period}?team_id={team_id}"
+            "players_playing_for_scoring_period": "GET /api/v1/players-playing/{scoring_period}?team_id={team_id}",
+            "scoreboard": "GET /api/v1/scoreboard/{week_index}"
         }
     })
 
@@ -558,6 +559,28 @@ def get_tools_schema():
                             }
                         },
                         "required": ["scoring_period", "team_id"]
+                    }
+                }
+            },
+            {
+                "type": "function",
+                "function": {
+                    "name": "get_scoreboard",
+                    "description": "Get current scores for all matchups in a specific fantasy week",
+                    "x-endpoint": "/api/v1/scoreboard/{week_index}",
+                    "x-method": "GET",
+                    "x-week-reference": "Week 1 starts Oct 20, 2026 (Monday). Each week = 7 days. Currently in week 7.",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "week_index": {
+                                "type": "integer",
+                                "description": "Fantasy week number (1-23). Week 1 starts Oct 20, 2026 (Monday). Each week = 7 days.",
+                                "minimum": 1,
+                                "maximum": 23
+                            }
+                        },
+                        "required": ["week_index"]
                     }
                 }
             }
@@ -1193,6 +1216,83 @@ def get_players_playing_for_scoring_period(scoring_period):
         return jsonify({
             "status": "error",
             "message": f"Failed to get playing players: {str(e)}"
+        }), 500
+
+@app.route('/api/v1/scoreboard/<int:week_index>', methods=['GET'])
+@require_api_key
+@require_league
+def get_scoreboard(week_index):
+    """
+    Get current scores for all matchups in a specific week
+    
+    Path params:
+    - week_index: Fantasy week number (1-23)
+    """
+    try:
+        # Validate week index
+        if not isinstance(week_index, int) or week_index < 1 or week_index > 23:
+            return jsonify({
+                "status": "error",
+                "message": "week_index must be an integer between 1 and 23"
+            }), 400
+        
+        # Get scoreboard for the week
+        scoreboard = league.scoreboard(week_index)
+        
+        # Build matchup data
+        matchups = []
+        for matchup in scoreboard:
+            matchup_data = {
+                "home_team": {
+                    "id": matchup.home_team.team_id,
+                    "name": matchup.home_team.team_name,
+                    "owner": (matchup.home_team.owners[0].get('displayName') 
+                             if isinstance(matchup.home_team.owners[0], dict) 
+                             else matchup.home_team.owners[0].displayName) if matchup.home_team.owners else "Unknown",
+                    "score": matchup.home_score,
+                    "wins": matchup.home_team.wins,
+                    "losses": matchup.home_team.losses
+                },
+                "away_team": {
+                    "id": matchup.away_team.team_id,
+                    "name": matchup.away_team.team_name,
+                    "owner": (matchup.away_team.owners[0].get('displayName') 
+                             if isinstance(matchup.away_team.owners[0], dict) 
+                             else matchup.away_team.owners[0].displayName) if matchup.away_team.owners else "Unknown",
+                    "score": matchup.away_score,
+                    "wins": matchup.away_team.wins,
+                    "losses": matchup.away_team.losses
+                },
+                "matchup_id": matchup.matchup_id if hasattr(matchup, 'matchup_id') else None,
+                "is_playoffs": matchup.is_playoffs if hasattr(matchup, 'is_playoffs') else False
+            }
+            
+            # Calculate point differential
+            point_diff = matchup.home_score - matchup.away_score
+            matchup_data["point_differential"] = round(point_diff, 2)
+            matchup_data["leader"] = "home" if point_diff > 0 else ("away" if point_diff < 0 else "tied")
+            
+            matchups.append(matchup_data)
+        
+        response_data = {
+            "week_index": week_index,
+            "week_start": "Oct 20, 2026" if week_index == 1 else f"Week {week_index}",
+            "total_matchups": len(matchups),
+            "matchups": matchups
+        }
+        
+        return jsonify({
+            "status": "success",
+            "data": response_data
+        }), 200
+    
+    except Exception as e:
+        print(f"Error in get_scoreboard: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({
+            "status": "error",
+            "message": f"Failed to get scoreboard: {str(e)}"
         }), 500
 
 @app.route('/api/v1/team/<int:team_id>', methods=['GET'])
