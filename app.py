@@ -477,6 +477,43 @@ def get_tools_schema():
                         "required": ["player_id", "date", "team_id", "scoring_period_id"]
                     }
                 }
+            },
+            {
+                "type": "function",
+                "function": {
+                    "name": "get_team_info",
+                    "description": "Get team-specific information including matchup details and performance metrics",
+                    "x-endpoint": "/api/v1/team/{team_id}",
+                    "x-method": "GET",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "team_id": {
+                                "type": "integer",
+                                "description": "Fantasy team ID"
+                            },
+                            "week_index": {
+                                "type": "integer",
+                                "description": "Fantasy week number (1-17), defaults to current week",
+                                "minimum": 1,
+                                "maximum": 17
+                            },
+                            "day_of_week_override": {
+                                "type": "integer",
+                                "description": "Override starting day (0=Monday, 6=Sunday)",
+                                "minimum": 0,
+                                "maximum": 6,
+                                "default": 0
+                            },
+                            "injury_status": {
+                                "type": "string",
+                                "description": "Comma-separated injury statuses (e.g., 'ACTIVE,PROBABLE')",
+                                "default": "ACTIVE"
+                            }
+                        },
+                        "required": ["team_id"]
+                    }
+                }
             }
         ]
     })
