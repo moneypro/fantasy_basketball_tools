@@ -1242,6 +1242,10 @@ def get_scoreboard(week_index):
         # Build matchup data
         matchups = []
         for matchup in scoreboard:
+            # Get scores - use final_score if available, otherwise use live_score
+            home_score = matchup.home_final_score if hasattr(matchup, 'home_final_score') else matchup.home_team_live_score
+            away_score = matchup.away_final_score if hasattr(matchup, 'away_final_score') else matchup.away_team_live_score
+            
             matchup_data = {
                 "home_team": {
                     "id": matchup.home_team.team_id,
@@ -1249,7 +1253,7 @@ def get_scoreboard(week_index):
                     "owner": (matchup.home_team.owners[0].get('displayName') 
                              if isinstance(matchup.home_team.owners[0], dict) 
                              else matchup.home_team.owners[0].displayName) if matchup.home_team.owners else "Unknown",
-                    "score": matchup.home_score,
+                    "score": home_score,
                     "wins": matchup.home_team.wins,
                     "losses": matchup.home_team.losses
                 },
@@ -1259,16 +1263,17 @@ def get_scoreboard(week_index):
                     "owner": (matchup.away_team.owners[0].get('displayName') 
                              if isinstance(matchup.away_team.owners[0], dict) 
                              else matchup.away_team.owners[0].displayName) if matchup.away_team.owners else "Unknown",
-                    "score": matchup.away_score,
+                    "score": away_score,
                     "wins": matchup.away_team.wins,
                     "losses": matchup.away_team.losses
                 },
                 "matchup_id": matchup.matchup_id if hasattr(matchup, 'matchup_id') else None,
-                "is_playoffs": matchup.is_playoffs if hasattr(matchup, 'is_playoffs') else False
+                "is_playoffs": matchup.is_playoffs if hasattr(matchup, 'is_playoffs') else False,
+                "winner": matchup.winner if hasattr(matchup, 'winner') else None
             }
             
             # Calculate point differential
-            point_diff = matchup.home_score - matchup.away_score
+            point_diff = home_score - away_score
             matchup_data["point_differential"] = round(point_diff, 2)
             matchup_data["leader"] = "home" if point_diff > 0 else ("away" if point_diff < 0 else "tied")
             
