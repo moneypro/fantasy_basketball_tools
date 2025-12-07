@@ -983,8 +983,8 @@ def get_team_info(team_id):
             "team": {
                 "id": target_team.team_id,
                 "name": target_team.team_name,
-                "owner": target_team.owner,
-                "rank": target_team.position,
+                "owner": target_team.owners[0] if target_team.owners else "Unknown",
+                "rank": target_team.standing,
                 "wins": target_team.wins,
                 "losses": target_team.losses,
                 "points_for": round(target_team.points_for, 2),
