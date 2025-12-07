@@ -909,8 +909,8 @@ def refresh_league():
         # Create a new league instance without using cache
         from utils.create_league import create_league
         
-        # Temporarily disable cache by creating fresh instance
-        new_league = create_league(use_cache=False)
+        # Fetch fresh league data from ESPN (bypass cache)
+        new_league = create_league(use_local_cache=False)
         
         if new_league:
             league = new_league
