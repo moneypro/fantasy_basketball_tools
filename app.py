@@ -250,6 +250,7 @@ def get_tools_schema():
             "base_url": base_url,
             "authentication": "Query parameter: ?api_key=<your_api_key>",
             "note": "All endpoints require the api_key query parameter for authentication",
+            "api_endpoint": f"{base_url}/api/v1",
             "week_info": {
                 "season_start_date": "2025-10-20",
                 "current_week": current_week,
@@ -264,6 +265,8 @@ def get_tools_schema():
                 "function": {
                     "name": "calculate_fantasy_predictions",
                     "description": "Calculate fantasy basketball predictions for a given week",
+                    "x-endpoint": "/api/v1/predictions/calculate",
+                    "x-method": "POST",
                     "parameters": {
                         "type": "object",
                         "properties": {
@@ -294,6 +297,8 @@ def get_tools_schema():
                 "function": {
                     "name": "get_week_analysis",
                     "description": "Get detailed week analysis including table output",
+                    "x-endpoint": "/api/v1/predictions/week-analysis",
+                    "x-method": "POST",
                     "parameters": {
                         "type": "object",
                         "properties": {
@@ -320,6 +325,8 @@ def get_tools_schema():
                 "function": {
                     "name": "scout_players",
                     "description": "Scout and analyze players with scoring and upside analysis",
+                    "x-endpoint": "/api/v1/scout/players",
+                    "x-method": "POST",
                     "parameters": {
                         "type": "object",
                         "properties": {
@@ -337,6 +344,8 @@ def get_tools_schema():
                 "function": {
                     "name": "scout_teams",
                     "description": "Scout teams and analyze team performance",
+                    "x-endpoint": "/api/v1/scout/teams",
+                    "x-method": "GET",
                     "parameters": {
                         "type": "object",
                         "properties": {}
@@ -348,6 +357,8 @@ def get_tools_schema():
                 "function": {
                     "name": "get_advanced_stats",
                     "description": "Get team advanced stats from NBA",
+                    "x-endpoint": "/api/v1/scout/advanced-stats",
+                    "x-method": "GET",
                     "parameters": {
                         "type": "object",
                         "properties": {
@@ -365,6 +376,8 @@ def get_tools_schema():
                 "function": {
                     "name": "get_team_changes",
                     "description": "Get players who changed NBA teams, rookies, and departures",
+                    "x-endpoint": "/api/v1/scout/team-changes",
+                    "x-method": "GET",
                     "parameters": {
                         "type": "object",
                         "properties": {}
@@ -376,6 +389,8 @@ def get_tools_schema():
                 "function": {
                     "name": "update_lineup",
                     "description": "Update lineup for next 7 days",
+                    "x-endpoint": "/api/v1/lineup/update",
+                    "x-method": "POST",
                     "parameters": {
                         "type": "object",
                         "properties": {}
@@ -387,6 +402,8 @@ def get_tools_schema():
                 "function": {
                     "name": "analyze_draft",
                     "description": "Analyze draft performance with top and worst scorers",
+                    "x-endpoint": "/api/v1/draft/analysis",
+                    "x-method": "GET",
                     "parameters": {
                         "type": "object",
                         "properties": {
@@ -414,6 +431,8 @@ def get_tools_schema():
                 "function": {
                     "name": "post_transaction",
                     "description": "Post a free agent transaction",
+                    "x-endpoint": "/api/v1/scheduling/post-transaction",
+                    "x-method": "POST",
                     "parameters": {
                         "type": "object",
                         "properties": {
@@ -439,6 +458,8 @@ def get_tools_schema():
                 "function": {
                     "name": "schedule_free_agent_add",
                     "description": "Schedule a free agent add for a future date",
+                    "x-endpoint": "/api/v1/scheduling/schedule-add",
+                    "x-method": "POST",
                     "parameters": {
                         "type": "object",
                         "properties": {
