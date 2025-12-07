@@ -893,6 +893,50 @@ def list_api_keys():
             "message": f"Failed to list API keys: {str(e)}"
         }), 500
 
+@app.route('/api/v1/admin/refresh-league', methods=['POST'])
+@require_admin
+def refresh_league():
+    """Force refresh league data from ESPN (bypasses cache)
+    
+    This endpoint requires admin authentication.
+    Useful when the cached league data is stale.
+    """
+    try:
+        global league
+        
+        print("🔄 Admin requested league refresh...")
+        
+        # Create a new league instance without using cache
+        from utils.create_league import create_league
+        
+        # Temporarily disable cache by creating fresh instance
+        new_league = create_league(use_cache=False)
+        
+        if new_league:
+            league = new_league
+            print("✅ League refreshed successfully from ESPN")
+            return jsonify({
+                "status": "success",
+                "message": "League refreshed successfully from ESPN API",
+                "league_name": league.league_name if hasattr(league, 'league_name') else "Unknown",
+                "year": league.year if hasattr(league, 'year') else "Unknown"
+            }), 200
+        else:
+            print("❌ Failed to refresh league")
+            return jsonify({
+                "status": "error",
+                "message": "Failed to refresh league from ESPN"
+            }), 500
+    
+    except Exception as e:
+        print(f"Error in refresh_league: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({
+            "status": "error",
+            "message": f"Failed to refresh league: {str(e)}"
+        }), 500
+
 @app.route('/api/v1/auth/keys/revoke', methods=['POST'])
 @require_admin
 def revoke_api_key():
