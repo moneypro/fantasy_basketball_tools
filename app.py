@@ -92,7 +92,8 @@ def root():
             "week_analysis": "POST /api/v1/predictions/week-analysis",
             "team_info": "GET /api/v1/team/{team_id}",
             "team_roster": "GET /api/v1/team/{team_id}/roster",
-            "team_playing_today": "GET /api/v1/team/{team_id}/playing-today"
+            "team_playing_today": "GET /api/v1/team/{team_id}/playing-today",
+            "players_playing_for_scoring_period": "GET /api/v1/players-playing/{scoring_period}?team_id={team_id}"
         }
     })
 
@@ -556,6 +557,32 @@ def get_tools_schema():
                             }
                         },
                         "required": ["team_id"]
+                    }
+                }
+            },
+            {
+                "type": "function",
+                "function": {
+                    "name": "get_players_playing_for_scoring_period",
+                    "description": "Get players from a team who have games on a specific scoring period. Scoring periods: 1=Oct 21, 2=Oct 22, ..., 47=Dec 6, 2026",
+                    "x-endpoint": "/api/v1/players-playing/{scoring_period}",
+                    "x-method": "GET",
+                    "x-scoring-period-reference": "Scoring period 1 starts Oct 21, 2026. Each scoring period is 1 day. Period 47 is Dec 6, 2026.",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "scoring_period": {
+                                "type": "integer",
+                                "description": "Scoring period ID (1-47). 1=Oct 21, 2=Oct 22, ..., 47=Dec 6, 2026",
+                                "minimum": 1,
+                                "maximum": 47
+                            },
+                            "team_id": {
+                                "type": "integer",
+                                "description": "Fantasy team ID (query parameter)"
+                            }
+                        },
+                        "required": ["scoring_period", "team_id"]
                     }
                 }
             }
@@ -1063,6 +1090,122 @@ def get_team_roster(team_id):
         return jsonify({
             "status": "error",
             "message": f"Failed to retrieve team roster: {str(e)}"
+        }), 500
+
+@app.route('/api/v1/players-playing/<int:scoring_period>', methods=['GET'])
+@require_api_key
+@require_league
+def get_players_playing_for_scoring_period(scoring_period):
+    """
+    Get all players from a specific team who have games on a scoring period
+    
+    Path params:
+    - scoring_period: Scoring period ID (1=Oct 21, 2=Oct 22, ..., 47=Dec 6, 2026)
+    
+    Query params:
+    - team_id: Team ID (required) - Get players only for this team
+    """
+    try:
+        from line_up.game_day_player_getter import GameDayPlayerGetter
+        
+        # Get team_id from query params
+        team_id = request.args.get('team_id', type=int)
+        if not team_id:
+            return jsonify({
+                "status": "error",
+                "message": "team_id query parameter is required"
+            }), 400
+        
+        # Find the team
+        target_team = None
+        for team in league.teams:
+            if team.team_id == team_id:
+                target_team = team
+                break
+        
+        if not target_team:
+            return jsonify({
+                "status": "error",
+                "message": f"Team with ID {team_id} not found in league"
+            }), 404
+        
+        # Validate scoring period
+        if not isinstance(scoring_period, int) or scoring_period < 1 or scoring_period > 47:
+            return jsonify({
+                "status": "error",
+                "message": "scoring_period must be an integer between 1 and 47"
+            }), 400
+        
+        # Get the game day player getter
+        getter = GameDayPlayerGetter(league, [], team_id)
+        
+        # Get all active players for this scoring period
+        all_active_players = getter.get_active_player_list_for_day(scoring_period)
+        
+        # Get players playing this period
+        players_playing = getter.get_players_playing(scoring_period)
+        
+        # Get NBA teams playing
+        nba_teams_playing = getter.get_games(scoring_period)
+        
+        # Get owner name
+        owner_name = "Unknown"
+        if target_team.owners:
+            owner = target_team.owners[0]
+            owner_name = owner.get('displayName') if isinstance(owner, dict) else owner.displayName
+        
+        # Build player data
+        playing_players = [
+            {
+                "name": player.name,
+                "position": player.position if hasattr(player, 'position') else None,
+                "nba_team": player.proTeam if hasattr(player, 'proTeam') else None,
+                "injury_status": player.injuryStatus if hasattr(player, 'injuryStatus') and player.injuryStatus else "ACTIVE",
+                "player_id": player.player_id if hasattr(player, 'player_id') else None
+            }
+            for player in players_playing
+        ]
+        
+        not_playing_players = [
+            {
+                "name": p.name,
+                "position": p.position if hasattr(p, 'position') else None,
+                "nba_team": p.proTeam if hasattr(p, 'proTeam') else None,
+                "injury_status": p.injuryStatus if hasattr(p, 'injuryStatus') and p.injuryStatus else "ACTIVE"
+            }
+            for p in all_active_players if p not in players_playing
+        ]
+        
+        response_data = {
+            "team": {
+                "id": target_team.team_id,
+                "name": target_team.team_name,
+                "owner": owner_name
+            },
+            "scoring_period": scoring_period,
+            "nba_teams_playing": nba_teams_playing,
+            "players_playing": {
+                "count": len(playing_players),
+                "players": playing_players
+            },
+            "players_not_playing": {
+                "count": len(not_playing_players),
+                "players": not_playing_players
+            }
+        }
+        
+        return jsonify({
+            "status": "success",
+            "data": response_data
+        }), 200
+    
+    except Exception as e:
+        print(f"Error in get_players_playing_for_scoring_period: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({
+            "status": "error",
+            "message": f"Failed to get playing players: {str(e)}"
         }), 500
 
 @app.route('/api/v1/team/<int:team_id>/playing-today', methods=['GET'])
