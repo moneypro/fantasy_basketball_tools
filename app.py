@@ -229,8 +229,16 @@ def get_tools_schema():
     """
     Get tool schema for AI agents (Claude, ChatGPT, etc.)
     Describes what tools this service provides
+    
+    Authentication: Pass API key as query parameter ?api_key=<your_key>
+    All endpoints require: ?api_key=fba_mjfwAOKGkneKbFLai7NyGwejuBxyrogBcMCndiww8x0
     """
     return jsonify({
+        "info": {
+            "authentication": "Query parameter: ?api_key=<your_api_key>",
+            "api_key_example": "fba_mjfwAOKGkneKbFLai7NyGwejuBxyrogBcMCndiww8x0",
+            "note": "All endpoints require the api_key query parameter for authentication"
+        },
         "tools": [
             {
                 "type": "function",
