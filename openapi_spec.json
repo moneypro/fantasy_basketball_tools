@@ -13,7 +13,7 @@
   ],
   "paths": {
     "/api/v1/scoreboard/{week_index}": {
-      "get": {
+      "post": {
         "summary": "Get current scores for all matchups in a week",
         "description": "Returns live scores and matchup details for all teams in a specific fantasy week. Uses league.box_scores() for accurate live scoring.",
         "operationId": "getScoreboard",
@@ -104,7 +104,7 @@
       }
     },
     "/api/v1/players-playing/{scoring_period}": {
-      "get": {
+      "post": {
         "summary": "Get players from a team with games on a specific scoring period",
         "description": "Returns players with and without games for a team on a given scoring period. Includes individual player projections.",
         "operationId": "getPlayersPlaying",
@@ -208,7 +208,7 @@
       }
     },
     "/api/v1/team/{team_id}": {
-      "get": {
+      "post": {
         "summary": "Get team information and matchup details",
         "description": "Returns comprehensive team info including predictions for a specific week",
         "operationId": "getTeamInfo",
@@ -254,7 +254,7 @@
       }
     },
     "/api/v1/team/{team_id}/roster": {
-      "get": {
+      "post": {
         "summary": "Get team roster with player details",
         "description": "Returns current roster with player positions, injury status, and other details",
         "operationId": "getTeamRoster",

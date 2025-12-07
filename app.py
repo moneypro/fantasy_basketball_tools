@@ -1016,7 +1016,7 @@ def revoke_api_key():
 
 # ===== Team Endpoints =====
 
-@app.route('/api/v1/team/<int:team_id>/roster', methods=['GET'])
+@app.route('/api/v1/team/<int:team_id>/roster', methods=['POST'])
 @require_api_key
 @require_league
 def get_team_roster(team_id):
@@ -1090,7 +1090,7 @@ def get_team_roster(team_id):
             "message": f"Failed to retrieve team roster: {str(e)}"
         }), 500
 
-@app.route('/api/v1/players-playing/<int:scoring_period>', methods=['GET'])
+@app.route('/api/v1/players-playing/<int:scoring_period>', methods=['POST'])
 @require_api_key
 @require_league
 def get_players_playing_for_scoring_period(scoring_period):
@@ -1218,7 +1218,7 @@ def get_players_playing_for_scoring_period(scoring_period):
             "message": f"Failed to get playing players: {str(e)}"
         }), 500
 
-@app.route('/api/v1/scoreboard/<int:week_index>', methods=['GET'])
+@app.route('/api/v1/scoreboard/<int:week_index>', methods=['POST'])
 @require_api_key
 @require_league
 def get_scoreboard(week_index):
@@ -1327,7 +1327,7 @@ def get_scoreboard(week_index):
             "message": f"Failed to get scoreboard: {str(e)}"
         }), 500
 
-@app.route('/api/v1/team/<int:team_id>', methods=['GET'])
+@app.route('/api/v1/team/<int:team_id>', methods=['POST'])
 @require_api_key
 @require_league
 def get_team_info(team_id):
