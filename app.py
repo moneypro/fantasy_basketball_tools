@@ -233,17 +233,30 @@ def get_tools_schema():
     Authentication: Pass API key as query parameter ?api_key=<your_key>
     All endpoints require: ?api_key=fba_mjfwAOKGkneKbFLai7NyGwejuBxyrogBcMCndiww8x0
     """
+    from datetime import date
+    
     base_url = "https://leanora-unmumbling-noncontroversially.ngrok-free.dev"
-    api_key = "fba_mjfwAOKGkneKbFLai7NyGwejuBxyrogBcMCndiww8x0"
+    
+    # Calculate current week
+    season_start = date(2025, 10, 20)  # Week 1 starts Oct 20
+    today = date.today()
+    days_since_start = (today - season_start).days
+    current_week = max(1, (days_since_start // 7) + 1)
+    current_week = min(17, current_week)  # Cap at week 17
     
     return jsonify({
         "info": {
             "service": "Fantasy Basketball Predictions API",
             "base_url": base_url,
             "authentication": "Query parameter: ?api_key=<your_api_key>",
-            "api_key_example": api_key,
             "note": "All endpoints require the api_key query parameter for authentication",
-            "example_request": f"{base_url}/api/v1/predictions/calculate?api_key={api_key}"
+            "week_info": {
+                "season_start_date": "2025-10-20",
+                "current_week": current_week,
+                "week_explanation": "Week 1 starts on Oct 20, 2025. Each week is 7 days. Week index must be 1-17.",
+                "how_to_calculate": "Week = floor((days since Oct 20) / 7) + 1",
+                "example": f"Today is week {current_week}"
+            }
         },
         "tools": [
             {
