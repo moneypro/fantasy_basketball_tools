@@ -1242,9 +1242,25 @@ def get_scoreboard(week_index):
         # Build matchup data
         matchups = []
         for matchup in scoreboard:
-            # Get scores - use final_score if available, otherwise use live_score
-            home_score = matchup.home_final_score if hasattr(matchup, 'home_final_score') else matchup.home_team_live_score
-            away_score = matchup.away_final_score if hasattr(matchup, 'away_final_score') else matchup.away_team_live_score
+            # Calculate fantasy points from category scores for accurate live scores
+            def calc_fantasy_points(cats):
+                return (
+                    cats['PTS']['score']
+                    + cats['3PM']['score']
+                    - cats['FGA']['score']
+                    + cats['FGM']['score'] * 2
+                    - cats['FTA']['score']
+                    + cats['FTM']['score']
+                    + cats['REB']['score']
+                    + cats['AST']['score'] * 2
+                    + cats['STL']['score'] * 4
+                    + cats['BLK']['score'] * 4
+                    - cats['TO']['score'] * 2
+                )
+            
+            # Use calculated scores from category data (more up-to-date)
+            home_score = calc_fantasy_points(matchup.home_team_cats)
+            away_score = calc_fantasy_points(matchup.away_team_cats)
             
             matchup_data = {
                 "home_team": {
