@@ -128,14 +128,14 @@ def calculate_predictions():
         if not week_index:
             return jsonify({
                 "status": "error",
-                "message": "week_index is required (integer, 1-17)"
+                "message": "week_index is required (integer, 1-23)"
             }), 400
         
         # Validate week range
-        if not isinstance(week_index, int) or week_index < 1 or week_index > 17:
+        if not isinstance(week_index, int) or week_index < 1 or week_index > 23:
             return jsonify({
                 "status": "error",
-                "message": "week_index must be an integer between 1 and 17"
+                "message": "week_index must be an integer between 1 and 23"
             }), 400
         
         # Get optional parameters
@@ -236,7 +236,7 @@ def get_tools_schema():
     today = date.today()
     days_since_start = (today - season_start).days
     current_week = max(1, (days_since_start // 7) + 1)
-    current_week = min(17, current_week)  # Cap at week 17
+    current_week = min(23, current_week)  # Cap at week 23
     
     return jsonify({
         "info": {
@@ -248,7 +248,7 @@ def get_tools_schema():
             "week_info": {
                 "season_start_date": "2025-10-20",
                 "current_week": current_week,
-                "week_explanation": "Week 1 starts on Oct 20, 2025. Each week is 7 days. Week index must be 1-17.",
+                "week_explanation": "Week 1 starts on Oct 20, 2025. Each week is 7 days. Week index must be 1-23.",
                 "how_to_calculate": "Week = floor((days since Oct 20) / 7) + 1",
                 "example": f"Today is week {current_week}"
             }
@@ -266,9 +266,9 @@ def get_tools_schema():
                         "properties": {
                             "week_index": {
                                 "type": "integer",
-                                "description": "Fantasy week number (1-17)",
+                                "description": "Fantasy week number (1-23)",
                                 "minimum": 1,
-                                "maximum": 17
+                                "maximum": 23
                             },
                             "day_of_week_override": {
                                 "type": "integer",
@@ -298,7 +298,7 @@ def get_tools_schema():
                         "properties": {
                             "week_index": {
                                 "type": "integer",
-                                "description": "Fantasy week number (1-17)"
+                                "description": "Fantasy week number (1-23)"
                             },
                             "day_of_week_override": {
                                 "type": "integer",
@@ -494,9 +494,9 @@ def get_tools_schema():
                             },
                             "week_index": {
                                 "type": "integer",
-                                "description": "Fantasy week number (1-17), defaults to current week",
+                                "description": "Fantasy week number (1-23), defaults to current week",
                                 "minimum": 1,
-                                "maximum": 17
+                                "maximum": 23
                             },
                             "day_of_week_override": {
                                 "type": "integer",
@@ -916,10 +916,10 @@ def get_team_info(team_id):
             week_index = league.currentMatchupPeriod
         
         # Validate week range
-        if not isinstance(week_index, int) or week_index < 1 or week_index > 17:
+        if not isinstance(week_index, int) or week_index < 1 or week_index > 23:
             return jsonify({
                 "status": "error",
-                "message": "week_index must be an integer between 1 and 17"
+                "message": "week_index must be an integer between 1 and 23"
             }), 400
         
         # Validate day_of_week
