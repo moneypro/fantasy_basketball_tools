@@ -1258,15 +1258,20 @@ def get_scoreboard(week_index):
         
         # Build matchup data
         matchups = []
-        for i, matchup in enumerate(scoreboard):
-            # Use live box scores if available, otherwise fall back to final scores
-            if box_scores and i < len(box_scores):
-                box_score = box_scores[i]
-                home_score = box_score.home_score if hasattr(box_score, 'home_score') else matchup.home_final_score
-                away_score = box_score.away_score if hasattr(box_score, 'away_score') else matchup.away_final_score
-            else:
-                home_score = matchup.home_final_score if hasattr(matchup, 'home_final_score') else matchup.home_team_live_score
-                away_score = matchup.away_final_score if hasattr(matchup, 'away_final_score') else matchup.away_team_live_score
+        for matchup in scoreboard:
+            # Find matching box score by team IDs
+            home_score = matchup.home_final_score if hasattr(matchup, 'home_final_score') else matchup.home_team_live_score
+            away_score = matchup.away_final_score if hasattr(matchup, 'away_final_score') else matchup.away_team_live_score
+            
+            # Look up live scores from box_scores by matching team IDs
+            if box_scores:
+                for box_score in box_scores:
+                    if (hasattr(box_score, 'home_team') and hasattr(box_score, 'away_team') and
+                        box_score.home_team.team_id == matchup.home_team.team_id and
+                        box_score.away_team.team_id == matchup.away_team.team_id):
+                        home_score = box_score.home_score if hasattr(box_score, 'home_score') else home_score
+                        away_score = box_score.away_score if hasattr(box_score, 'away_score') else away_score
+                        break
             
             matchup_data = {
                 "home_team": {
