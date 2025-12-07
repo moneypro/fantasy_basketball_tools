@@ -90,7 +90,8 @@ def root():
             "calculate_predictions": "POST /api/v1/predictions/calculate",
             "tools_schema": "GET /api/v1/tools/schema",
             "week_analysis": "POST /api/v1/predictions/week-analysis",
-            "team_info": "GET /api/v1/team/{team_id}"
+            "team_info": "GET /api/v1/team/{team_id}",
+            "team_roster": "GET /api/v1/team/{team_id}/roster"
         }
     })
 
@@ -514,6 +515,25 @@ def get_tools_schema():
                         "required": ["team_id"]
                     }
                 }
+            },
+            {
+                "type": "function",
+                "function": {
+                    "name": "get_team_roster",
+                    "description": "Get a team's current roster with player details, positions, and injury status",
+                    "x-endpoint": "/api/v1/team/{team_id}/roster",
+                    "x-method": "GET",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "team_id": {
+                                "type": "integer",
+                                "description": "Fantasy team ID"
+                            }
+                        },
+                        "required": ["team_id"]
+                    }
+                }
             }
         ]
     })
@@ -888,6 +908,80 @@ def revoke_api_key():
         }), 500
 
 # ===== Team Endpoints =====
+
+@app.route('/api/v1/team/<int:team_id>/roster', methods=['GET'])
+@require_api_key
+@require_league
+def get_team_roster(team_id):
+    """
+    Get team roster with player details
+    
+    Path params:
+    - team_id: Team ID (integer)
+    """
+    try:
+        # Find the team by ID
+        target_team = None
+        for team in league.teams:
+            if team.team_id == team_id:
+                target_team = team
+                break
+        
+        if not target_team:
+            return jsonify({
+                "status": "error",
+                "message": f"Team with ID {team_id} not found in league"
+            }), 404
+        
+        # Get owner name
+        owner_name = "Unknown"
+        if target_team.owners:
+            owner = target_team.owners[0]
+            owner_name = owner.get('displayName') if isinstance(owner, dict) else owner.displayName
+        
+        # Build roster data
+        roster_data = []
+        for player in target_team.roster:
+            player_info = {
+                "name": player.name,
+                "position": player.position if hasattr(player, 'position') else None,
+                "nba_team": player.nba_team_abbrev if hasattr(player, 'nba_team_abbrev') else None,
+                "injury_status": player.injuryStatus if hasattr(player, 'injuryStatus') and player.injuryStatus else "ACTIVE",
+                "player_id": player.player_id if hasattr(player, 'player_id') else None
+            }
+            roster_data.append(player_info)
+        
+        response_data = {
+            "team": {
+                "id": target_team.team_id,
+                "name": target_team.team_name,
+                "owner": owner_name,
+                "rank": target_team.standing,
+                "wins": target_team.wins,
+                "losses": target_team.losses
+            },
+            "roster": {
+                "total_players": len(roster_data),
+                "active_players": sum(1 for p in roster_data if p['injury_status'] == 'ACTIVE'),
+                "out_players": sum(1 for p in roster_data if p['injury_status'] == 'OUT'),
+                "day_to_day_players": sum(1 for p in roster_data if p['injury_status'] == 'DAY_TO_DAY'),
+                "players": roster_data
+            }
+        }
+        
+        return jsonify({
+            "status": "success",
+            "data": response_data
+        }), 200
+    
+    except Exception as e:
+        print(f"Error in get_team_roster: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({
+            "status": "error",
+            "message": f"Failed to retrieve team roster: {str(e)}"
+        }), 500
 
 @app.route('/api/v1/team/<int:team_id>', methods=['GET'])
 @require_api_key
