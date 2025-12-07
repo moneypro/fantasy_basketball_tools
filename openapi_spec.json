@@ -12,6 +12,58 @@
     }
   ],
   "paths": {
+    "/api/v1/predictions/week-analysis": {
+      "post": {
+        "summary": "Get detailed week analysis with team predictions",
+        "description": "Returns comprehensive week analysis including team predictions, injury statuses, and matchup details for all teams",
+        "operationId": "getWeekAnalysis",
+        "parameters": [
+          {
+            "name": "api_key",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "API authentication key"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "Request body containing week analysis parameters",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "week_index": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 23,
+                    "description": "Fantasy week number (1-23)"
+                  },
+                  "day_of_week_override": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 6,
+                    "description": "Override starting day (0=Monday, 6=Sunday), default=0"
+                  }
+                },
+                "required": ["week_index"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response with week analysis data"
+          },
+          "400": {
+            "description": "Invalid parameters"
+          }
+        }
+      }
+    },
     "/api/v1/scoreboard/{week_index}": {
       "post": {
         "summary": "Get current scores for all matchups in a week",

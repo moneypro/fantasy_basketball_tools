@@ -90,10 +90,10 @@ def root():
             "calculate_predictions": "POST /api/v1/predictions/calculate",
             "tools_schema": "GET /api/v1/tools/schema",
             "week_analysis": "POST /api/v1/predictions/week-analysis",
-            "team_info": "GET /api/v1/team/{team_id}",
-            "team_roster": "GET /api/v1/team/{team_id}/roster",
-            "players_playing_for_scoring_period": "GET /api/v1/players-playing/{scoring_period}?team_id={team_id}",
-            "scoreboard": "GET /api/v1/scoreboard/{week_index}"
+            "team_info": "POST /api/v1/team/{team_id}",
+            "team_roster": "POST /api/v1/team/{team_id}/roster",
+            "players_playing_for_scoring_period": "POST /api/v1/players-playing/{scoring_period}",
+            "scoreboard": "POST /api/v1/scoreboard/{week_index}"
         }
     })
 
@@ -180,21 +180,24 @@ def calculate_predictions():
             "message": f"Prediction calculation failed: {str(e)}"
         }), 500
 
-@app.route('/api/v1/predictions/week-analysis', methods=['GET'])
+@app.route('/api/v1/predictions/week-analysis', methods=['POST'])
 @require_api_key
 @require_league
 def week_analysis():
     """
-    Get detailed week analysis with HTML tables for all injury statuses
+    Get detailed week analysis with JSON data for all injury statuses
     
-    Query params:
-    - week_index: Week number (required, 1-17)
+    Request body params:
+    - week_index: Week number (required, 1-23)
+    - day_of_week_override: Starting day override (optional, 0=Monday, 6=Sunday, default=0)
     """
     try:
         from predict.predict_week import build_week_json
         
-        data = request.args.to_dict()
-        week_index = int(data.get('week_index', 0)) if data.get('week_index') else None
+        # Get parameters from request body
+        data = request.get_json() or {}
+        week_index = data.get('week_index')
+        day_of_week_override = data.get('day_of_week_override', 0)
         
         if not week_index:
             return jsonify({
@@ -202,8 +205,19 @@ def week_analysis():
                 "message": "week_index is required"
             }), 400
         
-        # day_of_week_override is always 0 for current analysis
-        day_of_week_override = 0
+        # Validate week range
+        if not isinstance(week_index, int) or week_index < 1 or week_index > 23:
+            return jsonify({
+                "status": "error",
+                "message": "week_index must be an integer between 1 and 23"
+            }), 400
+        
+        # Validate day_of_week
+        if not isinstance(day_of_week_override, int) or day_of_week_override < 0 or day_of_week_override > 6:
+            return jsonify({
+                "status": "error",
+                "message": "day_of_week_override must be 0-6 (0=Monday, 6=Sunday)"
+            }), 400
         
         # Get JSON analysis (includes all injury statuses and tables as structured data)
         analysis_data = build_week_json(league, week_index, day_of_week_override)
