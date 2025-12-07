@@ -8,6 +8,7 @@ def require_api_key(f):
     """Decorator to require valid API key for endpoint.
     
     API key can be provided via:
+    - Bearer Token: Authorization: Bearer <key>
     - Header: X-API-Key: <key>
     - Query param: ?api_key=<key>
     - Request body: {"api_key": "<key>"} (for POST requests)
@@ -22,8 +23,17 @@ def require_api_key(f):
     def decorated_function(*args, **kwargs):
         manager = get_api_key_manager()
         
-        # Get API key from header, query param, or request body
-        api_key = request.headers.get('X-API-Key') or request.args.get('api_key')
+        # Get API key from Bearer token, header, query param, or request body
+        api_key = None
+        
+        # Check Bearer token first (preferred)
+        auth_header = request.headers.get('Authorization', '')
+        if auth_header.startswith('Bearer '):
+            api_key = auth_header[7:]  # Remove 'Bearer ' prefix
+        
+        # Fall back to X-API-Key header or query param
+        if not api_key:
+            api_key = request.headers.get('X-API-Key') or request.args.get('api_key')
         
         # For POST requests, also check request body
         if not api_key and request.method == 'POST':
@@ -74,6 +84,11 @@ def optional_api_key(f):
     If API key is provided, it must be valid.
     If not provided, endpoint still works but may return limited data.
     
+    API key can be provided via:
+    - Bearer Token: Authorization: Bearer <key>
+    - Header: X-API-Key: <key>
+    - Query param: ?api_key=<key>
+    
     Usage:
         @app.route('/api/v1/public', methods=['GET'])
         @optional_api_key
@@ -87,8 +102,17 @@ def optional_api_key(f):
     def decorated_function(*args, **kwargs):
         manager = get_api_key_manager()
         
-        # Get API key from header or query param (optional)
-        api_key = request.headers.get('X-API-Key') or request.args.get('api_key')
+        # Get API key from Bearer token, header, or query param (optional)
+        api_key = None
+        
+        # Check Bearer token first (preferred)
+        auth_header = request.headers.get('Authorization', '')
+        if auth_header.startswith('Bearer '):
+            api_key = auth_header[7:]  # Remove 'Bearer ' prefix
+        
+        # Fall back to X-API-Key header or query param
+        if not api_key:
+            api_key = request.headers.get('X-API-Key') or request.args.get('api_key')
         
         if api_key:
             # Verify key if provided
