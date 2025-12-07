@@ -176,23 +176,21 @@ def calculate_predictions():
             "message": f"Prediction calculation failed: {str(e)}"
         }), 500
 
-@app.route('/api/v1/predictions/week-analysis', methods=['POST'])
+@app.route('/api/v1/predictions/week-analysis', methods=['GET'])
 @require_api_key
 @require_league
 def week_analysis():
     """
     Get detailed week analysis including table output
     
-    Request body:
-    {
-        "week_index": 1,
-        "day_of_week_override": 0,
-        "injury_status": ["ACTIVE"]
-    }
+    Query params:
+    - week_index: Week number (required)
+    - day_of_week_override: Override current day (optional)
+    - injury_status: Filter by injury status (optional)
     """
     try:
-        data = request.json or {}
-        week_index = data.get('week_index')
+        data = request.args.to_dict()
+        week_index = int(data.get('week_index', 0)) if data.get('week_index') else None
         
         if not week_index:
             return jsonify({
@@ -200,8 +198,9 @@ def week_analysis():
                 "message": "week_index is required"
             }), 400
         
-        day_of_week = data.get('day_of_week_override', 0)
-        injury_status = data.get('injury_status', ['ACTIVE'])
+        day_of_week = int(data.get('day_of_week_override', 0))
+        injury_status_str = data.get('injury_status', 'ACTIVE')
+        injury_status = [injury_status_str] if isinstance(injury_status_str, str) else injury_status_str
         
         # Get table output
         table_output = get_table_output_for_week(
