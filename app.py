@@ -1236,15 +1236,37 @@ def get_scoreboard(week_index):
                 "message": "week_index must be an integer between 1 and 23"
             }), 400
         
+        # Check if week is within final scoring period
+        final_period = league.finalScoringPeriod if hasattr(league, 'finalScoringPeriod') else 47
+        if week_index > final_period:
+            return jsonify({
+                "status": "error",
+                "message": f"week_index cannot exceed final scoring period ({final_period})"
+            }), 400
+        
+        # Get current scoring period for live scores
+        current_period = league.currentMatchupPeriod
+        
         # Get scoreboard for the week
         scoreboard = league.scoreboard(week_index)
         
+        # Get live box scores for accurate current scores
+        try:
+            box_scores = league.box_scores(week_index, current_period, matchup_total=True)
+        except:
+            box_scores = None
+        
         # Build matchup data
         matchups = []
-        for matchup in scoreboard:
-            # Get scores - use final_score if available, otherwise use live_score
-            home_score = matchup.home_final_score if hasattr(matchup, 'home_final_score') else matchup.home_team_live_score
-            away_score = matchup.away_final_score if hasattr(matchup, 'away_final_score') else matchup.away_team_live_score
+        for i, matchup in enumerate(scoreboard):
+            # Use live box scores if available, otherwise fall back to final scores
+            if box_scores and i < len(box_scores):
+                box_score = box_scores[i]
+                home_score = box_score.home_score if hasattr(box_score, 'home_score') else matchup.home_final_score
+                away_score = box_score.away_score if hasattr(box_score, 'away_score') else matchup.away_final_score
+            else:
+                home_score = matchup.home_final_score if hasattr(matchup, 'home_final_score') else matchup.home_team_live_score
+                away_score = matchup.away_final_score if hasattr(matchup, 'away_final_score') else matchup.away_team_live_score
             
             matchup_data = {
                 "home_team": {
