@@ -25,6 +25,7 @@ from scheduling.post_free_agent_transaction import post_transaction
 from scheduling.schedule_free_agent_add import schedule_with_at
 from auth.decorators import require_api_key, optional_api_key
 from auth.api_key import get_api_key_manager
+from auth.admin import require_admin
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -525,6 +526,7 @@ def schedule_add_endpoint():
 # ===== Authentication Endpoints =====
 
 @app.route('/api/v1/auth/keys/generate', methods=['POST'])
+@require_admin
 def generate_api_key():
     """Generate a new API key.
     
@@ -568,6 +570,7 @@ def generate_api_key():
         }), 500
 
 @app.route('/api/v1/auth/keys', methods=['GET'])
+@require_admin
 def list_api_keys():
     """List all API keys (keys are truncated for security)"""
     try:
@@ -586,6 +589,7 @@ def list_api_keys():
         }), 500
 
 @app.route('/api/v1/auth/keys/revoke', methods=['POST'])
+@require_admin
 def revoke_api_key():
     """Revoke an API key
     
