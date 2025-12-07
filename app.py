@@ -298,7 +298,7 @@ def get_tools_schema():
                     "name": "get_week_analysis",
                     "description": "Get detailed week analysis including table output",
                     "x-endpoint": "/api/v1/predictions/week-analysis",
-                    "x-method": "POST",
+                    "x-method": "GET",
                     "parameters": {
                         "type": "object",
                         "properties": {
