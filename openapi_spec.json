@@ -1,0 +1,399 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Fantasy Basketball Predictions API",
+    "description": "API for fantasy basketball team analysis, predictions, and matchup forecasting",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://leanora-unmumbling-noncontroversially.ngrok-free.dev",
+      "description": "Production server"
+    }
+  ],
+  "paths": {
+    "/api/v1/predictions/week-analysis": {
+      "post": {
+        "summary": "Get detailed week analysis with team predictions",
+        "description": "Returns comprehensive week analysis including team predictions, injury statuses, and matchup details for all teams",
+        "operationId": "getWeekAnalysis",
+        "parameters": [
+          {
+            "name": "api_key",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "API authentication key"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "Request body containing week analysis parameters",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "week_index": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 23,
+                    "description": "Fantasy week number (1-23)"
+                  },
+                  "day_of_week_override": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 6,
+                    "description": "Override starting day (0=Monday, 6=Sunday), default=0"
+                  }
+                },
+                "required": ["week_index"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response with week analysis data"
+          },
+          "400": {
+            "description": "Invalid parameters"
+          }
+        }
+      }
+    },
+    "/api/v1/scoreboard/{week_index}": {
+      "post": {
+        "summary": "Get current scores for all matchups in a week",
+        "description": "Returns live scores and matchup details for all teams in a specific fantasy week. Uses league.box_scores() for accurate live scoring.",
+        "operationId": "getScoreboard",
+        "parameters": [
+          {
+            "name": "week_index",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 23
+            },
+            "description": "Fantasy week number (1-23). Week 1 starts Oct 20, 2026 (Monday). Each week = 7 days."
+          },
+          {
+            "name": "api_key",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "API authentication key"
+          }
+        ],
+        "requestBody": {
+          "description": "Optional request body (currently no parameters required)",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response with matchup scores",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "week_index": {
+                          "type": "integer"
+                        },
+                        "total_matchups": {
+                          "type": "integer"
+                        },
+                        "matchups": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "home_team": {
+                                "type": "object",
+                                "properties": {
+                                  "id": { "type": "integer" },
+                                  "name": { "type": "string" },
+                                  "score": { "type": "number" },
+                                  "wins": { "type": "integer" },
+                                  "losses": { "type": "integer" }
+                                }
+                              },
+                              "away_team": {
+                                "type": "object",
+                                "properties": {
+                                  "id": { "type": "integer" },
+                                  "name": { "type": "string" },
+                                  "score": { "type": "number" },
+                                  "wins": { "type": "integer" },
+                                  "losses": { "type": "integer" }
+                                }
+                              },
+                              "point_differential": { "type": "number" },
+                              "leader": { "type": "string" }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid parameters"
+          }
+        }
+      }
+    },
+    "/api/v1/players-playing/{scoring_period}": {
+      "post": {
+        "summary": "Get players from a team with games on a specific scoring period",
+        "description": "Returns players with and without games for a team on a given scoring period. Includes individual player projections.",
+        "operationId": "getPlayersPlaying",
+        "parameters": [
+          {
+            "name": "scoring_period",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "description": "Scoring period ID. Each period = 1 day. 1=Oct 21, 2=Oct 22, ..., 47=Dec 6, 2026"
+          },
+          {
+            "name": "api_key",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "API authentication key"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "Request body containing team_id",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "team_id": {
+                    "type": "integer",
+                    "description": "Fantasy team ID (required)"
+                  }
+                },
+                "required": ["team_id"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response with player data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "team": {
+                          "type": "object",
+                          "properties": {
+                            "id": { "type": "integer" },
+                            "name": { "type": "string" },
+                            "owner": { "type": "string" }
+                          }
+                        },
+                        "scoring_period": { "type": "integer" },
+                        "nba_teams_playing": { "type": "array", "items": { "type": "string" } },
+                        "players_playing": {
+                          "type": "object",
+                          "properties": {
+                            "count": { "type": "integer" },
+                            "players": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "player_id": { "type": "integer" },
+                                  "name": { "type": "string" },
+                                  "position": { "type": "string" },
+                                  "nba_team": { "type": "string" },
+                                  "injury_status": { "type": "string" },
+                                  "projected_avg_points": { "type": "number" },
+                                  "projected_variance": { "type": "number" }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "players_not_playing": {
+                          "type": "object",
+                          "properties": {
+                            "count": { "type": "integer" },
+                            "players": { "type": "array" }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid parameters"
+          },
+          "404": {
+            "description": "Team not found"
+          }
+        }
+      }
+    },
+    "/api/v1/team/{team_id}": {
+      "post": {
+        "summary": "Get team information and matchup details",
+        "description": "Returns comprehensive team info including predictions for a specific week",
+        "operationId": "getTeamInfo",
+        "parameters": [
+          {
+            "name": "team_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Fantasy team ID"
+          },
+          {
+            "name": "api_key",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "API authentication key"
+          }
+        ],
+        "requestBody": {
+          "description": "Optional request body with prediction parameters",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "week_index": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 23,
+                    "description": "Fantasy week number (1-23), defaults to current week if not provided"
+                  },
+                  "day_of_week_override": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 6,
+                    "description": "Override starting day (0=Monday, 6=Sunday), default=0"
+                  },
+                  "injury_status": {
+                    "type": "string",
+                    "description": "Comma-separated injury statuses (e.g., 'ACTIVE,PROBABLE'), default='ACTIVE'"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response with team and matchup data"
+          },
+          "404": {
+            "description": "Team not found"
+          }
+        }
+      }
+    },
+    "/api/v1/team/{team_id}/roster": {
+      "post": {
+        "summary": "Get team roster with player details",
+        "description": "Returns current roster with player positions, injury status, and other details",
+        "operationId": "getTeamRoster",
+        "parameters": [
+          {
+            "name": "team_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Fantasy team ID"
+          },
+          {
+            "name": "api_key",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "API authentication key"
+          }
+        ],
+        "requestBody": {
+          "description": "Optional request body (no parameters required)",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response with roster data"
+          },
+          "404": {
+            "description": "Team not found"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "query",
+        "name": "api_key"
+      }
+    }
+  }
+}

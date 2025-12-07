@@ -15,6 +15,7 @@ services:
       ESPN_S2: ${ESPN_S2}
       SWID: ${SWID}
       LEAGUE_ID: ${LEAGUE_ID}
+      ADMIN_TOKEN: ${ADMIN_TOKEN}
       FLASK_APP: app.py
       FLASK_HOST: 0.0.0.0
       FLASK_PORT: 5000
