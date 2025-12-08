@@ -165,9 +165,28 @@ def get_tools_schema():
                 "type": "function",
                 "function": {
                     "name": "scout_free_agents",
-                    "description": "Scout free agents with stats, positions, injury status, and team injury context. Returns free agents sorted by avg_last_30 points. Flags injured players (injury_status=OUT) and players on waivers. Use with get_players_playing_for_scoring_period to determine position gaps.",
+                    "description": "Scout free agents with comprehensive stats for finding the best pickup. Returns free agents sorted by avg_last_30 points with schedule info. Key fields: injured (OUT status), on_waivers (urgent), games_next_5_periods (which days they play). Use with get_players_playing_for_scoring_period to determine position gaps.",
                     "x-endpoint": "/api/v1/scout/free-agents",
                     "x-method": "POST",
+                    "x-response-fields": {
+                        "avg_last_30": "Most recent 30-day average (primary scoring metric)",
+                        "avg_year": "Season average (consistency metric)",
+                        "avg_projected": "Future projection",
+                        "injured": "Boolean - true if injury_status=OUT (won't play)",
+                        "injury_status": "ACTIVE, DAY_TO_DAY, or OUT",
+                        "on_waivers": "Boolean - true if player on waivers (urgent, may be claimed soon)",
+                        "waiver_clear_period": "Scoring period when dropped (for calculating when available)",
+                        "games_next_5_periods": "Array of scoring period IDs when player has games (e.g., [49, 53] means plays Dec 8 and Dec 12)",
+                        "positions_eligible": "Array of positions (PG, SG, SF, PF, C, G, F)",
+                        "team_injuries": "OUT/DAY_TO_DAY players on same NBA team (usage boost if significant player out)"
+                    },
+                    "x-decision-tree": {
+                        "step_1": "Skip if injured=true (no points tomorrow)",
+                        "step_2": "Check games_next_5_periods - if current_period in list, plays today (high priority)",
+                        "step_3": "Use get_players_playing_for_scoring_period to get position gaps, boost score if fills gap",
+                        "step_4": "If on_waivers=true, URGENT (may be claimed soon)",
+                        "step_5": "Rank by: avg_last_30 * position_fit * plays_tomorrow_factor * waiver_urgency"
+                    },
                     "parameters": {
                         "type": "object",
                         "properties": {
