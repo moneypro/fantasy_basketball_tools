@@ -384,6 +384,57 @@ def team_changes_endpoint():
             "message": f"Failed to get team changes: {str(e)}"
         }), 500
 
+@app.route('/api/v1/scout/free-agents', methods=['POST'])
+@require_api_key
+@require_league
+def scout_free_agents_endpoint():
+    """Scout free agents with their stats and team injury context.
+    
+    Request body:
+    {
+        "limit": 20,
+        "min_avg_points": 5.0
+    }
+    
+    Returns:
+    - free_agents: List of free agents with stats, positions, and team injury info
+    - summary: Total analyzed, returned count, and filters applied
+    """
+    try:
+        from scout.free_agent_scouting import scout_free_agents
+        
+        data = request.json or {}
+        limit = data.get('limit', 20)
+        min_avg_points = data.get('min_avg_points', 5.0)
+        
+        # Validate parameters
+        if not isinstance(limit, int) or limit < 1 or limit > 500:
+            return jsonify({
+                "status": "error",
+                "message": "limit must be an integer between 1 and 500"
+            }), 400
+        
+        if not isinstance(min_avg_points, (int, float)) or min_avg_points < 0:
+            return jsonify({
+                "status": "error",
+                "message": "min_avg_points must be a number >= 0"
+            }), 400
+        
+        result = scout_free_agents(league, limit=limit, min_avg_points=min_avg_points)
+        
+        return jsonify({
+            "status": "success",
+            "data": result
+        }), 200
+    except Exception as e:
+        print(f"Error in scout_free_agents_endpoint: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({
+            "status": "error",
+            "message": f"Failed to scout free agents: {str(e)}"
+        }), 500
+
 # ===== Lineup Endpoints =====
 
 @app.route('/api/v1/lineup/update', methods=['POST'])

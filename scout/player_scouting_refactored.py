@@ -138,83 +138,54 @@ def scout_players(limit: int = 200) -> ScoutingResult:
     Returns:
         ScoutingResult containing player stats and upside analysis
     """
-    league_2025 = create_league(year=2025)
     league_2026 = create_league(year=2026)
-
-    players_2025 = get_all_players(league_2025)
     players_2026 = get_all_players(league_2026)
 
     # Use dictionary instead of tuple for cleaner data structure
     players_data = {}
 
-    # 1. Calculate player scores (including rookies)
-    for player_id, player_2025 in players_2025.items():
-        stats_30 = player_2025.stats.get('2025_last_30', {})
-        avg_30 = stats_30.get('applied_avg', 0.0)
-        total_30 = stats_30.get('applied_total', 0.0)
-        gp_30 = int(round(total_30 / avg_30)) if avg_30 > 0 else 0
-
-        stats_total = player_2025.stats.get('2025_total', {})
+    # 1. Calculate player scores using only 2026 data
+    for player_id, player_2026 in players_2026.items():
+        # Get current season stats (2026_total)
+        stats_total = player_2026.stats.get('2026_total', {})
         avg_year = stats_total.get('applied_avg', 0.0)
         total_year = stats_total.get('applied_total', 0.0)
         gp_year = int(round(total_year / avg_year)) if avg_year > 0 else 0
 
-        player_2026 = players_2026.get(player_id)
-        avg_proj = 0.0
-        total_proj = 0.0
-        gp_proj = 0
-        if player_2026:
-            stats_proj = player_2026.stats.get('2026_projected', {})
-            avg_proj = stats_proj.get('applied_avg', 0.0)
-            total_proj = stats_proj.get('applied_total', 0.0)
-            gp_proj = int(round(total_proj / avg_proj)) if avg_proj > 0 else 0
+        # Get last 30 days stats
+        stats_30 = player_2026.stats.get('2026_last_30', {})
+        avg_30 = stats_30.get('applied_avg', 0.0)
+        total_30 = stats_30.get('applied_total', 0.0)
+        gp_30 = int(round(total_30 / avg_30)) if avg_30 > 0 else 0
 
+        # Get projected stats
+        stats_proj = player_2026.stats.get('2026_projected', {})
+        avg_proj = stats_proj.get('applied_avg', 0.0)
+        total_proj = stats_proj.get('applied_total', 0.0)
+        gp_proj = int(round(total_proj / avg_proj)) if avg_proj > 0 else 0
+
+        # Use last 30 days if available, otherwise use year average
         avg_recent = avg_30 if gp_30 >= 5 else avg_year
         final_score = calculate_final_score(avg_recent, avg_proj, gp_proj)
 
-        eligible = set(player_2025.eligibleSlots) if hasattr(player_2025, "eligibleSlots") else set()
+        eligible = set(player_2026.eligibleSlots) if hasattr(player_2026, "eligibleSlots") else set()
         eligibility_dict = {pos: pos in eligible for pos in config.PRIMARY_POSITIONS}
         
-        players_data[player_id] = {
-            'player_id': player_id,
-            'name': player_2025.name,
-            'avg_recent': avg_recent,
-            'total_30': total_30,
-            'gp_30': gp_30,
-            'gp_year': gp_year,
-            'avg_proj': avg_proj,
-            'gp_proj': gp_proj,
-            'final_score': final_score,
-            'eligibility': eligibility_dict,
-            'is_rookie': False
-        }
-
-    # Add rookies (in 2026 but not in 2025)
-    for player_id, player_2026 in players_2026.items():
-        if player_id not in players_2025:
-            stats_proj = player_2026.stats.get('2026_projected', {})
-            avg_proj = stats_proj.get('applied_avg', 0.0)
-            total_proj = stats_proj.get('applied_total', 0.0)
-            gp_proj = int(round(total_proj / avg_proj)) if avg_proj > 0 else 0
-
-            if avg_proj > 0 and gp_proj > 0:
-                final_score = calculate_final_score(avg_proj, avg_proj, gp_proj)
-                eligible = set(player_2026.eligibleSlots) if hasattr(player_2026, "eligibleSlots") else set()
-                eligibility_dict = {pos: pos in eligible for pos in config.PRIMARY_POSITIONS}
-                
-                players_data[player_id] = {
-                    'player_id': player_id,
-                    'name': player_2026.name,
-                    'avg_recent': 0.0,
-                    'total_30': 0.0,
-                    'gp_30': 0,
-                    'gp_year': 0,
-                    'avg_proj': avg_proj,
-                    'gp_proj': gp_proj,
-                    'final_score': final_score,
-                    'eligibility': eligibility_dict,
-                    'is_rookie': True
-                }
+        # Only add player if they have meaningful stats or projections
+        if avg_year > 0 or avg_proj > 0:
+            players_data[player_id] = {
+                'player_id': player_id,
+                'name': player_2026.name,
+                'avg_recent': avg_recent,
+                'total_30': total_30,
+                'gp_30': gp_30,
+                'gp_year': gp_year,
+                'avg_proj': avg_proj,
+                'gp_proj': gp_proj,
+                'final_score': final_score,
+                'eligibility': eligibility_dict,
+                'is_rookie': avg_year == 0 and avg_proj > 0  # Rookie if no year stats but has projections
+            }
 
     # 2. Standardize final scores to [0, 100]
     scores = [p['final_score'] for p in players_data.values()]

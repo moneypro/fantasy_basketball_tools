@@ -25,6 +25,19 @@ def get_all_players(league: League) -> Dict[int, any]:
     return unique_players
 
 
+def get_free_agents(league: League) -> Dict[int, any]:
+    """Get all free agents (players not on any team roster).
+    
+    Args:
+        league: The fantasy basketball league
+        
+    Returns:
+        Dictionary mapping player IDs to free agent player objects
+    """
+    free_agents_list = league.free_agents(size=1000)
+    return {p.playerId: p for p in free_agents_list}
+
+
 def build_team_id_map() -> Dict[str, int]:
     """Build a mapping of NBA team abbreviations to team IDs.
     
