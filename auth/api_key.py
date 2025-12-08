@@ -19,6 +19,8 @@ class APIKeyInfo:
     active: bool = True
     rate_limit: int = 100  # requests per hour
     requests_this_hour: int = 0
+    tier: str = "basic"  # API tier (basic, premium, enterprise)
+    description: Optional[str] = None  # Human-readable description
     
 
 class APIKeyManager:
@@ -56,12 +58,20 @@ class APIKeyManager:
         except Exception as e:
             print(f"Warning: Could not save API keys: {e}")
     
-    def generate_key(self, name: str, rate_limit: int = 100) -> str:
+    def generate_key(
+        self,
+        name: str,
+        rate_limit: int = 100,
+        tier: str = "basic",
+        description: Optional[str] = None
+    ) -> str:
         """Generate a new API key.
         
         Args:
             name: Human-readable name for the key
             rate_limit: Requests per hour allowed (default: 100)
+            tier: API tier - "basic", "premium", or "enterprise" (default: "basic")
+            description: Optional description of the key's purpose
             
         Returns:
             New API key
@@ -73,7 +83,9 @@ class APIKeyManager:
             key=key,
             name=name,
             created_at=datetime.utcnow().isoformat(),
-            rate_limit=rate_limit
+            rate_limit=rate_limit,
+            tier=tier,
+            description=description
         )
         
         self.keys[key] = key_info
@@ -81,7 +93,10 @@ class APIKeyManager:
         
         print(f"✅ Generated API key for '{name}':")
         print(f"   {key}")
+        print(f"   Tier: {tier}")
         print(f"   Rate limit: {rate_limit} requests/hour")
+        if description:
+            print(f"   Description: {description}")
         
         return key
     
@@ -94,6 +109,9 @@ class APIKeyManager:
         Returns:
             True if key is valid and active
         """
+        # Always reload from disk to get latest state
+        self._load_keys()
+        
         if key not in self.keys:
             return False
         
@@ -109,6 +127,8 @@ class APIKeyManager:
         Returns:
             APIKeyInfo or None if key doesn't exist
         """
+        # Always reload from disk to get latest state
+        self._load_keys()
         return self.keys.get(key)
     
     def revoke_key(self, key: str) -> bool:
@@ -135,6 +155,9 @@ class APIKeyManager:
         Returns:
             True if within limit, False if exceeded
         """
+        # Always reload from disk to get latest state
+        self._load_keys()
+        
         if key not in self.keys:
             return False
         
@@ -147,6 +170,9 @@ class APIKeyManager:
         Args:
             key: API key
         """
+        # Always reload from disk to get latest state
+        self._load_keys()
+        
         if key in self.keys:
             self.keys[key].requests_this_hour += 1
             self.keys[key].last_used = datetime.utcnow().isoformat()
