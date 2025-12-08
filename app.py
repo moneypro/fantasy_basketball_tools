@@ -858,24 +858,24 @@ def get_players_playing_for_scoring_period(scoring_period):
             import traceback
             traceback.print_exc()
         
-        # Create a map of player_id to actual box player for quick lookup
+        # Create a map of playerId to actual box player for quick lookup
         box_player_map = {}
         if box_scores:
             for box_score in box_scores:
                 if hasattr(box_score, 'home_lineup'):
                     for box_player in box_score.home_lineup:
-                        if hasattr(box_player, 'player_id'):
-                            box_player_map[box_player.player_id] = box_player
+                        if hasattr(box_player, 'playerId'):
+                            box_player_map[box_player.playerId] = box_player
                 if hasattr(box_score, 'away_lineup'):
                     for box_player in box_score.away_lineup:
-                        if hasattr(box_player, 'player_id'):
-                            box_player_map[box_player.player_id] = box_player
+                        if hasattr(box_player, 'playerId'):
+                            box_player_map[box_player.playerId] = box_player
         
         # Build player data with stats
         playing_players = []
         for player in players_playing:
             avg_points, variance = RosterWeekPredictor.get_avg_variance_stats(player)
-            player_id = player.player_id if hasattr(player, 'player_id') else None
+            player_id = player.playerId if hasattr(player, 'playerId') else None
             
             # Check if we have actual box score data for this player
             actual_points = None
@@ -902,7 +902,7 @@ def get_players_playing_for_scoring_period(scoring_period):
         for p in all_active_players:
             if p not in players_playing:
                 avg_points, variance = RosterWeekPredictor.get_avg_variance_stats(p)
-                player_id = p.player_id if hasattr(p, 'player_id') else None
+                player_id = p.playerId if hasattr(p, 'playerId') else None
                 
                 # Check if we have actual box score data for this player
                 actual_points = None
