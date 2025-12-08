@@ -590,17 +590,24 @@ def generate_api_key():
     Request body:
     {
         "name": "my-app",
-        "rate_limit": 100
+        "rate_limit": 100,
+        "tier": "basic"
     }
     
     Returns the new API key (shown only once!)
     """
     try:
+        # IMPORTANT: Always reload from disk to avoid overwriting other keys
+        # This is critical for thread safety and concurrent requests
         manager = get_api_key_manager()
+        manager._load_keys()  # Reload from disk to get latest state
+        
         data = request.json or {}
         
         name = data.get('name', 'Unnamed Key')
         rate_limit = data.get('rate_limit', 100)
+        tier = data.get('tier', 'basic')
+        description = data.get('description')
         
         if not name or len(name) < 3:
             return jsonify({
@@ -608,7 +615,7 @@ def generate_api_key():
                 "message": "name is required (min 3 characters)"
             }), 400
         
-        new_key = manager.generate_key(name, rate_limit)
+        new_key = manager.generate_key(name, rate_limit, tier, description)
         
         return jsonify({
             "status": "success",
@@ -617,6 +624,7 @@ def generate_api_key():
                 "api_key": new_key,
                 "name": name,
                 "rate_limit": rate_limit,
+                "tier": tier,
                 "warning": "Save this key now - you won't see it again!"
             }
         }), 201
