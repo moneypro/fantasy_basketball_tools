@@ -255,7 +255,11 @@ The LLM will receive all this data and:
 2. For each free agent you're interested in, call `POST /api/v1/players-playing/{scoring_period}` for periods 49-53 to see:
    - Which of your roster players are playing that day
    - Your position breakdown for that day
-3. The LLM combines both data sources to recommend who to pick up based on your daily position gaps
+   - **Which NBA teams have games that day** (critical for filtering free agents!)
+3. The LLM combines both data sources to recommend who to pick up based on:
+   - **Free agent's nba_team MUST be in nba_teams_playing** (or they won't score that day)
+   - Your daily position gaps
+   - Waiver availability and injury status
 
 ## Implementation Steps
 
