@@ -4,31 +4,25 @@ from typing import Dict, List, Any
 from espn_api.basketball import League
 
 
-def get_team_injuries(league: League, nba_team: str) -> List[Dict[str, Any]]:
+def get_team_injuries(all_players: Dict[int, Any], nba_team: str, exclude_player_id: int = None) -> List[Dict[str, Any]]:
     """Get all OUT and DAY_TO_DAY players on a specific NBA team.
     
     Args:
-        league: The fantasy basketball league
+        all_players: Dictionary of all players (key: playerId, value: player object)
         nba_team: NBA team abbreviation (e.g., 'LAL', 'BOS')
+        exclude_player_id: Player ID to exclude from results (e.g., the free agent themselves)
         
     Returns:
         List of dicts with injured player info: name, position, injury_status, avg_points
     """
     injuries = []
     
-    # Check all players in the league for this NBA team
-    all_players = {}
-    for team in league.teams:
-        for player in team.roster:
-            all_players[player.playerId] = player
-    
-    # Also add free agents
-    free_agents = league.free_agents(size=1000)
-    for player in free_agents:
-        all_players[player.playerId] = player
-    
     # Find players on the specified NBA team with injury status
     for player_id, player in all_players.items():
+        # Skip the excluded player (usually the free agent themselves)
+        if exclude_player_id and player_id == exclude_player_id:
+            continue
+        
         player_nba_team = getattr(player, 'proTeam', None)
         injury_status = getattr(player, 'injuryStatus', None)
         
@@ -51,12 +45,11 @@ def get_team_injuries(league: League, nba_team: str) -> List[Dict[str, Any]]:
     return injuries
 
 
-def build_free_agent_data(league: League, league_2026: League, free_agent_player: Any) -> Dict[str, Any]:
+def build_free_agent_data(all_players: Dict[int, Any], free_agent_player: Any) -> Dict[str, Any]:
     """Build complete free agent data including stats and team injuries.
     
     Args:
-        league: Current fantasy league (for context)
-        league_2026: League for 2026 season (for stats)
+        all_players: Dictionary of all players (for injury lookup)
         free_agent_player: The free agent player object
         
     Returns:
@@ -76,8 +69,20 @@ def build_free_agent_data(league: League, league_2026: League, free_agent_player
     stats_proj = free_agent_player.stats.get('2026_projected', {})
     avg_projected = stats_proj.get('applied_avg', 0.0)
     
-    # Get position eligibility
-    positions_eligible = set(free_agent_player.eligibleSlots) if hasattr(free_agent_player, 'eligibleSlots') else set()
+    # Get position eligibility - expand combo positions to individual positions
+    # E.g., "F/C" becomes ["F", "C"], "G" stays ["G"], etc.
+    # Filter out non-position slots like BE (Bench), IR (Injured Reserve), UT (Utility), Rookie
+    real_positions = {'PG', 'SG', 'SF', 'PF', 'C', 'G', 'F'}
+    eligible_slots = getattr(free_agent_player, 'eligibleSlots', [])
+    positions_eligible = []
+    for slot in eligible_slots:
+        if '/' in slot:
+            # Expand combo positions like "F/C" to ["F", "C"]
+            for pos in slot.split('/'):
+                if pos in real_positions and pos not in positions_eligible:
+                    positions_eligible.append(pos)
+        elif slot in real_positions and slot not in positions_eligible:
+            positions_eligible.append(slot)
     
     # Get injury status
     injury_status = getattr(free_agent_player, 'injuryStatus', 'ACTIVE')
@@ -87,17 +92,17 @@ def build_free_agent_data(league: League, league_2026: League, free_agent_player
     # Get NBA team
     nba_team = getattr(free_agent_player, 'proTeam', 'UNKNOWN')
     
-    # Get team injuries for this player's NBA team
+    # Get team injuries for this player's NBA team (excluding the player themselves)
     team_injuries = []
     if nba_team != 'UNKNOWN':
-        team_injuries = get_team_injuries(league, nba_team)
+        team_injuries = get_team_injuries(all_players, nba_team, exclude_player_id=player_id)
     
     return {
         'player_id': player_id,
         'name': free_agent_player.name,
         'nba_team': nba_team,
         'injury_status': injury_status,
-        'positions_eligible': list(positions_eligible),
+        'positions_eligible': positions_eligible,
         'scoring': {
             'avg_last_30': round(avg_last_30, 2),
             'total_30': round(total_30, 2),
@@ -120,10 +125,18 @@ def scout_free_agents(league: League, limit: int = 20, min_avg_points: float = 5
     Returns:
         Dictionary with free agents data sorted by avg_last_30 descending
     """
-    free_agents_dict = {}
+    # Build all players dict once (for efficiency)
+    all_players = {}
+    for team in league.teams:
+        for player in team.roster:
+            all_players[player.playerId] = player
     
     # Get all free agents
     free_agents_list = league.free_agents(size=1000)
+    for player in free_agents_list:
+        all_players[player.playerId] = player
+    
+    free_agents_dict = {}
     
     # Build data for each free agent
     for player in free_agents_list:
@@ -131,7 +144,7 @@ def scout_free_agents(league: League, limit: int = 20, min_avg_points: float = 5
         
         # Filter by minimum average points
         if avg_last_30 >= min_avg_points:
-            player_data = build_free_agent_data(league, league, player)
+            player_data = build_free_agent_data(all_players, player)
             free_agents_dict[player.playerId] = player_data
     
     # Sort by avg_last_30 descending
