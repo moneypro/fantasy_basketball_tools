@@ -164,6 +164,33 @@ def get_tools_schema():
             {
                 "type": "function",
                 "function": {
+                    "name": "scout_free_agents",
+                    "description": "Scout free agents with stats, positions, and team injury context. Returns free agents sorted by avg_last_30 points. Use with get_players_playing_for_scoring_period to determine position gaps.",
+                    "x-endpoint": "/api/v1/scout/free-agents",
+                    "x-method": "POST",
+                    "parameters": {
+                        "type": "object",
+                        "properties": {
+                            "limit": {
+                                "type": "integer",
+                                "description": "Number of top free agents to return (1-500)",
+                                "minimum": 1,
+                                "maximum": 500,
+                                "default": 20
+                            },
+                            "min_avg_points": {
+                                "type": "number",
+                                "description": "Minimum avg_last_30 points to include",
+                                "minimum": 0,
+                                "default": 5.0
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                "type": "function",
+                "function": {
                     "name": "update_lineup",
                     "description": "Update lineup for next 7 days",
                     "x-endpoint": "/api/v1/lineup/update",

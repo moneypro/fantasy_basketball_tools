@@ -385,7 +385,56 @@
           }
         }
       }
-    }
+    },
+    \"/api/v1/scout/free-agents\": {
+      \"post\": {
+        \"summary\": \"Scout free agents with stats and team injury context\",
+        \"description\": \"Returns list of free agents sorted by average points (last 30 days). Includes player stats, position eligibility, injury status, and team injury context for LLM reasoning.\",
+        \"operationId\": \"scoutFreeAgents\",
+        \"parameters\": [
+          {
+            \"name\": \"api_key\",
+            \"in\": \"query\",
+            \"required\": true,
+            \"schema\": {
+              \"type\": \"string\"
+            },
+            \"description\": \"API authentication key\"
+          }
+        ],
+        \"requestBody\": {
+          \"description\": \"Request body with free agent filtering parameters\",
+          \"content\": {
+            \"application/json\": {
+              \"schema\": {
+                \"type\": \"object\",
+                \"properties\": {
+                  \"limit\": {
+                    \"type\": \"integer\",
+                    \"minimum\": 1,
+                    \"maximum\": 500,
+                    \"default\": 20,
+                    \"description\": \"Number of top free agents to return\"
+                  },
+                  \"min_avg_points\": {
+                    \"type\": \"number\",
+                    \"minimum\": 0,
+                    \"default\": 5.0,
+                    \"description\": \"Minimum avg_last_30 points to include in results\"
+                  }
+                }
+              }
+            }
+          }
+        },
+        \"responses\": {
+          \"200\": {
+            \"description\": \"Successful response with free agents data\",
+            \"content\": {
+              \"application/json\": {
+                \"schema\": {
+                  \"type\": \"object\",
+                  \"properties\": {\n                    \"status\": {\n                      \"type\": \"string\",\n                      \"example\": \"success\"\n                    },\n                    \"data\": {\n                      \"type\": \"object\",\n                      \"properties\": {\n                        \"free_agents\": {\n                          \"type\": \"array\",\n                          \"items\": {\n                            \"type\": \"object\",\n                            \"properties\": {\n                              \"player_id\": { \"type\": \"integer\" },\n                              \"name\": { \"type\": \"string\" },\n                              \"nba_team\": { \"type\": \"string\" },\n                              \"injury_status\": { \"type\": \"string\", \"enum\": [\"ACTIVE\", \"DAY_TO_DAY\", \"OUT\"] },\n                              \"positions_eligible\": {\n                                \"type\": \"array\",\n                                \"items\": { \"type\": \"string\" },\n                                \"example\": [\"SG\", \"SF\", \"G\", \"F\"]\n                              },\n                              \"scoring\": {\n                                \"type\": \"object\",\n                                \"properties\": {\n                                  \"avg_last_30\": { \"type\": \"number\" },\n                                  \"total_30\": { \"type\": \"number\" },\n                                  \"gp_30\": { \"type\": \"integer\" },\n                                  \"avg_year\": { \"type\": \"number\" },\n                                  \"avg_projected\": { \"type\": \"number\" }\n                                }\n                              },\n                              \"team_injuries\": {\n                                \"type\": \"array\",\n                                \"items\": {\n                                  \"type\": \"object\",\n                                  \"properties\": {\n                                    \"player_name\": { \"type\": \"string\" },\n                                    \"position\": { \"type\": \"string\" },\n                                    \"injury_status\": { \"type\": \"string\", \"enum\": [\"OUT\", \"DAY_TO_DAY\"] },\n                                    \"avg_points\": { \"type\": \"number\" }\n                                  }\n                                }\n                              }\n                            }\n                          }\n                        },\n                        \"summary\": {\n                          \"type\": \"object\",\n                          \"properties\": {\n                            \"total_free_agents_analyzed\": { \"type\": \"integer\" },\n                            \"returned\": { \"type\": \"integer\" },\n                            \"min_avg_points_filter\": { \"type\": \"number\" }\n                          }\n                        }\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          },\n          \"400\": {\n            \"description\": \"Invalid parameters\"\n          }\n        }\n      }\n    }
   },
   "components": {
     "securitySchemes": {
