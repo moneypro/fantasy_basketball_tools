@@ -144,8 +144,8 @@ def scout_players(limit: int = 200) -> ScoutingResult:
     players_2025 = get_all_players(league_2025)
     players_2026 = get_all_players(league_2026)
 
-    player_points = []
-    player_id_list = []
+    # Use dictionary instead of tuple for cleaner data structure
+    players_data = {}
 
     # 1. Calculate player scores (including rookies)
     for player_id, player_2025 in players_2025.items():
@@ -173,11 +173,21 @@ def scout_players(limit: int = 200) -> ScoutingResult:
         final_score = calculate_final_score(avg_recent, avg_proj, gp_proj)
 
         eligible = set(player_2025.eligibleSlots) if hasattr(player_2025, "eligibleSlots") else set()
-        eligibility = [str(pos in eligible) for pos in config.PRIMARY_POSITIONS]
-        player_points.append((
-            player_id, player_2025.name, avg_recent, total_30, gp_30, gp_year, avg_proj, gp_proj, final_score, *eligibility
-        ))
-        player_id_list.append(player_id)
+        eligibility_dict = {pos: pos in eligible for pos in config.PRIMARY_POSITIONS}
+        
+        players_data[player_id] = {
+            'player_id': player_id,
+            'name': player_2025.name,
+            'avg_recent': avg_recent,
+            'total_30': total_30,
+            'gp_30': gp_30,
+            'gp_year': gp_year,
+            'avg_proj': avg_proj,
+            'gp_proj': gp_proj,
+            'final_score': final_score,
+            'eligibility': eligibility_dict,
+            'is_rookie': False
+        }
 
     # Add rookies (in 2026 but not in 2025)
     for player_id, player_2026 in players_2026.items():
@@ -188,86 +198,85 @@ def scout_players(limit: int = 200) -> ScoutingResult:
             gp_proj = int(round(total_proj / avg_proj)) if avg_proj > 0 else 0
 
             if avg_proj > 0 and gp_proj > 0:
-                avg_recent = 0.0  # N/A for rookies
-                total_30 = 0.0
-                gp_30 = 0
-                gp_year = 0
-                # Use only projection for both avg_recent and avg_proj
                 final_score = calculate_final_score(avg_proj, avg_proj, gp_proj)
                 eligible = set(player_2026.eligibleSlots) if hasattr(player_2026, "eligibleSlots") else set()
-                eligibility = [str(pos in eligible) for pos in config.PRIMARY_POSITIONS]
-                player_points.append((
-                    player_id, player_2026.name, avg_recent, total_30, gp_30, gp_year, avg_proj, gp_proj, final_score, *eligibility
-                ))
-                player_id_list.append(player_id)
+                eligibility_dict = {pos: pos in eligible for pos in config.PRIMARY_POSITIONS}
+                
+                players_data[player_id] = {
+                    'player_id': player_id,
+                    'name': player_2026.name,
+                    'avg_recent': 0.0,
+                    'total_30': 0.0,
+                    'gp_30': 0,
+                    'gp_year': 0,
+                    'avg_proj': avg_proj,
+                    'gp_proj': gp_proj,
+                    'final_score': final_score,
+                    'eligibility': eligibility_dict,
+                    'is_rookie': True
+                }
 
     # 2. Standardize final scores to [0, 100]
-    scores = [x[8] for x in player_points]
-    min_score = min(scores)
-    max_score = max(scores)
+    scores = [p['final_score'] for p in players_data.values()]
+    min_score = min(scores) if scores else 0
+    max_score = max(scores) if scores else 1
+    
     if max_score > min_score:
-        standardized = [100 * (s - min_score) / (max_score - min_score) for s in scores]
+        for player_id in players_data:
+            raw_score = players_data[player_id]['final_score']
+            players_data[player_id]['standardized_score'] = 100 * (raw_score - min_score) / (max_score - min_score)
     else:
-        standardized = [100 for _ in scores]
+        for player_id in players_data:
+            players_data[player_id]['standardized_score'] = 100.0
 
     # 3. Build player_scores dict for team context
-    player_scores = {row[0]: standardized[i] for i, row in enumerate(player_points)}
+    player_scores = {player_id: data['standardized_score'] for player_id, data in players_data.items()}
 
     # 4. Get team context
     team_talent, team_off_rating, max_team_talent, avg_off_rating = get_team_context(players_2026, player_scores)
-    player_rank = get_team_rankings(player_points, standardized, players_2026)
+    player_rank = get_team_rankings_refactored(players_data, players_2026)
     
     # 5. Calculate potential_upside for each player
-    player_points_with_upside = []
-    for i, row in enumerate(player_points):
-        player_id = row[0]
-        player_score = standardized[i]
+    for player_id, data in players_data.items():
         player_obj = players_2026.get(player_id)
         team = getattr(player_obj, 'proTeam', 'Unknown') if player_obj else 'Unknown'
+        player_score = data['standardized_score']
         team_score = team_talent.get(team, 0.0) - player_score
         off_rating = team_off_rating.get(team, avg_off_rating)
         potential_upside = player_score * (1 + ALPHA * (1 - team_score / max_team_talent)) * (off_rating / avg_off_rating) ** BETA
         rank = player_rank.get(player_id, 0)
-        player_points_with_upside.append(row[:9] + (standardized[i], potential_upside, rank) + row[9:])
+        
+        data['potential_upside'] = potential_upside
+        data['team_rank'] = rank
 
     # 6. Sort by standardized score descending
-    player_points_with_upside.sort(key=lambda x: x[9], reverse=True)
+    sorted_players = sorted(players_data.items(), key=lambda x: x[1]['standardized_score'], reverse=True)
 
     # 7. Build result structure
     players_list = []
-    for row in player_points_with_upside[:limit]:
-        eligibility_dict = {
-            'PG': row[12] == 'True',
-            'SG': row[13] == 'True',
-            'SF': row[14] == 'True',
-            'PF': row[15] == 'True',
-            'C': row[16] == 'True',
-            'G': row[17] == 'True',
-            'F': row[18] == 'True',
-        }
-        
+    for player_id, data in sorted_players[:limit]:
         player = PlayerStats(
-            player_id=row[0],
-            name=row[1],
-            avg_recent=float(row[2]) if row[2] != 'N/A' else 0.0,
-            total_30=float(row[3]) if row[3] != 'N/A' else 0.0,
-            gp_30=int(row[4]) if row[4] != 'N/A' else 0,
-            gp_year=int(row[5]) if row[5] != 'N/A' else 0,
-            avg_proj=float(row[6]),
-            gp_proj=int(row[7]),
-            standardized_score=round(row[9], 2),
-            potential_upside=round(row[10], 2),
-            team_rank=int(row[11]),
-            eligibility=eligibility_dict
+            player_id=player_id,
+            name=data['name'],
+            avg_recent=data['avg_recent'],
+            total_30=data['total_30'],
+            gp_30=data['gp_30'],
+            gp_year=data['gp_year'],
+            avg_proj=data['avg_proj'],
+            gp_proj=data['gp_proj'],
+            standardized_score=round(data['standardized_score'], 2),
+            potential_upside=round(data['potential_upside'], 2),
+            team_rank=data['team_rank'],
+            eligibility=data['eligibility']
         )
         players_list.append(player)
 
     # 8. Calculate upside differences
     upside_diffs = []
-    for row in player_points_with_upside:
-        name = row[1]
-        standardized_score = row[9]
-        potential_upside = row[10]
+    for player_id, data in sorted_players:
+        name = data['name']
+        standardized_score = data['standardized_score']
+        potential_upside = data['potential_upside']
         diff = potential_upside - standardized_score
         upside_diffs.append((diff, name, standardized_score, potential_upside))
 
@@ -287,6 +296,24 @@ def scout_players(limit: int = 200) -> ScoutingResult:
     return ScoutingResult(
         players=players_list,
         upside_differences=upside_list,
-        total_players_analyzed=len(player_points),
+        total_players_analyzed=len(players_data),
         limit_returned=min(limit, len(players_list))
     )
+
+
+def get_team_rankings_refactored(players_data: Dict, players_2026: Dict) -> Dict:
+    """Returns a dict: player_id -> rank (1 = top option on team)"""
+    # Build team -> list of (player_id, standardized_score)
+    team_to_players = defaultdict(list)
+    for player_id, data in players_data.items():
+        player_obj = players_2026.get(player_id)
+        team = getattr(player_obj, 'proTeam', 'Unknown') if player_obj else 'Unknown'
+        team_to_players[team].append((player_id, data['standardized_score']))
+    
+    # For each team, sort and assign rank
+    player_rank = {}
+    for team, plist in team_to_players.items():
+        plist_sorted = sorted(plist, key=lambda x: x[1], reverse=True)
+        for rank, (pid, _) in enumerate(plist_sorted, 1):
+            player_rank[pid] = rank
+    return player_rank
