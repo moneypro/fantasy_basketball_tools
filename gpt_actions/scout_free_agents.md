@@ -22,14 +22,14 @@ Example:
 
 ## Key Insights
 1. **Injury Status is Critical**
-   - `injured: true` + `injury_status: "OUT"` = Player likely won't play tomorrow
+   - `injured: true` + `injury_status: "OUT"` = Player won't play and won't accumulate stats
    - Aaron Nesmith has 35.67 avg but is OUT, so risky pickup for immediate games
    - Check before recommending a pickup for tomorrow's games
 
-2. **Waiver Status Indicates Availability**
-   - `on_waivers: true` = Player was recently claimed via waivers
-   - Means they might not be available much longer
-   - Higher priority if they're top performers and still available
+2. **Waiver Status Indicates Availability Timeline**
+   - `on_waivers: true` = Player is currently on waivers
+   - `waiver_clear_period: 47` = Player was dropped in period 47, clears ~2 periods later
+   - Use this to prioritize pickups: players clearing sooner have limited time windows
 
 3. **Position Scarcity Creates Value**
    - If user has only 1 Guard spot left but 2 Forward spots, Forward has more value
@@ -206,7 +206,8 @@ The LLM will receive all this data and:
         "nba_team": "LAL",
         "injury_status": "ACTIVE",
         "injured": false,
-        "on_waivers": false,
+        "on_waivers": true,
+        "waiver_clear_period": 47,
         "positions_eligible": ["PF", "SF", "F"],
         "scoring": {
           "avg_last_30": 18.5,
