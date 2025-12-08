@@ -281,31 +281,136 @@ The LLM will receive all this data and:
    - Sort by avg_last_30 descending
    - Return top N (limit parameter)
 
-## Example Usage Scenario
+## How to Find the Best Free Agent
+
+The LLM should use a decision tree when evaluating free agents:
+
+### Step 1: Filter Out Injured Players
+```
+IF injured == true OR injury_status == "OUT":
+  SKIP - Player won't accumulate points tomorrow
+```
+
+**Example:** Aaron Nesmith (injured=true) - Skip even though 35.67 avg
+
+### Step 2: Check If They Play Tomorrow
+```
+current_period = 49 (Dec 8)
+IF current_period NOT IN games_next_5_periods:
+  LOWER PRIORITY - No games tomorrow means no points tomorrow
+```
+
+**Example:** 
+- Jaime Jaquez Jr. (games=[50]) - Plays Dec 9, not tomorrow
+- Jay Huff (games=[49, 53]) - Plays tomorrow! ✅
+
+### Step 3: Check Position Gaps vs Your Roster
+```
+your_team_playing = GET /api/v1/players-playing/49 with team_id
+open_positions = Count by position which spots are empty
+free_agent_positions = games_next_5_periods[0] tells you positions eligible
+
+IF free_agent fills a critical gap:
+  BOOST PRIORITY
+```
+
+**Example:**
+- You have: 1 Guard playing, 0 Forwards playing tomorrow (need Forwards badly)
+- Jay Huff (C, PF, F) fills Forward gap → HIGHER priority
+- Guard free agent → LOWER priority
+
+### Step 4: Check Waiver Status & Availability
+```
+IF on_waivers == true:
+  URGENT - Player may be claimed soon
+  Check waiver_clear_period to see when they become free
+ELSE:
+  Can claim immediately
+```
+
+**Example:**
+- Jay Huff (on_waivers=true) - Grab ASAP
+- Duncan Robinson (on_waivers=false) - Available anytime
+
+### Step 5: Evaluate Scoring & Team Context
+```
+Primary Score = avg_last_30 (most recent production)
+Secondary = avg_year (consistency)
+Tertiary = avg_projected (future outlook)
+
+IF team_injuries has significant OUT player (avg > 15):
+  Player gets usage boost
+  Usage factor = 1.6x if replacing OUT player of same position
+```
+
+**Example:**
+- Jay Huff (IND): IND team has no major injuries, but he's 27.87 avg - solid scorer
+- Jaime Jaquez Jr. (MIA): 30.27 avg (highest!), but plays only once in next 5 days
+
+### Final Ranking Logic
+
+For **Short-Term Pickup (Tomorrow):**
+```
+SCORE = avg_last_30 * position_fit * plays_tomorrow_factor * waiver_urgency
+  position_fit: 1.5x if fills gap, 1.0x otherwise
+  plays_tomorrow_factor: 2.0x if plays today, 0.5x if plays later
+  waiver_urgency: 1.2x if on waivers
+```
+
+**Real Example - Your Situation (Dec 8):**
+
+1. **Jay Huff (IND)**
+   - avg: 27.87, positions: C/PF/F, plays: [49, 53]
+   - plays_tomorrow: YES (period 49 in list)
+   - on_waivers: YES (urgent)
+   - Score: 27.87 × 1.5 (fills F gap) × 2.0 (plays today) × 1.2 (waivers) = **100.3** ✅ TOP PICK
+
+2. **Jeremiah Fears (NOP)**
+   - avg: 27.75, positions: PG/SG/G/SF/F, plays: [49, 52]
+   - plays_tomorrow: YES (period 49 in list)
+   - on_waivers: YES
+   - Score: 27.75 × 1.5 (fills any gap) × 2.0 (plays today) × 1.2 (waivers) = **99.9**
+
+3. **Jaime Jaquez Jr. (MIA)**
+   - avg: 30.27 (highest!), positions: SG/SF/G/F/C, plays: [50]
+   - plays_tomorrow: NO (only period 50)
+   - injured: NO
+   - on_waivers: YES
+   - Score: 30.27 × 1.5 × 0.5 (plays later, not today) × 1.2 = **27.2** ❌ LOWER PRIORITY
+
+### Example Usage Scenario
 
 The free-agents endpoint returns raw data like:
 
-**Free Agent Option 1:** Rui Hachimura
-- avg_last_30: 18.5, avg_year: 17.2, avg_projected: 16.8
-- Positions: PF, SF, F
-- Team injuries: LeBron James (PF, OUT, 24.5 avg)
-
-**Free Agent Option 2:** Jamal Murray
-- avg_last_30: 17.2, avg_year: 16.5, avg_projected: 15.9
-- Positions: PG, SG, G
+**Free Agent Option 1:** Jay Huff
+- avg_last_30: 27.87, avg_year: 26.5, avg_projected: 26.0
+- Positions: C, PF, F
+- games_next_5_periods: [49, 53]
+- on_waivers: true, injured: false
 - Team injuries: None
 
-**Free Agent Option 3:** Keldon Johnson
-- avg_last_30: 14.3, avg_year: 13.8, avg_projected: 13.2
-- Positions: SF, PF, F
-- Team injuries: Devin Booker (SG, DAY_TO_DAY, 21.0 avg)
+**Free Agent Option 2:** Jeremiah Fears
+- avg_last_30: 27.75, avg_year: 26.2, avg_projected: 25.8
+- Positions: PG, SG, G, SF, F
+- games_next_5_periods: [49, 52]
+- on_waivers: true, injured: false
+- Team injuries: None
+
+**Free Agent Option 3:** Jaime Jaquez Jr.
+- avg_last_30: 30.27, avg_year: 29.1, avg_projected: 28.5
+- Positions: SG, SF, G, F, C
+- games_next_5_periods: [50]
+- on_waivers: true, injured: false
+- Team injuries: None
 
 **What the LLM Reasoning Will Be:**
-- Rui has the highest avg (18.5), AND his NBA team is missing LeBron (a high-value PF), so Rui gets extra opportunities
-- The user (checking via `/api/v1/players-playing`) has 2 Forward spots open but only 1 Guard spot open
-- Therefore: Rui > Keldon (both forwards, but Rui is better) > Jamal (guard fills smaller gap)
+- Jay Huff and Jeremiah Fears both play TODAY (period 49 is in their games list)
+- Jaime Jaquez Jr. plays TOMORROW (period 50), not today - lower priority for immediate pickup
+- Your team needs Forwards (0 playing tomorrow) - both Jay and Jeremiah help
+- All three are on waivers (urgent)
+- Recommendation: **Jay Huff is the best pickup for tomorrow** - plays today, fills position need, healthy, highest urgency
 
-The endpoint just provides the facts; the LLM does the reasoning.
+The endpoint provides the facts; the LLM combines them to find the best match for your immediate needs.
 
 ## Implementation Ready ✅
 
