@@ -58,6 +58,58 @@ def get_waiver_player_ids(league: League) -> Set[int]:
     return waiver_player_ids
 
 
+def get_games_next_5_periods(league: League, nba_team: str, pro_schedule_data: Dict = None) -> List[int]:
+    """Get which of the next 5 scoring periods the NBA team has games.
+    
+    Args:
+        league: The fantasy basketball league
+        nba_team: NBA team abbreviation (e.g., 'LAL', 'BOS')
+        pro_schedule_data: Cached pro schedule data (fetched once to avoid repeated API calls)
+        
+    Returns:
+        List of scoring periods (49-53) when the team has games
+    """
+    games_periods = []
+    
+    try:
+        from espn_api.basketball.constant import PRO_TEAM_MAP
+        
+        current_period = league.scoringPeriodId if hasattr(league, 'scoringPeriodId') else 48
+        
+        # If schedule data not provided, fetch it once
+        if pro_schedule_data is None:
+            pro_schedule_response = league.espn_request.get_pro_schedule()
+            pro_teams = pro_schedule_response['settings']['proTeams']
+            
+            # Get the pro team ID for this NBA team abbreviation
+            nba_team_id = None
+            for team_id, team_abbr in PRO_TEAM_MAP.items():
+                if team_abbr == nba_team:
+                    nba_team_id = team_id
+                    break
+            
+            if nba_team_id:
+                # Check which periods this team has games
+                for team in pro_teams:
+                    if team['id'] == nba_team_id:
+                        pro_games = team.get('proGamesByScoringPeriod', {})
+                        for period_str in pro_games.keys():
+                            try:
+                                period = int(period_str)
+                                # Include periods from current to current+5 (next 5 days)
+                                if current_period <= period <= current_period + 5:
+                                    games_periods.append(period)
+                            except ValueError:
+                                pass
+                        break
+    
+    except Exception as e:
+        # Return empty list on error
+        pass
+    
+    return sorted(games_periods)
+
+
 def get_team_injuries(all_players: Dict[int, Any], nba_team: str, exclude_player_id: int = None) -> List[Dict[str, Any]]:
     """Get all OUT and DAY_TO_DAY players on a specific NBA team.
     
@@ -99,7 +151,7 @@ def get_team_injuries(all_players: Dict[int, Any], nba_team: str, exclude_player
     return injuries
 
 
-def build_free_agent_data(all_players: Dict[int, Any], free_agent_player: Any, waiver_player_ids: Set[int] = None, recent_transactions: List[Any] = None) -> Dict[str, Any]:
+def build_free_agent_data(all_players: Dict[int, Any], free_agent_player: Any, waiver_player_ids: Set[int] = None, recent_transactions: List[Any] = None, league: League = None, pro_schedule_data: Dict = None) -> Dict[str, Any]:
     """Build complete free agent data including stats and team injuries.
     
     Args:
@@ -107,6 +159,8 @@ def build_free_agent_data(all_players: Dict[int, Any], free_agent_player: Any, w
         free_agent_player: The free agent player object
         waiver_player_ids: Set of player IDs currently on waivers
         recent_transactions: List of recent transactions (to find drop date)
+        league: League object (for getting schedule info)
+        pro_schedule_data: Cached pro schedule data (to avoid repeated API calls)
         
     Returns:
         Dictionary with free agent data ready for API response
@@ -151,6 +205,11 @@ def build_free_agent_data(all_players: Dict[int, Any], free_agent_player: Any, w
     # Get NBA team
     nba_team = getattr(free_agent_player, 'proTeam', 'UNKNOWN')
     
+    # Get next 5 periods schedule (which periods this player's team has games)
+    games_next_5_periods = []
+    if nba_team != 'UNKNOWN' and league:
+        games_next_5_periods = get_games_next_5_periods(league, nba_team, pro_schedule_data)
+    
     # Get team injuries for this player's NBA team (excluding the player themselves)
     team_injuries = []
     if nba_team != 'UNKNOWN':
@@ -182,6 +241,7 @@ def build_free_agent_data(all_players: Dict[int, Any], free_agent_player: Any, w
         'on_waivers': on_waivers,
         'waiver_clear_period': waiver_clear_period,
         'positions_eligible': positions_eligible,
+        'games_next_5_periods': games_next_5_periods,
         'scoring': {
             'avg_last_30': round(avg_last_30, 2),
             'total_30': round(total_30, 2),
@@ -231,6 +291,13 @@ def scout_free_agents(league: League, limit: int = 20, min_avg_points: float = 5
     except:
         pass
     
+    # Fetch pro schedule once to avoid repeated API calls
+    pro_schedule_data = None
+    try:
+        pro_schedule_data = league.espn_request.get_pro_schedule()
+    except:
+        pass
+    
     free_agents_dict = {}
     
     # Build data for each free agent
@@ -239,7 +306,7 @@ def scout_free_agents(league: League, limit: int = 20, min_avg_points: float = 5
         
         # Filter by minimum average points
         if avg_last_30 >= min_avg_points:
-            player_data = build_free_agent_data(all_players, player, waiver_player_ids, recent_transactions)
+            player_data = build_free_agent_data(all_players, player, waiver_player_ids, recent_transactions, league, pro_schedule_data)
             free_agents_dict[player.playerId] = player_data
     
     # Sort by avg_last_30 descending
