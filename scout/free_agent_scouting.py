@@ -45,12 +45,13 @@ def get_team_injuries(all_players: Dict[int, Any], nba_team: str, exclude_player
     return injuries
 
 
-def build_free_agent_data(all_players: Dict[int, Any], free_agent_player: Any) -> Dict[str, Any]:
+def build_free_agent_data(all_players: Dict[int, Any], free_agent_player: Any, recent_transactions: List[Any] = None) -> Dict[str, Any]:
     """Build complete free agent data including stats and team injuries.
     
     Args:
         all_players: Dictionary of all players (for injury lookup)
         free_agent_player: The free agent player object
+        recent_transactions: List of recent transactions (to check waiver status)
         
     Returns:
         Dictionary with free agent data ready for API response
@@ -89,6 +90,9 @@ def build_free_agent_data(all_players: Dict[int, Any], free_agent_player: Any) -
     if not injury_status:
         injury_status = 'ACTIVE'
     
+    # Check if injured
+    injured = getattr(free_agent_player, 'injured', False)
+    
     # Get NBA team
     nba_team = getattr(free_agent_player, 'proTeam', 'UNKNOWN')
     
@@ -97,11 +101,22 @@ def build_free_agent_data(all_players: Dict[int, Any], free_agent_player: Any) -
     if nba_team != 'UNKNOWN':
         team_injuries = get_team_injuries(all_players, nba_team, exclude_player_id=player_id)
     
+    # Check if player is on waivers (from recent transactions)
+    on_waivers = False
+    if recent_transactions:
+        for trans in recent_transactions:
+            trans_str = str(trans)
+            if 'WAIVER' in trans_str and free_agent_player.name in trans_str:
+                on_waivers = True
+                break
+    
     return {
         'player_id': player_id,
         'name': free_agent_player.name,
         'nba_team': nba_team,
         'injury_status': injury_status,
+        'injured': injured,
+        'on_waivers': on_waivers,
         'positions_eligible': positions_eligible,
         'scoring': {
             'avg_last_30': round(avg_last_30, 2),
@@ -136,6 +151,12 @@ def scout_free_agents(league: League, limit: int = 20, min_avg_points: float = 5
     for player in free_agents_list:
         all_players[player.playerId] = player
     
+    # Get recent transactions for waiver information
+    try:
+        recent_transactions = league.transactions()
+    except:
+        recent_transactions = []
+    
     free_agents_dict = {}
     
     # Build data for each free agent
@@ -144,7 +165,7 @@ def scout_free_agents(league: League, limit: int = 20, min_avg_points: float = 5
         
         # Filter by minimum average points
         if avg_last_30 >= min_avg_points:
-            player_data = build_free_agent_data(all_players, player)
+            player_data = build_free_agent_data(all_players, player, recent_transactions)
             free_agents_dict[player.playerId] = player_data
     
     # Sort by avg_last_30 descending
