@@ -58,27 +58,21 @@ def log_request(
         response_time_ms: Response time in milliseconds
         error_message: Optional error message if request failed
     """
-    import sys
-    try:
-        extra = {
-            'method': method,
-            'path': path,
-            'status': status_code,
-            'key_name': key_name,
-            'tier': tier,
-            'response_time': f"{response_time_ms:.2f}"
-        }
-        
-        if status_code < 400:
-            request_logger.info(f"Success", extra=extra)
-        elif status_code < 500:
-            request_logger.warning(f"Client error: {error_message}", extra=extra)
-        else:
-            request_logger.error(f"Server error: {error_message}", extra=extra)
-    except Exception as e:
-        print(f"DEBUG: log_request error: {e}", file=sys.stderr)
-        import traceback
-        traceback.print_exc(file=sys.stderr)
+    extra = {
+        'method': method,
+        'path': path,
+        'status': status_code,
+        'key_name': key_name,
+        'tier': tier,
+        'response_time': f"{response_time_ms:.2f}"
+    }
+    
+    if status_code < 400:
+        request_logger.info(f"Success", extra=extra)
+    elif status_code < 500:
+        request_logger.warning(f"Client error: {error_message}", extra=extra)
+    else:
+        request_logger.error(f"Server error: {error_message}", extra=extra)
 
 
 def log_request_to_json(

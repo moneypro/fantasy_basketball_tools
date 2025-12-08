@@ -30,9 +30,6 @@ def require_api_key(f):
     """
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        import sys
-        print(f"DEBUG: require_api_key decorator called", file=sys.stderr)
-        sys.stderr.flush()
         manager = get_api_key_manager()
         start_time = time.time()
         
