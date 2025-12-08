@@ -76,32 +76,35 @@ def get_games_next_5_periods(league: League, nba_team: str, pro_schedule_data: D
         
         current_period = league.scoringPeriodId if hasattr(league, 'scoringPeriodId') else 48
         
-        # If schedule data not provided, fetch it once
+        # If schedule data not provided, fetch it
         if pro_schedule_data is None:
             pro_schedule_response = league.espn_request.get_pro_schedule()
-            pro_teams = pro_schedule_response['settings']['proTeams']
-            
-            # Get the pro team ID for this NBA team abbreviation
-            nba_team_id = None
-            for team_id, team_abbr in PRO_TEAM_MAP.items():
-                if team_abbr == nba_team:
-                    nba_team_id = team_id
+        else:
+            pro_schedule_response = pro_schedule_data
+        
+        pro_teams = pro_schedule_response['settings']['proTeams']
+        
+        # Get the pro team ID for this NBA team abbreviation
+        nba_team_id = None
+        for team_id, team_abbr in PRO_TEAM_MAP.items():
+            if team_abbr == nba_team:
+                nba_team_id = team_id
+                break
+        
+        if nba_team_id:
+            # Check which periods this team has games
+            for team in pro_teams:
+                if team['id'] == nba_team_id:
+                    pro_games = team.get('proGamesByScoringPeriod', {})
+                    for period_str in pro_games.keys():
+                        try:
+                            period = int(period_str)
+                            # Include periods from current to current+5 (next 5 days)
+                            if current_period <= period <= current_period + 5:
+                                games_periods.append(period)
+                        except ValueError:
+                            pass
                     break
-            
-            if nba_team_id:
-                # Check which periods this team has games
-                for team in pro_teams:
-                    if team['id'] == nba_team_id:
-                        pro_games = team.get('proGamesByScoringPeriod', {})
-                        for period_str in pro_games.keys():
-                            try:
-                                period = int(period_str)
-                                # Include periods from current to current+5 (next 5 days)
-                                if current_period <= period <= current_period + 5:
-                                    games_periods.append(period)
-                            except ValueError:
-                                pass
-                        break
     
     except Exception as e:
         # Return empty list on error
