@@ -653,6 +653,56 @@ def list_api_keys():
             "message": f"Failed to list API keys: {str(e)}"
         }), 500
 
+@app.route('/api/v1/admin/access-logs', methods=['GET'])
+@require_admin
+def get_access_logs():
+    """Get recent API access logs.
+    
+    Query parameters:
+    - limit: Number of recent logs to return (default: 50, max: 500)
+    - key_name: Filter by API key name (optional)
+    
+    Returns recent request logs with:
+    - timestamp: When the request was made
+    - method: HTTP method
+    - path: API endpoint path
+    - status: HTTP response code
+    - key_name: API key name (not the key itself)
+    - tier: API tier of the key
+    - response_time: How long the request took
+    """
+    try:
+        from auth.request_logger import get_recent_requests
+        
+        # Get query parameters
+        limit = request.args.get('limit', 50, type=int)
+        key_name = request.args.get('key_name', None, type=str)
+        
+        # Validate limit
+        if limit < 1 or limit > 500:
+            return jsonify({
+                "status": "error",
+                "message": "limit must be between 1 and 500"
+            }), 400
+        
+        # Get recent logs
+        logs = get_recent_requests(limit=limit, key_name=key_name)
+        
+        return jsonify({
+            "status": "success",
+            "data": {
+                "logs": logs,
+                "count": len(logs),
+                "limit": limit,
+                "filtered_by_key": key_name
+            }
+        }), 200
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": f"Failed to retrieve access logs: {str(e)}"
+        }), 500
+
 @app.route('/api/v1/admin/refresh-league', methods=['POST'])
 @require_admin
 def refresh_league():

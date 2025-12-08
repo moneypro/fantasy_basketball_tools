@@ -123,6 +123,56 @@ def log_request_to_json(
         request_logger.error(f"Failed to write JSON log: {e}")
 
 
+def get_recent_requests(limit: int = 50, key_name: Optional[str] = None) -> list:
+    """Get recent API requests from logs.
+    
+    Args:
+        limit: Number of recent requests to return (default: 50)
+        key_name: Filter by key name (optional)
+    
+    Returns:
+        List of recent request entries
+    """
+    try:
+        if not REQUEST_LOG_FILE.exists():
+            return []
+        
+        requests_list = []
+        
+        with open(REQUEST_LOG_FILE, 'r') as f:
+            # Read all lines
+            lines = f.readlines()
+            
+            # Take the last `limit` lines
+            for line in lines[-limit:]:
+                try:
+                    # Parse the log line
+                    # Format: timestamp | method | path | status | key_name | tier | response_time
+                    parts = line.strip().split(' | ')
+                    if len(parts) >= 7:
+                        entry = {
+                            'timestamp': parts[0],
+                            'method': parts[1],
+                            'path': parts[2],
+                            'status': parts[3],
+                            'key_name': parts[4],
+                            'tier': parts[5],
+                            'response_time': parts[6]
+                        }
+                        
+                        # Filter by key_name if specified
+                        if key_name and entry['key_name'] != key_name:
+                            continue
+                        
+                        requests_list.append(entry)
+                except Exception:
+                    continue
+        
+        return requests_list
+    except Exception as e:
+        return [{"error": f"Failed to read logs: {e}"}]
+
+
 def get_usage_summary(key_name: Optional[str] = None) -> Dict[str, Any]:
     """Get usage summary from logs.
     
