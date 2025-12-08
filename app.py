@@ -838,38 +838,8 @@ def get_players_playing_for_scoring_period(scoring_period):
         from predict.internal.roster_week_predictor import RosterWeekPredictor
         from common.week import Week
         
-        # Try to get box scores for actual game data
-        box_scores = None
-        try:
-            # Figure out which week the scoring_period belongs to
-            # Scoring periods are grouped by week - week 1 has periods 1-7, week 2 has 8-14, etc.
-            week_index = ((scoring_period - 1) // 7) + 1
-            box_scores = league.box_scores(week_index, scoring_period, matchup_total=True)
-            print(f"DEBUG: Got {len(box_scores) if box_scores else 0} box scores for week {week_index}, period {scoring_period}")
-            if box_scores and len(box_scores) > 0:
-                first_box = box_scores[0]
-                print(f"DEBUG: First box score has home_lineup: {hasattr(first_box, 'home_lineup')}")
-                if hasattr(first_box, 'home_lineup'):
-                    print(f"DEBUG: home_lineup length: {len(first_box.home_lineup)}")
-                    if len(first_box.home_lineup) > 0:
-                        print(f"DEBUG: First home player: {first_box.home_lineup[0].name}, points: {first_box.home_lineup[0].points if hasattr(first_box.home_lineup[0], 'points') else 'N/A'}")
-        except Exception as e:
-            print(f"Warning: Could not get box scores: {e}")
-            import traceback
-            traceback.print_exc()
-        
-        # Create a map of playerId to actual box player for quick lookup
-        box_player_map = {}
-        if box_scores:
-            for box_score in box_scores:
-                if hasattr(box_score, 'home_lineup'):
-                    for box_player in box_score.home_lineup:
-                        if hasattr(box_player, 'playerId'):
-                            box_player_map[box_player.playerId] = box_player
-                if hasattr(box_score, 'away_lineup'):
-                    for box_player in box_score.away_lineup:
-                        if hasattr(box_player, 'playerId'):
-                            box_player_map[box_player.playerId] = box_player
+        # Get actual points for this scoring period from player stats
+        # Each player has stats['scoring_period'] with applied_total field
         
         # Build player data with stats
         playing_players = []
@@ -877,13 +847,11 @@ def get_players_playing_for_scoring_period(scoring_period):
             avg_points, variance = RosterWeekPredictor.get_avg_variance_stats(player)
             player_id = player.playerId if hasattr(player, 'playerId') else None
             
-            # Check if we have actual box score data for this player
+            # Get actual points for this scoring period from player.stats
             actual_points = None
-            game_played_pct = None
-            if player_id and player_id in box_player_map:
-                box_player = box_player_map[player_id]
-                actual_points = box_player.points if hasattr(box_player, 'points') else None
-                game_played_pct = box_player.game_played if hasattr(box_player, 'game_played') else None
+            if hasattr(player, 'stats') and str(scoring_period) in player.stats:
+                period_stats = player.stats[str(scoring_period)]
+                actual_points = period_stats.get('applied_total', None)
             
             player_info = {
                 "player_id": player_id,
@@ -893,8 +861,7 @@ def get_players_playing_for_scoring_period(scoring_period):
                 "injury_status": player.injuryStatus if hasattr(player, 'injuryStatus') and player.injuryStatus else "ACTIVE",
                 "projected_avg_points": round(avg_points, 2),
                 "projected_variance": round(variance, 2),
-                "actual_points": round(actual_points, 2) if actual_points is not None else None,
-                "game_played_pct": game_played_pct
+                "actual_points": round(actual_points, 2) if actual_points is not None else None
             }
             playing_players.append(player_info)
         
@@ -904,13 +871,11 @@ def get_players_playing_for_scoring_period(scoring_period):
                 avg_points, variance = RosterWeekPredictor.get_avg_variance_stats(p)
                 player_id = p.playerId if hasattr(p, 'playerId') else None
                 
-                # Check if we have actual box score data for this player
+                # Get actual points for this scoring period from player.stats
                 actual_points = None
-                game_played_pct = None
-                if player_id and player_id in box_player_map:
-                    box_player = box_player_map[player_id]
-                    actual_points = box_player.points if hasattr(box_player, 'points') else None
-                    game_played_pct = box_player.game_played if hasattr(box_player, 'game_played') else None
+                if hasattr(p, 'stats') and str(scoring_period) in p.stats:
+                    period_stats = p.stats[str(scoring_period)]
+                    actual_points = period_stats.get('applied_total', None)
                 
                 player_info = {
                     "player_id": player_id,
@@ -920,8 +885,7 @@ def get_players_playing_for_scoring_period(scoring_period):
                     "injury_status": p.injuryStatus if hasattr(p, 'injuryStatus') and p.injuryStatus else "ACTIVE",
                     "projected_avg_points": round(avg_points, 2),
                     "projected_variance": round(variance, 2),
-                    "actual_points": round(actual_points, 2) if actual_points is not None else None,
-                    "game_played_pct": game_played_pct
+                    "actual_points": round(actual_points, 2) if actual_points is not None else None
                 }
                 not_playing_players.append(player_info)
         
