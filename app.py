@@ -839,15 +839,24 @@ def get_players_playing_for_scoring_period(scoring_period):
         from common.week import Week
         
         # Try to get box scores for actual game data
+        box_scores = None
         try:
-            current_period = league.currentMatchupPeriod
             # Figure out which week the scoring_period belongs to
             # Scoring periods are grouped by week - week 1 has periods 1-7, week 2 has 8-14, etc.
             week_index = ((scoring_period - 1) // 7) + 1
             box_scores = league.box_scores(week_index, scoring_period, matchup_total=True)
+            print(f"DEBUG: Got {len(box_scores) if box_scores else 0} box scores for week {week_index}, period {scoring_period}")
+            if box_scores and len(box_scores) > 0:
+                first_box = box_scores[0]
+                print(f"DEBUG: First box score has home_lineup: {hasattr(first_box, 'home_lineup')}")
+                if hasattr(first_box, 'home_lineup'):
+                    print(f"DEBUG: home_lineup length: {len(first_box.home_lineup)}")
+                    if len(first_box.home_lineup) > 0:
+                        print(f"DEBUG: First home player: {first_box.home_lineup[0].name}, points: {first_box.home_lineup[0].points if hasattr(first_box.home_lineup[0], 'points') else 'N/A'}")
         except Exception as e:
             print(f"Warning: Could not get box scores: {e}")
-            box_scores = None
+            import traceback
+            traceback.print_exc()
         
         # Create a map of player_id to actual box player for quick lookup
         box_player_map = {}
