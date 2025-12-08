@@ -1,7 +1,61 @@
 """Free agent scouting and analysis functions."""
 
-from typing import Dict, List, Any
+from typing import Dict, List, Any, Set
 from espn_api.basketball import League
+import requests
+import json
+
+
+def get_waiver_player_ids(league: League) -> Set[int]:
+    """Get all player IDs currently on waivers using ESPN API.
+    
+    Args:
+        league: The fantasy basketball league
+        
+    Returns:
+        Set of player IDs that are currently on waivers
+    """
+    waiver_player_ids = set()
+    
+    try:
+        # Use requests directly with league's cookies for waiver filter
+        # Note: league.espn_request.league_get() has issues with certain headers
+        x_fantasy_filter = {
+            "players": {
+                "filterStatus": {"value": ["WAIVERS"]}
+            }
+        }
+        
+        headers = {
+            "x-fantasy-filter": json.dumps(x_fantasy_filter),
+            "x-fantasy-platform": "espn-fantasy-web",
+            "x-fantasy-source": "kona"
+        }
+        
+        params = {
+            "view": "kona_player_info"
+        }
+        
+        response = requests.get(
+            league.espn_request.LEAGUE_ENDPOINT,
+            params=params,
+            headers=headers,
+            cookies=league.espn_request.cookies
+        )
+        response.raise_for_status()
+        
+        data = response.json()
+        
+        # Extract player IDs from waivers
+        if isinstance(data, dict) and 'players' in data:
+            for player in data['players']:
+                if 'id' in player:
+                    waiver_player_ids.add(player['id'])
+    
+    except Exception as e:
+        print(f"Warning: Could not fetch waiver players: {e}")
+    
+    return waiver_player_ids
 
 
 def get_team_injuries(all_players: Dict[int, Any], nba_team: str, exclude_player_id: int = None) -> List[Dict[str, Any]]:
@@ -45,13 +99,14 @@ def get_team_injuries(all_players: Dict[int, Any], nba_team: str, exclude_player
     return injuries
 
 
-def build_free_agent_data(all_players: Dict[int, Any], free_agent_player: Any, recent_transactions: List[Any] = None) -> Dict[str, Any]:
+def build_free_agent_data(all_players: Dict[int, Any], free_agent_player: Any, waiver_player_ids: Set[int] = None, recent_transactions: List[Any] = None) -> Dict[str, Any]:
     """Build complete free agent data including stats and team injuries.
     
     Args:
         all_players: Dictionary of all players (for injury lookup)
         free_agent_player: The free agent player object
-        recent_transactions: List of recent transactions (to check waiver status)
+        waiver_player_ids: Set of player IDs currently on waivers
+        recent_transactions: List of recent transactions (to find drop date)
         
     Returns:
         Dictionary with free agent data ready for API response
@@ -101,14 +156,22 @@ def build_free_agent_data(all_players: Dict[int, Any], free_agent_player: Any, r
     if nba_team != 'UNKNOWN':
         team_injuries = get_team_injuries(all_players, nba_team, exclude_player_id=player_id)
     
-    # Check if player is on waivers (from recent transactions)
+    # Check if player is on waivers (from ESPN API waiver list)
     on_waivers = False
-    if recent_transactions:
-        for trans in recent_transactions:
-            trans_str = str(trans)
-            if 'WAIVER' in trans_str and free_agent_player.name in trans_str:
-                on_waivers = True
-                break
+    waiver_clear_period = None
+    if waiver_player_ids and player_id in waiver_player_ids:
+        on_waivers = True
+        
+        # Find when player was dropped
+        if recent_transactions:
+            for trans in recent_transactions:
+                if hasattr(trans, 'type') and trans.type == 'FREEAGENT' and hasattr(trans, 'items'):
+                    for item in trans.items:
+                        item_str = str(item)
+                        if 'DROP' in item_str and free_agent_player.name in item_str:
+                            # Store the scoring period when player was dropped
+                            waiver_clear_period = trans.scoring_period if hasattr(trans, 'scoring_period') else None
+                            break
     
     return {
         'player_id': player_id,
@@ -117,6 +180,7 @@ def build_free_agent_data(all_players: Dict[int, Any], free_agent_player: Any, r
         'injury_status': injury_status,
         'injured': injured,
         'on_waivers': on_waivers,
+        'waiver_clear_period': waiver_clear_period,
         'positions_eligible': positions_eligible,
         'scoring': {
             'avg_last_30': round(avg_last_30, 2),
@@ -151,11 +215,21 @@ def scout_free_agents(league: League, limit: int = 20, min_avg_points: float = 5
     for player in free_agents_list:
         all_players[player.playerId] = player
     
-    # Get recent transactions for waiver information
+    # Get waiver player IDs from ESPN API
+    waiver_player_ids = get_waiver_player_ids(league)
+    
+    # Get recent transactions to find drop dates for waivers
+    recent_transactions = []
     try:
-        recent_transactions = league.transactions()
+        current_period = league.scoringPeriodId if hasattr(league, 'scoringPeriodId') else 1
+        recent_transactions.extend(league.transactions())
+        for period in range(max(1, current_period - 7), current_period):
+            try:
+                recent_transactions.extend(league.transactions(scoring_period=period))
+            except:
+                pass
     except:
-        recent_transactions = []
+        pass
     
     free_agents_dict = {}
     
@@ -165,7 +239,7 @@ def scout_free_agents(league: League, limit: int = 20, min_avg_points: float = 5
         
         # Filter by minimum average points
         if avg_last_30 >= min_avg_points:
-            player_data = build_free_agent_data(all_players, player, recent_transactions)
+            player_data = build_free_agent_data(all_players, player, waiver_player_ids, recent_transactions)
             free_agents_dict[player.playerId] = player_data
     
     # Sort by avg_last_30 descending
