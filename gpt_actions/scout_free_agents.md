@@ -4,9 +4,10 @@
 Identify the best free agents to add to your roster by analyzing:
 1. **Current Performance**: Average points (last 30 days, year average)
 2. **Future Potential**: Projected points for the season
-3. **Next 5 Days Schedule**: Exactly which days they're playing and how many games
-4. **Position Value**: How they fill gaps in your roster based on position scarcity
-5. **Gap-to-Fill Analysis**: Whether their NBA team has significant OUT/DAY_TO_DAY players (increased usage opportunity)
+3. **Injury Status**: Flag injured players (OUT status) who won't play tomorrow
+4. **Waiver Status**: Identify players on waivers who might not be available soon
+5. **Position Value**: How they fill gaps in your roster based on position scarcity
+6. **Gap-to-Fill Analysis**: Whether their NBA team has significant OUT/DAY_TO_DAY players (increased usage opportunity)
 
 ## Problem Statement
 When adding free agents, managers need to understand not just raw talent, but:
@@ -20,18 +21,24 @@ Example:
 - Gabe Vincent (SG) on Lakers sees minimal benefit → Lower value for SG-needy teams
 
 ## Key Insights
-1. **Scoring Period Matters More Than General Stats**
-   - A player averaging 20 pts/game is only valuable if they play in the next 5 days
-   - Must show exact schedule: "Playing Dec 8 & Dec 10" vs "Playing Dec 8, 9, 10, 11, 12"
+1. **Injury Status is Critical**
+   - `injured: true` + `injury_status: "OUT"` = Player likely won't play tomorrow
+   - Aaron Nesmith has 35.67 avg but is OUT, so risky pickup for immediate games
+   - Check before recommending a pickup for tomorrow's games
 
-2. **Position Scarcity Creates Value**
-   - If user has only 1 Guard spot left but 2 Forward spots, a bench Guard is more valuable than bench Forward
+2. **Waiver Status Indicates Availability**
+   - `on_waivers: true` = Player was recently claimed via waivers
+   - Means they might not be available much longer
+   - Higher priority if they're top performers and still available
+
+3. **Position Scarcity Creates Value**
+   - If user has only 1 Guard spot left but 2 Forward spots, Forward has more value
    - If user already has 4+ players playing tomorrow, adding anyone is risky
 
-3. **Injury-Driven Opportunity**
-   - Only matters if the injured player is significant (avg >= 15 pts or team impact)
-   - DAY_TO_DAY = ~30% usage boost expected
-   - OUT = ~60% usage boost expected
+4. **Injury-Driven Opportunity**
+   - Only matters if the injured player is significant (avg >= 15 pts)
+   - DAY_TO_DAY teammate out = ~30% usage boost expected
+   - OUT teammate = ~60% usage boost expected
 
 ## Data Requirements
 
@@ -198,6 +205,8 @@ The LLM will receive all this data and:
         "name": "Rui Hachimura",
         "nba_team": "LAL",
         "injury_status": "ACTIVE",
+        "injured": false,
+        "on_waivers": false,
         "positions_eligible": ["PF", "SF", "F"],
         "scoring": {
           "avg_last_30": 18.5,

@@ -165,7 +165,7 @@ def get_tools_schema():
                 "type": "function",
                 "function": {
                     "name": "scout_free_agents",
-                    "description": "Scout free agents with stats, positions, and team injury context. Returns free agents sorted by avg_last_30 points. Use with get_players_playing_for_scoring_period to determine position gaps.",
+                    "description": "Scout free agents with stats, positions, injury status, and team injury context. Returns free agents sorted by avg_last_30 points. Flags injured players (injury_status=OUT) and players on waivers. Use with get_players_playing_for_scoring_period to determine position gaps.",
                     "x-endpoint": "/api/v1/scout/free-agents",
                     "x-method": "POST",
                     "parameters": {
