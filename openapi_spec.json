@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "https://leanora-unmumbling-noncontroversially.ngrok-free.dev",
+      "url": "https://hcheng.ngrok.app",
       "description": "Production server"
     }
   ],
@@ -179,7 +179,7 @@
               "type": "integer",
               "minimum": 1
             },
-            "description": "Scoring period ID. Each period = 1 day. 1=Oct 21, 2=Oct 22, ..., 47=Dec 6, 2026"
+            "description": "Scoring period ID. Each period = 1 day. 1=Oct 21, 2=Oct 22, ..., 47=Dec 6, 2025"
           },
           {
             "name": "api_key",

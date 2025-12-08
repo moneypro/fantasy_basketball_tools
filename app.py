@@ -779,7 +779,7 @@ def get_players_playing_for_scoring_period(scoring_period):
     Get all players from a specific team who have games on a scoring period
     
     Path params:
-    - scoring_period: Scoring period ID (1=Oct 21, 2=Oct 22, ..., 47=Dec 6, 2026)
+    - scoring_period: Scoring period ID (1=Oct 21, 2=Oct 22, ..., 47=Dec 6, 2025)
     
     Request body params:
     - team_id: Team ID (required) - Get players only for this team
@@ -838,18 +838,54 @@ def get_players_playing_for_scoring_period(scoring_period):
         from predict.internal.roster_week_predictor import RosterWeekPredictor
         from common.week import Week
         
+        # Try to get box scores for actual game data
+        try:
+            current_period = league.currentMatchupPeriod
+            # Figure out which week the scoring_period belongs to
+            # Scoring periods are grouped by week - week 1 has periods 1-7, week 2 has 8-14, etc.
+            week_index = ((scoring_period - 1) // 7) + 1
+            box_scores = league.box_scores(week_index, scoring_period, matchup_total=True)
+        except Exception as e:
+            print(f"Warning: Could not get box scores: {e}")
+            box_scores = None
+        
+        # Create a map of player_id to actual box player for quick lookup
+        box_player_map = {}
+        if box_scores:
+            for box_score in box_scores:
+                if hasattr(box_score, 'home_lineup'):
+                    for box_player in box_score.home_lineup:
+                        if hasattr(box_player, 'player_id'):
+                            box_player_map[box_player.player_id] = box_player
+                if hasattr(box_score, 'away_lineup'):
+                    for box_player in box_score.away_lineup:
+                        if hasattr(box_player, 'player_id'):
+                            box_player_map[box_player.player_id] = box_player
+        
         # Build player data with stats
         playing_players = []
         for player in players_playing:
             avg_points, variance = RosterWeekPredictor.get_avg_variance_stats(player)
+            player_id = player.player_id if hasattr(player, 'player_id') else None
+            
+            # Check if we have actual box score data for this player
+            actual_points = None
+            game_played_pct = None
+            if player_id and player_id in box_player_map:
+                box_player = box_player_map[player_id]
+                actual_points = box_player.points if hasattr(box_player, 'points') else None
+                game_played_pct = box_player.game_played if hasattr(box_player, 'game_played') else None
+            
             player_info = {
-                "player_id": player.player_id if hasattr(player, 'player_id') else None,
+                "player_id": player_id,
                 "name": player.name,
                 "position": player.position if hasattr(player, 'position') else None,
                 "nba_team": player.proTeam if hasattr(player, 'proTeam') else None,
                 "injury_status": player.injuryStatus if hasattr(player, 'injuryStatus') and player.injuryStatus else "ACTIVE",
                 "projected_avg_points": round(avg_points, 2),
-                "projected_variance": round(variance, 2)
+                "projected_variance": round(variance, 2),
+                "actual_points": round(actual_points, 2) if actual_points is not None else None,
+                "game_played_pct": game_played_pct
             }
             playing_players.append(player_info)
         
@@ -857,14 +893,26 @@ def get_players_playing_for_scoring_period(scoring_period):
         for p in all_active_players:
             if p not in players_playing:
                 avg_points, variance = RosterWeekPredictor.get_avg_variance_stats(p)
+                player_id = p.player_id if hasattr(p, 'player_id') else None
+                
+                # Check if we have actual box score data for this player
+                actual_points = None
+                game_played_pct = None
+                if player_id and player_id in box_player_map:
+                    box_player = box_player_map[player_id]
+                    actual_points = box_player.points if hasattr(box_player, 'points') else None
+                    game_played_pct = box_player.game_played if hasattr(box_player, 'game_played') else None
+                
                 player_info = {
-                    "player_id": p.player_id if hasattr(p, 'player_id') else None,
+                    "player_id": player_id,
                     "name": p.name,
                     "position": p.position if hasattr(p, 'position') else None,
                     "nba_team": p.proTeam if hasattr(p, 'proTeam') else None,
                     "injury_status": p.injuryStatus if hasattr(p, 'injuryStatus') and p.injuryStatus else "ACTIVE",
                     "projected_avg_points": round(avg_points, 2),
-                    "projected_variance": round(variance, 2)
+                    "projected_variance": round(variance, 2),
+                    "actual_points": round(actual_points, 2) if actual_points is not None else None,
+                    "game_played_pct": game_played_pct
                 }
                 not_playing_players.append(player_info)
         
