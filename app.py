@@ -384,6 +384,57 @@ def team_changes_endpoint():
             "message": f"Failed to get team changes: {str(e)}"
         }), 500
 
+@app.route('/api/v1/scout/free-agents', methods=['POST'])
+@require_api_key
+@require_league
+def scout_free_agents_endpoint():
+    """Scout free agents with their stats and team injury context.
+    
+    Request body:
+    {
+        "limit": 20,
+        "min_avg_points": 5.0
+    }
+    
+    Returns:
+    - free_agents: List of free agents with stats, positions, and team injury info
+    - summary: Total analyzed, returned count, and filters applied
+    """
+    try:
+        from scout.free_agent_scouting import scout_free_agents
+        
+        data = request.json or {}
+        limit = data.get('limit', 20)
+        min_avg_points = data.get('min_avg_points', 5.0)
+        
+        # Validate parameters
+        if not isinstance(limit, int) or limit < 1 or limit > 500:
+            return jsonify({
+                "status": "error",
+                "message": "limit must be an integer between 1 and 500"
+            }), 400
+        
+        if not isinstance(min_avg_points, (int, float)) or min_avg_points < 0:
+            return jsonify({
+                "status": "error",
+                "message": "min_avg_points must be a number >= 0"
+            }), 400
+        
+        result = scout_free_agents(league, limit=limit, min_avg_points=min_avg_points)
+        
+        return jsonify({
+            "status": "success",
+            "data": result
+        }), 200
+    except Exception as e:
+        print(f"Error in scout_free_agents_endpoint: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({
+            "status": "error",
+            "message": f"Failed to scout free agents: {str(e)}"
+        }), 500
+
 # ===== Lineup Endpoints =====
 
 @app.route('/api/v1/lineup/update', methods=['POST'])
@@ -539,17 +590,24 @@ def generate_api_key():
     Request body:
     {
         "name": "my-app",
-        "rate_limit": 100
+        "rate_limit": 100,
+        "tier": "basic"
     }
     
     Returns the new API key (shown only once!)
     """
     try:
+        # IMPORTANT: Always reload from disk to avoid overwriting other keys
+        # This is critical for thread safety and concurrent requests
         manager = get_api_key_manager()
+        manager._load_keys()  # Reload from disk to get latest state
+        
         data = request.json or {}
         
         name = data.get('name', 'Unnamed Key')
         rate_limit = data.get('rate_limit', 100)
+        tier = data.get('tier', 'basic')
+        description = data.get('description')
         
         if not name or len(name) < 3:
             return jsonify({
@@ -557,7 +615,7 @@ def generate_api_key():
                 "message": "name is required (min 3 characters)"
             }), 400
         
-        new_key = manager.generate_key(name, rate_limit)
+        new_key = manager.generate_key(name, rate_limit, tier, description)
         
         return jsonify({
             "status": "success",
@@ -566,6 +624,7 @@ def generate_api_key():
                 "api_key": new_key,
                 "name": name,
                 "rate_limit": rate_limit,
+                "tier": tier,
                 "warning": "Save this key now - you won't see it again!"
             }
         }), 201
@@ -779,7 +838,7 @@ def get_players_playing_for_scoring_period(scoring_period):
     Get all players from a specific team who have games on a scoring period
     
     Path params:
-    - scoring_period: Scoring period ID (1=Oct 21, 2=Oct 22, ..., 47=Dec 6, 2026)
+    - scoring_period: Scoring period ID (1=Oct 21, 2=Oct 22, ..., 47=Dec 6, 2025)
     
     Request body params:
     - team_id: Team ID (required) - Get players only for this team
@@ -838,18 +897,30 @@ def get_players_playing_for_scoring_period(scoring_period):
         from predict.internal.roster_week_predictor import RosterWeekPredictor
         from common.week import Week
         
+        # Get actual points for this scoring period from player stats
+        # Each player has stats['scoring_period'] with applied_total field
+        
         # Build player data with stats
         playing_players = []
         for player in players_playing:
             avg_points, variance = RosterWeekPredictor.get_avg_variance_stats(player)
+            player_id = player.playerId if hasattr(player, 'playerId') else None
+            
+            # Get actual points for this scoring period from player.stats
+            actual_points = None
+            if hasattr(player, 'stats') and str(scoring_period) in player.stats:
+                period_stats = player.stats[str(scoring_period)]
+                actual_points = period_stats.get('applied_total', None)
+            
             player_info = {
-                "player_id": player.player_id if hasattr(player, 'player_id') else None,
+                "player_id": player_id,
                 "name": player.name,
                 "position": player.position if hasattr(player, 'position') else None,
                 "nba_team": player.proTeam if hasattr(player, 'proTeam') else None,
                 "injury_status": player.injuryStatus if hasattr(player, 'injuryStatus') and player.injuryStatus else "ACTIVE",
                 "projected_avg_points": round(avg_points, 2),
-                "projected_variance": round(variance, 2)
+                "projected_variance": round(variance, 2),
+                "actual_points": round(actual_points, 2) if actual_points is not None else None
             }
             playing_players.append(player_info)
         
@@ -857,14 +928,23 @@ def get_players_playing_for_scoring_period(scoring_period):
         for p in all_active_players:
             if p not in players_playing:
                 avg_points, variance = RosterWeekPredictor.get_avg_variance_stats(p)
+                player_id = p.playerId if hasattr(p, 'playerId') else None
+                
+                # Get actual points for this scoring period from player.stats
+                actual_points = None
+                if hasattr(p, 'stats') and str(scoring_period) in p.stats:
+                    period_stats = p.stats[str(scoring_period)]
+                    actual_points = period_stats.get('applied_total', None)
+                
                 player_info = {
-                    "player_id": p.player_id if hasattr(p, 'player_id') else None,
+                    "player_id": player_id,
                     "name": p.name,
                     "position": p.position if hasattr(p, 'position') else None,
                     "nba_team": p.proTeam if hasattr(p, 'proTeam') else None,
                     "injury_status": p.injuryStatus if hasattr(p, 'injuryStatus') and p.injuryStatus else "ACTIVE",
                     "projected_avg_points": round(avg_points, 2),
-                    "projected_variance": round(variance, 2)
+                    "projected_variance": round(variance, 2),
+                    "actual_points": round(actual_points, 2) if actual_points is not None else None
                 }
                 not_playing_players.append(player_info)
         

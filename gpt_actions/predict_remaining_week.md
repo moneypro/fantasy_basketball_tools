@@ -34,10 +34,74 @@ The endpoint uses `league.box_scores(week, current_scoring_period, matchup_total
 - Point differential
 - Opponent ID and name
 
-### Step 2: Get Players Playing Tomorrow
+### Step 2: Get Comprehensive Week Analysis (Recommended)
+**Endpoint:** `POST /api/v1/predictions/week-analysis`
+
+**Purpose:** Get all week predictions, remaining days breakdown, and injury status in one call
+
+**Query:**
+```bash
+POST /api/v1/predictions/week-analysis?api_key={API_KEY}
+{
+  "week_index": 7,
+  "day_of_week_override": 0
+}
+```
+
+**Response Data Used:**
+- Full week projections for all teams (active-only, day-to-day included, out included)
+- Remaining days breakdown by team (remaining points for each day of week)
+- Injury status summary (DAY_TO_DAY and OUT players for each team)
+- Point differentials and matchup analysis
+
+**Response Structure:**
+```json
+{
+  "active_only": {
+    "predictions": [
+      {
+        "Team Name": "SEA MoNeYPro",
+        "Week 7 Mean": 1102,
+        "Week 7 Standard Deviation": 24,
+        "# of games": 32
+      }
+    ],
+    "remaining_days": [
+      {
+        "Team Name": "SEA MoNeYPro",
+        "Thursday (...)": "650 ± 18",
+        "Friday (...)": "548 ± 17",
+        "Saturday (...)": "305 ± 13",
+        "Sunday (...)": "96 ± 8",
+        "Monday (...)": "1102 ± 24"
+      }
+    ]
+  },
+  "day_to_day_included": { /* Same structure with day-to-day players */ },
+  "out_included": { /* Same structure with all injured players */ },
+  "summary": {
+    "non_healthy_players": [
+      {
+        "Team Name": "SEA MoNeYPro",
+        "DAY_TO_DAY": "Davion Mitchell",
+        "OUT": "Stephen Curry, Stephon Castle"
+      }
+    ]
+  }
+}
+```
+
+**Advantages:**
+- Single API call for complete analysis
+- Includes all three injury status scenarios
+- Shows remaining days breakdown
+- Includes injury information
+- Compares all teams at once
+
+### Step 3: (Alternative) Get Players Playing Tomorrow
 **Endpoint:** `GET /api/v1/players-playing/{scoring_period}?team_id={team_id}`
 
-**Purpose:** Get projections for players with games in the next scoring period
+**Purpose:** Get detailed player-level projections for the next scoring period
 
 **Query (Your Team):**
 ```bash
@@ -168,6 +232,10 @@ Result:               ✅ WIN by 59.90 points
 
 ## API Endpoints Used
 
+**Recommended Single-Call Approach:**
+1. `POST /api/v1/predictions/week-analysis` - Complete week analysis with all scenarios and injury status
+
+**Alternative Multi-Call Approach:**
 1. `GET /api/v1/scoreboard/{week_index}` - Current live scores (uses league.box_scores() for accuracy)
 2. `GET /api/v1/players-playing/{scoring_period}?team_id={team_id}` - Players with games and projections
 3. Repeat endpoint 2 for opponent team with their team_id
@@ -230,8 +298,8 @@ Check bench players with games:
 - Projections are based on historical stats and recent performance
 - Variance/std dev provides confidence intervals
 - Scoring period = 1 day, Week = 7 days
-- Current week is week 7 (Nov 30 - Dec 6, 2026)
-- Season ends at week 23 (Dec 6 - Dec 13, 2026)
+- Current week is week 7 (Dec 1 - Dec 7 2025)
+- Season ends at week 23 (March 30 - April 5, 2026)
 
 ## Success Metrics
 
