@@ -182,24 +182,30 @@ def build_free_agent_data(all_players: Dict[int, Any], free_agent_player: Any, w
     stats_proj = free_agent_player.stats.get('2026_projected', {})
     avg_projected = stats_proj.get('applied_avg', 0.0)
     
-    # Get position eligibility - only track the 5 primary positions
-    # Ignore G and F combo slots, only extract PG, SG, SF, PF, C
-    # E.g., "G/F" is ignored, "PG/SG" -> ["PG", "SG"], "F/C" -> ["SF", "PF", "C"]
+    # Get position eligibility - use the player's primary position
+    # The 'position' attribute is more accurate than parsing eligibleSlots
+    # which includes lineup slot options like "PF/C" that don't reflect actual position
     primary_positions = {'PG', 'SG', 'SF', 'PF', 'C'}
     
-    eligible_slots = getattr(free_agent_player, 'eligibleSlots', [])
+    # Get the player's primary position
+    position = getattr(free_agent_player, 'position', None)
     positions_eligible = []
     
-    for slot in eligible_slots:
-        if '/' in slot:
-            # Expand combo positions like "PG/SG" or "SF/PF/C"
-            for pos in slot.split('/'):
-                if pos in primary_positions and pos not in positions_eligible:
-                    positions_eligible.append(pos)
-        elif slot in primary_positions and slot not in positions_eligible:
-            # Only add if it's one of the 5 primary positions
-            positions_eligible.append(slot)
-        # Ignore G, F, and other non-primary positions
+    if position and position in primary_positions:
+        positions_eligible = [position]
+    else:
+        # Fallback: try to extract from eligibleSlots if position is not set
+        eligible_slots = getattr(free_agent_player, 'eligibleSlots', [])
+        for slot in eligible_slots:
+            if '/' in slot:
+                # Expand combo positions like "PG/SG" or "PF/C"
+                for pos in slot.split('/'):
+                    if pos in primary_positions and pos not in positions_eligible:
+                        positions_eligible.append(pos)
+            elif slot in primary_positions and slot not in positions_eligible:
+                # Only add if it's one of the 5 primary positions
+                positions_eligible.append(slot)
+            # Ignore G, F, and other non-primary positions
     
     # Get injury status
     injury_status = getattr(free_agent_player, 'injuryStatus', 'ACTIVE')
