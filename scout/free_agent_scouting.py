@@ -182,20 +182,24 @@ def build_free_agent_data(all_players: Dict[int, Any], free_agent_player: Any, w
     stats_proj = free_agent_player.stats.get('2026_projected', {})
     avg_projected = stats_proj.get('applied_avg', 0.0)
     
-    # Get position eligibility - expand combo positions to individual positions
-    # E.g., "F/C" becomes ["F", "C"], "G" stays ["G"], etc.
-    # Filter out non-position slots like BE (Bench), IR (Injured Reserve), UT (Utility), Rookie
-    real_positions = {'PG', 'SG', 'SF', 'PF', 'C', 'G', 'F'}
+    # Get position eligibility - only track the 5 primary positions
+    # Ignore G and F combo slots, only extract PG, SG, SF, PF, C
+    # E.g., "G/F" is ignored, "PG/SG" -> ["PG", "SG"], "F/C" -> ["SF", "PF", "C"]
+    primary_positions = {'PG', 'SG', 'SF', 'PF', 'C'}
+    
     eligible_slots = getattr(free_agent_player, 'eligibleSlots', [])
     positions_eligible = []
+    
     for slot in eligible_slots:
         if '/' in slot:
-            # Expand combo positions like "F/C" to ["F", "C"]
+            # Expand combo positions like "PG/SG" or "SF/PF/C"
             for pos in slot.split('/'):
-                if pos in real_positions and pos not in positions_eligible:
+                if pos in primary_positions and pos not in positions_eligible:
                     positions_eligible.append(pos)
-        elif slot in real_positions and slot not in positions_eligible:
+        elif slot in primary_positions and slot not in positions_eligible:
+            # Only add if it's one of the 5 primary positions
             positions_eligible.append(slot)
+        # Ignore G, F, and other non-primary positions
     
     # Get injury status
     injury_status = getattr(free_agent_player, 'injuryStatus', 'ACTIVE')
