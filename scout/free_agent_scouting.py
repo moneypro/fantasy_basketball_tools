@@ -4,6 +4,7 @@ from typing import Dict, List, Any, Set
 from espn_api.basketball import League
 import requests
 import json
+from common.scoring_period import scoring_period_to_date_and_day
 
 
 def get_waiver_player_ids(league: League) -> Set[int]:
@@ -225,8 +226,18 @@ def build_free_agent_data(all_players: Dict[int, Any], free_agent_player: Any, w
     
     # Get next 5 periods schedule (which periods this player's team has games)
     games_next_5_periods = []
+    games_with_dates = []
     if nba_team != 'UNKNOWN' and league:
         games_next_5_periods = get_games_next_5_periods(league, nba_team, pro_schedule_data)
+        # Convert each scoring period to date and day of week
+        games_with_dates = [
+            {
+                'scoring_period': period,
+                'date': scoring_period_to_date_and_day(period)[0],
+                'day_of_week': scoring_period_to_date_and_day(period)[1]
+            }
+            for period in games_next_5_periods
+        ]
     
     # Get team injuries for this player's NBA team (excluding the player themselves)
     team_injuries = []
@@ -260,6 +271,7 @@ def build_free_agent_data(all_players: Dict[int, Any], free_agent_player: Any, w
         'waiver_clear_period': waiver_clear_period,
         'positions_eligible': positions_eligible,
         'games_next_5_periods': games_next_5_periods,
+        'games_with_dates': games_with_dates,
         'scoring': {
             'avg_last_30': round(avg_last_30, 2),
             'total_30': round(total_30, 2),
