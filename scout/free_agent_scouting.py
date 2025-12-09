@@ -182,30 +182,41 @@ def build_free_agent_data(all_players: Dict[int, Any], free_agent_player: Any, w
     stats_proj = free_agent_player.stats.get('2026_projected', {})
     avg_projected = stats_proj.get('applied_avg', 0.0)
     
-    # Get position eligibility - use the player's primary position
-    # The 'position' attribute is more accurate than parsing eligibleSlots
-    # which includes lineup slot options like "PF/C" that don't reflect actual position
+    # Get position eligibility from eligibleSlots
+    # Extract the 5 primary positions: PG, SG, SF, PF, C
+    # Also include G if player has PG or SG, and F if player has SF or PF
     primary_positions = {'PG', 'SG', 'SF', 'PF', 'C'}
     
-    # Get the player's primary position
-    position = getattr(free_agent_player, 'position', None)
-    positions_eligible = []
+    eligible_slots = getattr(free_agent_player, 'eligibleSlots', [])
+    positions_set = set()  # Use set to avoid duplicates
+    has_guard = False
+    has_forward = False
     
-    if position and position in primary_positions:
-        positions_eligible = [position]
-    else:
-        # Fallback: try to extract from eligibleSlots if position is not set
-        eligible_slots = getattr(free_agent_player, 'eligibleSlots', [])
-        for slot in eligible_slots:
-            if '/' in slot:
-                # Expand combo positions like "PG/SG" or "PF/C"
-                for pos in slot.split('/'):
-                    if pos in primary_positions and pos not in positions_eligible:
-                        positions_eligible.append(pos)
-            elif slot in primary_positions and slot not in positions_eligible:
-                # Only add if it's one of the 5 primary positions
-                positions_eligible.append(slot)
-            # Ignore G, F, and other non-primary positions
+    for slot in eligible_slots:
+        if '/' in slot:
+            # Expand combo positions like "PG/SG" or "SF/PF/C"
+            for pos in slot.split('/'):
+                if pos in primary_positions:
+                    positions_set.add(pos)
+                    if pos in {'PG', 'SG'}:
+                        has_guard = True
+                    if pos in {'SF', 'PF'}:
+                        has_forward = True
+        elif slot in primary_positions:
+            positions_set.add(slot)
+            if slot in {'PG', 'SG'}:
+                has_guard = True
+            if slot in {'SF', 'PF'}:
+                has_forward = True
+        # Ignore G, F, UT, BE, IR and other non-primary positions
+    
+    # Add G if they have guard positions, F if they have forward positions
+    if has_guard:
+        positions_set.add('G')
+    if has_forward:
+        positions_set.add('F')
+    
+    positions_eligible = sorted(list(positions_set))
     
     # Get injury status
     injury_status = getattr(free_agent_player, 'injuryStatus', 'ACTIVE')
