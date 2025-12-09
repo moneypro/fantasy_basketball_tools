@@ -185,6 +185,7 @@ def build_free_agent_data(all_players: Dict[int, Any], free_agent_player: Any, w
     # Get position eligibility from eligibleSlots
     # Extract the 5 primary positions: PG, SG, SF, PF, C
     # Also include G if player has PG or SG, and F if player has SF or PF
+    # Ignore slots with "/" (combos like F/C, PF/C, G/F) and non-position slots (UT, BE, IR, G, F)
     primary_positions = {'PG', 'SG', 'SF', 'PF', 'C'}
     
     eligible_slots = getattr(free_agent_player, 'eligibleSlots', [])
@@ -193,22 +194,15 @@ def build_free_agent_data(all_players: Dict[int, Any], free_agent_player: Any, w
     has_forward = False
     
     for slot in eligible_slots:
-        if '/' in slot:
-            # Expand combo positions like "PG/SG" or "SF/PF/C"
-            for pos in slot.split('/'):
-                if pos in primary_positions:
-                    positions_set.add(pos)
-                    if pos in {'PG', 'SG'}:
-                        has_guard = True
-                    if pos in {'SF', 'PF'}:
-                        has_forward = True
-        elif slot in primary_positions:
-            positions_set.add(slot)
-            if slot in {'PG', 'SG'}:
-                has_guard = True
-            if slot in {'SF', 'PF'}:
-                has_forward = True
-        # Ignore G, F, UT, BE, IR and other non-primary positions
+        # Ignore any slot with "/" and non-primary position slots
+        if '/' in slot or slot not in primary_positions:
+            continue
+        
+        positions_set.add(slot)
+        if slot in {'PG', 'SG'}:
+            has_guard = True
+        if slot in {'SF', 'PF'}:
+            has_forward = True
     
     # Add G if they have guard positions, F if they have forward positions
     if has_guard:
