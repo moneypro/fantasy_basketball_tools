@@ -326,15 +326,13 @@ def scout_free_agents(league: League, limit: int = 20, min_avg_points: float = 5
     waiver_player_ids = get_waiver_player_ids(league)
     
     # Get recent transactions to find drop dates for waivers
+    # Uses smart caching: past periods from cache, current from API
     recent_transactions = []
     try:
+        from common.transaction_cache import get_transactions_smart
         current_period = league.scoringPeriodId if hasattr(league, 'scoringPeriodId') else 1
-        recent_transactions.extend(league.transactions())
-        for period in range(max(1, current_period - 7), current_period):
-            try:
-                recent_transactions.extend(league.transactions(scoring_period=period))
-            except:
-                pass
+        league_id = league.league_id if hasattr(league, 'league_id') else 1
+        recent_transactions = get_transactions_smart(league, league_id, current_period)
     except:
         pass
     
