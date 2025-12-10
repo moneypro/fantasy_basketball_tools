@@ -322,8 +322,18 @@ def scout_free_agents(league: League, limit: int = 20, min_avg_points: float = 5
     for player in free_agents_list:
         all_players[player.playerId] = player
     
-    # Get waiver player IDs from ESPN API
-    waiver_player_ids = get_waiver_player_ids(league)
+    # Get waiver player IDs (cached until 3AM PT daily)
+    waiver_player_ids = set()
+    try:
+        from common.waiver_cache import get_waiver_ids_smart
+        league_id = league.league_id if hasattr(league, 'league_id') else 1
+        waiver_player_ids = get_waiver_ids_smart(league, league_id)
+    except Exception as e:
+        # Fallback to direct API call if caching fails
+        try:
+            waiver_player_ids = get_waiver_player_ids(league)
+        except:
+            pass
     
     # Get recent transactions to find drop dates for waivers
     # Uses smart caching: past periods from cache, current from API
