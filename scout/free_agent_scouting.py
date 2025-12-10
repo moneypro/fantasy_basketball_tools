@@ -311,16 +311,8 @@ def scout_free_agents(league: League, limit: int = 20, min_avg_points: float = 5
     Returns:
         Dictionary with free agents data sorted by avg_last_30 descending
     """
-    # Build all players dict once (for efficiency)
-    all_players = {}
-    for team in league.teams:
-        for player in team.roster:
-            all_players[player.playerId] = player
-    
-    # Get all free agents
+    # Get all free agents (we only use this list for the response)
     free_agents_list = league.free_agents(size=1000)
-    for player in free_agents_list:
-        all_players[player.playerId] = player
     
     # Get waiver player IDs (cached until 3AM PT daily)
     waiver_player_ids = set()
@@ -353,9 +345,26 @@ def scout_free_agents(league: League, limit: int = 20, min_avg_points: float = 5
     except:
         pass
     
-    # Build team injuries lookup ONCE (instead of looking up per free agent!)
-    # This changes complexity from O(n*m) to O(n+m) - HUGE speedup!
-    team_injuries_lookup = build_team_injuries_lookup(all_players)
+    # Get team injuries (cached, avoids building all_players!)
+    # Injuries are pre-computed and cached to avoid O(n*m) complexity
+    team_injuries_lookup = {}
+    try:
+        from common.injury_cache import get_injuries_smart
+        league_id = league.league_id if hasattr(league, 'league_id') else 1
+        team_injuries_lookup = get_injuries_smart(league, league_id)
+    except Exception as e:
+        # Fallback: build from league data if caching fails
+        try:
+            all_players = {}
+            for team in league.teams:
+                for player in team.roster:
+                    all_players[player.playerId] = player
+            free_agents = league.free_agents(size=1000)
+            for player in free_agents:
+                all_players[player.playerId] = player
+            team_injuries_lookup = build_team_injuries_lookup(all_players)
+        except:
+            pass
     
     free_agents_dict = {}
     
