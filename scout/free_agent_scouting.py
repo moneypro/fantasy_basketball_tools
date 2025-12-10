@@ -114,30 +114,30 @@ def get_games_next_5_periods(league: League, nba_team: str, pro_schedule_data: D
     return sorted(games_periods)
 
 
-def get_team_injuries(all_players: Dict[int, Any], nba_team: str, exclude_player_id: int = None) -> List[Dict[str, Any]]:
-    """Get all OUT and DAY_TO_DAY players on a specific NBA team.
+def build_team_injuries_lookup(all_players: Dict[int, Any]) -> Dict[str, List[Dict]]:
+    """Build a lookup table of injuries grouped by NBA team (MUCH FASTER).
+    
+    Instead of looping through all players for each free agent, loop once
+    and group by team. Then do O(1) lookups for each free agent.
     
     Args:
         all_players: Dictionary of all players (key: playerId, value: player object)
-        nba_team: NBA team abbreviation (e.g., 'LAL', 'BOS')
-        exclude_player_id: Player ID to exclude from results (e.g., the free agent themselves)
         
     Returns:
-        List of dicts with injured player info: name, position, injury_status, avg_points
+        Dictionary mapping NBA team abbreviation to list of injured players
     """
-    injuries = []
+    team_injuries_lookup = {}
     
-    # Find players on the specified NBA team with injury status
+    # Loop through all players ONCE and group by team
     for player_id, player in all_players.items():
-        # Skip the excluded player (usually the free agent themselves)
-        if exclude_player_id and player_id == exclude_player_id:
-            continue
-        
         player_nba_team = getattr(player, 'proTeam', None)
         injury_status = getattr(player, 'injuryStatus', None)
         
-        # Check if this player is on the target team and has an injury status
-        if player_nba_team == nba_team and injury_status and injury_status in ['OUT', 'DAY_TO_DAY']:
+        # Only process if player has an injury status
+        if injury_status and injury_status in ['OUT', 'DAY_TO_DAY']:
+            if player_nba_team not in team_injuries_lookup:
+                team_injuries_lookup[player_nba_team] = []
+            
             # Get average points
             stats_30 = player.stats.get('2026_last_30', {})
             avg_points = stats_30.get('applied_avg', 0.0)
@@ -145,21 +145,38 @@ def get_team_injuries(all_players: Dict[int, Any], nba_team: str, exclude_player
             # Get position
             position = getattr(player, 'position', 'UNKNOWN')
             
-            injuries.append({
+            team_injuries_lookup[player_nba_team].append({
                 'player_name': player.name,
                 'position': position,
                 'injury_status': injury_status,
                 'avg_points': round(avg_points, 2)
             })
     
-    return injuries
+    return team_injuries_lookup
 
 
-def build_free_agent_data(all_players: Dict[int, Any], free_agent_player: Any, waiver_player_ids: Set[int] = None, recent_transactions: List[Any] = None, league: League = None, pro_schedule_data: Dict = None) -> Dict[str, Any]:
+def get_team_injuries(team_injuries_lookup: Dict[str, List[Dict]], nba_team: str, exclude_player_id: int = None) -> List[Dict[str, Any]]:
+    """Get injured players on a specific NBA team using pre-built lookup.
+    
+    Changed from O(n) loop to O(1) lookup!
+    
+    Args:
+        team_injuries_lookup: Pre-built lookup table (from build_team_injuries_lookup)
+        nba_team: NBA team abbreviation (e.g., 'LAL', 'BOS')
+        exclude_player_id: Unused now, kept for backwards compatibility
+        
+    Returns:
+        List of dicts with injured player info on that team
+    """
+    # Simple O(1) dictionary lookup instead of O(n) loop through all players!
+    return team_injuries_lookup.get(nba_team, [])
+
+
+def build_free_agent_data(team_injuries_lookup: Dict[str, List[Dict]], free_agent_player: Any, waiver_player_ids: Set[int] = None, recent_transactions: List[Any] = None, league: League = None, pro_schedule_data: Dict = None) -> Dict[str, Any]:
     """Build complete free agent data including stats and team injuries.
     
     Args:
-        all_players: Dictionary of all players (for injury lookup)
+        team_injuries_lookup: Pre-built team injuries lookup (from build_team_injuries_lookup)
         free_agent_player: The free agent player object
         waiver_player_ids: Set of player IDs currently on waivers
         recent_transactions: List of recent transactions (to find drop date)
@@ -239,10 +256,10 @@ def build_free_agent_data(all_players: Dict[int, Any], free_agent_player: Any, w
             for period in games_next_5_periods
         ]
     
-    # Get team injuries for this player's NBA team (excluding the player themselves)
+    # Get team injuries for this player's NBA team (using O(1) lookup!)
     team_injuries = []
     if nba_team != 'UNKNOWN':
-        team_injuries = get_team_injuries(all_players, nba_team, exclude_player_id=player_id)
+        team_injuries = get_team_injuries(team_injuries_lookup, nba_team)
     
     # Check if player is on waivers (from ESPN API waiver list)
     on_waivers = False
@@ -328,6 +345,10 @@ def scout_free_agents(league: League, limit: int = 20, min_avg_points: float = 5
     except:
         pass
     
+    # Build team injuries lookup ONCE (instead of looking up per free agent!)
+    # This changes complexity from O(n*m) to O(n+m) - HUGE speedup!
+    team_injuries_lookup = build_team_injuries_lookup(all_players)
+    
     free_agents_dict = {}
     
     # Build data for each free agent
@@ -336,7 +357,7 @@ def scout_free_agents(league: League, limit: int = 20, min_avg_points: float = 5
         
         # Filter by minimum average points
         if avg_last_30 >= min_avg_points:
-            player_data = build_free_agent_data(all_players, player, waiver_player_ids, recent_transactions, league, pro_schedule_data)
+            player_data = build_free_agent_data(team_injuries_lookup, player, waiver_player_ids, recent_transactions, league, pro_schedule_data)
             free_agents_dict[player.playerId] = player_data
     
     # Sort by avg_last_30 descending
