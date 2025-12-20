@@ -148,8 +148,17 @@ def get_transaction_summary(league: League, hours: int = 24) -> Dict[str, Any]:
     recent = []
     for trans in all_transactions:
         trans_time = trans.get('date')
-        if trans_time and trans_time > cutoff_time:
-            recent.append(trans)
+        # Handle both datetime objects and timestamps
+        if trans_time:
+            try:
+                if isinstance(trans_time, int):
+                    # Convert milliseconds timestamp to datetime
+                    trans_time = datetime.fromtimestamp(trans_time / 1000)
+                if trans_time > cutoff_time:
+                    recent.append(trans)
+            except (TypeError, ValueError):
+                # If we can't parse the time, include it anyway
+                recent.append(trans)
     
     # Summarize by type
     summary = {
