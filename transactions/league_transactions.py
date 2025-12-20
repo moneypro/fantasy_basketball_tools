@@ -10,6 +10,7 @@ This module provides functionality to view recent league transactions including:
 from typing import List, Dict, Any, Optional
 from datetime import datetime, timedelta
 from espn_api.basketball.league import League
+import os
 
 
 def get_recent_transactions(league: League, limit: int = 50) -> List[Dict[str, Any]]:
@@ -279,3 +280,49 @@ def print_recent_trades(league: League, limit: int = 20):
             items = str(items)[:57] + "..."
         
         print(f"{str(period):<8} | {str(date):<20} | {str(items):<60}")
+
+
+def main():
+    """Main function to display recent league transactions.
+    
+    Creates a fresh league instance without using cache and displays
+    recent transaction activity.
+    """
+    # Clear cache to force fresh data fetch
+    cache_dir = os.path.expanduser("~/.fantasy_league_cache")
+    cache_file = os.path.join(cache_dir, "league_2026.pkl")
+    
+    if os.path.exists(cache_file):
+        try:
+            os.remove(cache_file)
+            print("🗑️  Cleared cached league data\n")
+        except Exception as e:
+            print(f"⚠️  Could not clear cache: {e}\n")
+    
+    # Import here to avoid circular imports
+    from utils.create_league import create_league
+    
+    print("📡 Loading fresh league data from ESPN...\n")
+    league = create_league()
+    
+    print("✅ League loaded successfully!\n")
+    
+    # Display transaction information
+    print_recent_transactions(league, limit=20)
+    print("\n" + "="*90)
+    print_recent_pickups(league, limit=10)
+    print("\n" + "="*90)
+    print_recent_trades(league, limit=10)
+    print("\n" + "="*90)
+    
+    # Display summary
+    print("\n📈 TRANSACTION SUMMARY:\n")
+    summary = get_transaction_summary(league, hours=24)
+    print(f"Recent Transactions (24h): {summary['total_transactions']}")
+    if summary['by_type']:
+        print(f"By Type: {summary['by_type']}")
+    print()
+
+
+if __name__ == "__main__":
+    main()
