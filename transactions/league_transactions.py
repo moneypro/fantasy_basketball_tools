@@ -11,6 +11,39 @@ from typing import List, Dict, Any, Optional
 from datetime import datetime, timedelta
 from espn_api.basketball.league import League
 import os
+from dateutil import parser as dateutil_parser
+
+
+def format_timestamp(timestamp: Any) -> str:
+    """Convert various timestamp formats to readable datetime string.
+    
+    Args:
+        timestamp: Unix timestamp (seconds or milliseconds), datetime object, or string
+        
+    Returns:
+        Human-readable datetime string (YYYY-MM-DD HH:MM:SS)
+    """
+    if timestamp is None:
+        return "N/A"
+    
+    try:
+        if isinstance(timestamp, int):
+            # Check if it's milliseconds (13 digits) or seconds (10 digits)
+            if timestamp > 10**11:  # Milliseconds
+                dt = datetime.fromtimestamp(timestamp / 1000)
+            else:  # Seconds
+                dt = datetime.fromtimestamp(timestamp)
+            return dt.strftime("%Y-%m-%d %H:%M:%S")
+        elif isinstance(timestamp, datetime):
+            return timestamp.strftime("%Y-%m-%d %H:%M:%S")
+        elif isinstance(timestamp, str):
+            # Try to parse string timestamp
+            dt = dateutil_parser.parse(timestamp)
+            return dt.strftime("%Y-%m-%d %H:%M:%S")
+    except (ValueError, TypeError, OverflowError):
+        pass
+    
+    return str(timestamp)
 
 
 def get_recent_transactions(league: League, limit: int = 50) -> List[Dict[str, Any]]:
@@ -193,14 +226,14 @@ def print_recent_transactions(league: League, limit: int = 20):
     for trans in transactions:
         period = trans.get('scoring_period', 'N/A')
         trans_type = trans.get('type', 'N/A')
-        date = trans.get('date', 'N/A')
+        date = format_timestamp(trans.get('date'))
         items = trans.get('items', 'N/A')
         
         # Truncate items for display
         if len(str(items)) > 50:
             items = str(items)[:47] + "..."
         
-        print(f"{str(period):<8} | {str(trans_type):<10} | {str(date):<20} | {str(items):<50}")
+        print(f"{str(period):<8} | {str(trans_type):<10} | {date:<20} | {str(items):<50}")
 
 
 def print_team_transactions(league: League, team_id: int, limit: int = 20):
@@ -224,13 +257,13 @@ def print_team_transactions(league: League, team_id: int, limit: int = 20):
     for trans in transactions:
         period = trans.get('scoring_period', 'N/A')
         trans_type = trans.get('type', 'N/A')
-        date = trans.get('date', 'N/A')
+        date = format_timestamp(trans.get('date'))
         items = trans.get('items', 'N/A')
         
         if len(str(items)) > 50:
             items = str(items)[:47] + "..."
         
-        print(f"{str(period):<8} | {str(trans_type):<10} | {str(date):<20} | {str(items):<50}")
+        print(f"{str(period):<8} | {str(trans_type):<10} | {date:<20} | {str(items):<50}")
 
 
 def print_recent_pickups(league: League, limit: int = 20):
@@ -249,13 +282,13 @@ def print_recent_pickups(league: League, limit: int = 20):
     for pickup in pickups:
         period = pickup.get('scoring_period', 'N/A')
         trans_type = pickup.get('type', 'N/A')
-        date = pickup.get('date', 'N/A')
+        date = format_timestamp(pickup.get('date'))
         items = pickup.get('items', 'N/A')
         
         if len(str(items)) > 50:
             items = str(items)[:47] + "..."
         
-        print(f"{str(period):<8} | {str(trans_type):<10} | {str(date):<20} | {str(items):<50}")
+        print(f"{str(period):<8} | {str(trans_type):<10} | {date:<20} | {str(items):<50}")
 
 
 def print_recent_trades(league: League, limit: int = 20):
@@ -273,13 +306,13 @@ def print_recent_trades(league: League, limit: int = 20):
     
     for trade in trades:
         period = trade.get('scoring_period', 'N/A')
-        date = trade.get('date', 'N/A')
+        date = format_timestamp(trade.get('date'))
         items = trade.get('items', 'N/A')
         
         if len(str(items)) > 60:
             items = str(items)[:57] + "..."
         
-        print(f"{str(period):<8} | {str(date):<20} | {str(items):<60}")
+        print(f"{str(period):<8} | {date:<20} | {str(items):<60}")
 
 
 def main():
@@ -288,6 +321,12 @@ def main():
     Creates a fresh league instance without using cache and displays
     recent transaction activity.
     """
+    import sys
+    from pathlib import Path
+    
+    # Add parent directory to path for imports
+    sys.path.insert(0, str(Path(__file__).parent.parent))
+    
     # Clear cache to force fresh data fetch
     cache_dir = os.path.expanduser("~/.fantasy_league_cache")
     cache_file = os.path.join(cache_dir, "league_2026.pkl")
@@ -308,7 +347,7 @@ def main():
     print("✅ League loaded successfully!\n")
     
     # Display transaction information
-    print_recent_transactions(league, limit=20)
+    print_recent_transactions(league, limit=100)
     print("\n" + "="*90)
     print_recent_pickups(league, limit=10)
     print("\n" + "="*90)
