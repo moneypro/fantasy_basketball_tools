@@ -64,6 +64,226 @@
         }
       }
     },
+    "/api/v1/matchup/current-prediction": {
+      "post": {
+        "summary": "Get comprehensive matchup prediction with scores and player details",
+        "description": "Returns detailed matchup prediction including predicted scores, remaining days in the week, players playing with game counts, and daily cumulative predictions. Accepts either date or week number as input.",
+        "operationId": "getCurrentMatchupPrediction",
+        "parameters": [
+          {
+            "name": "api_key",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "API authentication key"
+          }
+        ],
+        "requestBody": {
+          "description": "Optional request body with matchup parameters",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "week_index": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 23,
+                    "description": "Fantasy week number (1-23), defaults to current week if not provided"
+                  },
+                  "date": {
+                    "type": "string",
+                    "format": "date",
+                    "description": "Date in YYYY-MM-DD format (alternative to week_index). Season starts 2024-10-22."
+                  },
+                  "team_id": {
+                    "type": "integer",
+                    "description": "Team ID to get matchup for (defaults to first matchup if not provided)"
+                  },
+                  "day_of_week_override": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 6,
+                    "description": "Starting day override (0=Monday, 6=Sunday), default=0"
+                  },
+                  "injury_status": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "enum": ["ACTIVE", "DAY_TO_DAY", "OUT", "QUESTIONABLE"]
+                    },
+                    "description": "List of injury statuses to include in predictions, default=['ACTIVE']"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response with matchup prediction data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "week_index": {
+                          "type": "integer",
+                          "description": "Matchup week number"
+                        },
+                        "date_range": {
+                          "type": "object",
+                          "properties": {
+                            "start_date": {
+                              "type": "string",
+                              "format": "date",
+                              "description": "First day of the matchup week"
+                            },
+                            "end_date": {
+                              "type": "string",
+                              "format": "date",
+                              "description": "Last day of the matchup week"
+                            },
+                            "remaining_days": {
+                              "type": "integer",
+                              "description": "Number of days remaining in the week (0 if week is over)"
+                            }
+                          }
+                        },
+                        "matchup": {
+                          "type": "object",
+                          "properties": {
+                            "home_team": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "integer"
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "owner": {
+                                  "type": "string"
+                                },
+                                "current_score": {
+                                  "type": "number",
+                                  "description": "Current actual score for the week"
+                                },
+                                "predicted_score": {
+                                  "type": "object",
+                                  "properties": {
+                                    "mean": {
+                                      "type": "number",
+                                      "description": "Average predicted total score"
+                                    },
+                                    "std_dev": {
+                                      "type": "number",
+                                      "description": "Standard deviation of prediction"
+                                    }
+                                  }
+                                },
+                                "total_games": {
+                                  "type": "integer",
+                                  "description": "Total NBA games for this team this week"
+                                },
+                                "players_playing": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "name": {
+                                        "type": "string"
+                                      },
+                                      "position": {
+                                        "type": "string"
+                                      },
+                                      "pro_team": {
+                                        "type": "string",
+                                        "description": "NBA team name"
+                                      },
+                                      "injury_status": {
+                                        "type": "string"
+                                      },
+                                      "games_this_week": {
+                                        "type": "integer"
+                                      },
+                                      "game_days": {
+                                        "type": "array",
+                                        "items": {
+                                          "type": "integer"
+                                        },
+                                        "description": "Array of day indices when player has games (0=Monday, 6=Sunday)"
+                                      }
+                                    }
+                                  }
+                                },
+                                "remaining_days_predictions": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "day": {
+                                        "type": "integer",
+                                        "description": "Day index (0=start of week)"
+                                      },
+                                      "mean": {
+                                        "type": "number",
+                                        "description": "Predicted cumulative score from this day through end of week"
+                                      },
+                                      "std_dev": {
+                                        "type": "number"
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "away_team": {
+                              "type": "object",
+                              "description": "Same structure as home_team"
+                            },
+                            "predicted_margin": {
+                              "type": "number",
+                              "description": "Difference in predicted scores (positive = home team ahead)"
+                            },
+                            "predicted_winner": {
+                              "type": "string",
+                              "description": "Name of team predicted to win"
+                            }
+                          }
+                        },
+                        "injury_status_filter": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          },
+                          "description": "Injury statuses included in this prediction"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid parameters"
+          },
+          "404": {
+            "description": "Team or matchup not found"
+          }
+        }
+      }
+    },
     "/api/v1/scoreboard/{week_index}": {
       "post": {
         "summary": "Get current scores for all matchups in a week",
@@ -130,25 +350,49 @@
                               "home_team": {
                                 "type": "object",
                                 "properties": {
-                                  "id": { "type": "integer" },
-                                  "name": { "type": "string" },
-                                  "score": { "type": "number" },
-                                  "wins": { "type": "integer" },
-                                  "losses": { "type": "integer" }
+                                  "id": {
+                                    "type": "integer"
+                                  },
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "score": {
+                                    "type": "number"
+                                  },
+                                  "wins": {
+                                    "type": "integer"
+                                  },
+                                  "losses": {
+                                    "type": "integer"
+                                  }
                                 }
                               },
                               "away_team": {
                                 "type": "object",
                                 "properties": {
-                                  "id": { "type": "integer" },
-                                  "name": { "type": "string" },
-                                  "score": { "type": "number" },
-                                  "wins": { "type": "integer" },
-                                  "losses": { "type": "integer" }
+                                  "id": {
+                                    "type": "integer"
+                                  },
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "score": {
+                                    "type": "number"
+                                  },
+                                  "wins": {
+                                    "type": "integer"
+                                  },
+                                  "losses": {
+                                    "type": "integer"
+                                  }
                                 }
                               },
-                              "point_differential": { "type": "number" },
-                              "leader": { "type": "string" }
+                              "point_differential": {
+                                "type": "number"
+                              },
+                              "leader": {
+                                "type": "string"
+                              }
                             }
                           }
                         }
@@ -227,29 +471,58 @@
                         "team": {
                           "type": "object",
                           "properties": {
-                            "id": { "type": "integer" },
-                            "name": { "type": "string" },
-                            "owner": { "type": "string" }
+                            "id": {
+                              "type": "integer"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "owner": {
+                              "type": "string"
+                            }
                           }
                         },
-                        "scoring_period": { "type": "integer" },
-                        "nba_teams_playing": { "type": "array", "items": { "type": "string" } },
+                        "scoring_period": {
+                          "type": "integer"
+                        },
+                        "nba_teams_playing": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
                         "players_playing": {
                           "type": "object",
                           "properties": {
-                            "count": { "type": "integer" },
+                            "count": {
+                              "type": "integer"
+                            },
                             "players": {
                               "type": "array",
                               "items": {
                                 "type": "object",
                                 "properties": {
-                                  "player_id": { "type": "integer" },
-                                  "name": { "type": "string" },
-                                  "position": { "type": "string" },
-                                  "nba_team": { "type": "string" },
-                                  "injury_status": { "type": "string" },
-                                  "projected_avg_points": { "type": "number" },
-                                  "projected_variance": { "type": "number" }
+                                  "player_id": {
+                                    "type": "integer"
+                                  },
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "position": {
+                                    "type": "string"
+                                  },
+                                  "nba_team": {
+                                    "type": "string"
+                                  },
+                                  "injury_status": {
+                                    "type": "string"
+                                  },
+                                  "projected_avg_points": {
+                                    "type": "number"
+                                  },
+                                  "projected_variance": {
+                                    "type": "number"
+                                  }
                                 }
                               }
                             }
@@ -258,8 +531,12 @@
                         "players_not_playing": {
                           "type": "object",
                           "properties": {
-                            "count": { "type": "integer" },
-                            "players": { "type": "array" }
+                            "count": {
+                              "type": "integer"
+                            },
+                            "players": {
+                              "type": "array"
+                            }
                           }
                         }
                       }
@@ -386,55 +663,166 @@
         }
       }
     },
-    \"/api/v1/scout/free-agents\": {
-      \"post\": {
-        \"summary\": \"Scout free agents with stats and team injury context\",
-        \"description\": \"Returns list of free agents sorted by average points (last 30 days). Includes player stats, position eligibility, injury status, and team injury context for LLM reasoning.\",
-        \"operationId\": \"scoutFreeAgents\",
-        \"parameters\": [
+    "/api/v1/scout/free-agents": {
+      "post": {
+        "summary": "Scout free agents with stats and team injury context",
+        "description": "Returns list of free agents sorted by average points (last 30 days). Includes player stats, position eligibility, injury status, and team injury context for LLM reasoning.",
+        "operationId": "scoutFreeAgents",
+        "parameters": [
           {
-            \"name\": \"api_key\",
-            \"in\": \"query\",
-            \"required\": true,
-            \"schema\": {
-              \"type\": \"string\"
+            "name": "api_key",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
             },
-            \"description\": \"API authentication key\"
+            "description": "API authentication key"
           }
         ],
-        \"requestBody\": {
-          \"description\": \"Request body with free agent filtering parameters\",
-          \"content\": {
-            \"application/json\": {
-              \"schema\": {
-                \"type\": \"object\",
-                \"properties\": {
-                  \"limit\": {
-                    \"type\": \"integer\",
-                    \"minimum\": 1,
-                    \"maximum\": 500,
-                    \"default\": 20,
-                    \"description\": \"Number of top free agents to return\"
+        "requestBody": {
+          "description": "Request body with free agent filtering parameters",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "limit": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 500,
+                    "default": 20,
+                    "description": "Number of top free agents to return"
                   },
-                  \"min_avg_points\": {
-                    \"type\": \"number\",
-                    \"minimum\": 0,
-                    \"default\": 5.0,
-                    \"description\": \"Minimum avg_last_30 points to include in results\"
+                  "min_avg_points": {
+                    "type": "number",
+                    "minimum": 0,
+                    "default": 5.0,
+                    "description": "Minimum avg_last_30 points to include in results"
                   }
                 }
               }
             }
           }
         },
-        \"responses\": {
-          \"200\": {
-            \"description\": \"Successful response with free agents data\",
-            \"content\": {
-              \"application/json\": {
-                \"schema\": {
-                  \"type\": \"object\",
-                  \"properties\": {\n                    \"status\": {\n                      \"type\": \"string\",\n                      \"example\": \"success\"\n                    },\n                    \"data\": {\n                      \"type\": \"object\",\n                      \"properties\": {\n                        \"free_agents\": {\n                          \"type\": \"array\",\n                          \"items\": {\n                            \"type\": \"object\",\n                            \"properties\": {\n                              \"player_id\": { \"type\": \"integer\" },\n                              \"name\": { \"type\": \"string\" },\n                              \"nba_team\": { \"type\": \"string\" },\n                              \"injury_status\": { \"type\": \"string\", \"enum\": [\"ACTIVE\", \"DAY_TO_DAY\", \"OUT\"] },\n                              \"injured\": { \"type\": \"boolean\", \"description\": \"True if player has injury status OUT\" },\n                              \"on_waivers\": { \"type\": \"boolean\", \"description\": \"True if player was claimed on waivers recently\" },\n                              \"positions_eligible\": {\n                                \"type\": \"array\",\n                                \"items\": { \"type\": \"string\" },\n                                \"example\": [\"SG\", \"SF\", \"G\", \"F\"]\n                              },\n                              \"scoring\": {\n                                \"type\": \"object\",\n                                \"properties\": {\n                                  \"avg_last_30\": { \"type\": \"number\" },\n                                  \"total_30\": { \"type\": \"number\" },\n                                  \"gp_30\": { \"type\": \"integer\" },\n                                  \"avg_year\": { \"type\": \"number\" },\n                                  \"avg_projected\": { \"type\": \"number\" }\n                                }\n                              },\n                              \"team_injuries\": {\n                                \"type\": \"array\",\n                                \"items\": {\n                                  \"type\": \"object\",\n                                  \"properties\": {\n                                    \"player_name\": { \"type\": \"string\" },\n                                    \"position\": { \"type\": \"string\" },\n                                    \"injury_status\": { \"type\": \"string\", \"enum\": [\"OUT\", \"DAY_TO_DAY\"] },\n                                    \"avg_points\": { \"type\": \"number\" }\n                                  }\n                                }\n                              }\n                            }\n                          }\n                        },\n                        \"summary\": {\n                          \"type\": \"object\",\n                          \"properties\": {\n                            \"total_free_agents_analyzed\": { \"type\": \"integer\" },\n                            \"returned\": { \"type\": \"integer\" },\n                            \"min_avg_points_filter\": { \"type\": \"number\" }\n                          }\n                        }\n                      }\n                    }\n                  }\n                }\n              }\n            }\n          },\n          \"400\": {\n            \"description\": \"Invalid parameters\"\n          }\n        }\n      }\n    }
+        "responses": {
+          "200": {
+            "description": "Successful response with free agents data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "free_agents": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "player_id": {
+                                "type": "integer"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "nba_team": {
+                                "type": "string"
+                              },
+                              "injury_status": {
+                                "type": "string",
+                                "enum": ["ACTIVE", "DAY_TO_DAY", "OUT"]
+                              },
+                              "injured": {
+                                "type": "boolean",
+                                "description": "True if player has injury status OUT"
+                              },
+                              "on_waivers": {
+                                "type": "boolean",
+                                "description": "True if player was claimed on waivers recently"
+                              },
+                              "positions_eligible": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                },
+                                "example": ["SG", "SF", "G", "F"]
+                              },
+                              "scoring": {
+                                "type": "object",
+                                "properties": {
+                                  "avg_last_30": {
+                                    "type": "number"
+                                  },
+                                  "total_30": {
+                                    "type": "number"
+                                  },
+                                  "gp_30": {
+                                    "type": "integer"
+                                  },
+                                  "avg_year": {
+                                    "type": "number"
+                                  },
+                                  "avg_projected": {
+                                    "type": "number"
+                                  }
+                                }
+                              },
+                              "team_injuries": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "player_name": {
+                                      "type": "string"
+                                    },
+                                    "position": {
+                                      "type": "string"
+                                    },
+                                    "injury_status": {
+                                      "type": "string",
+                                      "enum": ["OUT", "DAY_TO_DAY"]
+                                    },
+                                    "avg_points": {
+                                      "type": "number"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "summary": {
+                          "type": "object",
+                          "properties": {
+                            "total_free_agents_analyzed": {
+                              "type": "integer"
+                            },
+                            "returned": {
+                              "type": "integer"
+                            },
+                            "min_avg_points_filter": {
+                              "type": "number"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid parameters"
+          }
+        }
+      }
+    }
   },
   "components": {
     "securitySchemes": {
