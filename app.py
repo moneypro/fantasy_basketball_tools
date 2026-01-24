@@ -90,6 +90,7 @@ def root():
             "calculate_predictions": "POST /api/v1/predictions/calculate",
             "tools_schema": "GET /api/v1/tools/schema",
             "week_analysis": "POST /api/v1/predictions/week-analysis",
+            "current_matchup_prediction": "POST /api/v1/matchup/current-prediction",
             "team_info": "POST /api/v1/team/{team_id}",
             "team_roster": "POST /api/v1/team/{team_id}/roster",
             "players_playing_for_scoring_period": "POST /api/v1/players-playing/{scoring_period}",
@@ -1093,6 +1094,231 @@ def get_scoreboard(week_index):
         return jsonify({
             "status": "error",
             "message": f"Failed to get scoreboard: {str(e)}"
+        }), 500
+
+@app.route('/api/v1/matchup/current-prediction', methods=['POST'])
+@require_api_key
+@require_league
+def get_current_matchup_prediction():
+    """
+    Get comprehensive matchup prediction with scores, remaining days, and players playing.
+
+    Request body params:
+    - week_index: Matchup week number (1-23) (optional, defaults to current week)
+    - date: Date string in YYYY-MM-DD format (optional, alternative to week_index)
+    - team_id: Team ID to get matchup for (optional, defaults to first team)
+    - day_of_week_override: Starting day override (0=Monday, 6=Sunday, default=0)
+    - injury_status: List of injury statuses to include (default: ['ACTIVE'])
+
+    Returns:
+    - Matchup details with predicted scores for each team
+    - Remaining days in the matchup
+    - Date range for the matchup week
+    - Players playing for each team with game counts
+    - Predicted scores by day
+    """
+    try:
+        from utils.date_utils import DateScoringPeriodConverter, parse_date_or_period_input
+        from predict.predict_week import predict_week, get_remaining_days_cumulative_scores
+        from common.week import Week
+
+        # Get parameters from request body
+        data = request.get_json() or {}
+        week_index = data.get('week_index')
+        date_input = data.get('date')
+        team_id = data.get('team_id')
+        day_of_week_override = data.get('day_of_week_override', 0)
+        injury_status_list = data.get('injury_status', ['ACTIVE'])
+
+        # Determine week_index from input
+        if date_input:
+            # Convert date to week
+            try:
+                scoring_period = DateScoringPeriodConverter.date_to_scoring_period(date_input)
+                # Map scoring period to week (approximate)
+                week_index = (scoring_period // 7) + 1
+            except ValueError as e:
+                return jsonify({
+                    "status": "error",
+                    "message": f"Invalid date: {str(e)}"
+                }), 400
+        elif not week_index:
+            # Use current matchup period
+            week_index = league.currentMatchupPeriod
+
+        # Validate week index
+        if not isinstance(week_index, int) or week_index < 1 or week_index > 23:
+            return jsonify({
+                "status": "error",
+                "message": "week_index must be an integer between 1 and 23"
+            }), 400
+
+        # Get date range for this week
+        try:
+            start_date, end_date = DateScoringPeriodConverter.matchup_week_to_date_range(week_index)
+            remaining_days = DateScoringPeriodConverter.get_remaining_days_in_week(week_index)
+        except Exception as e:
+            return jsonify({
+                "status": "error",
+                "message": f"Error calculating dates: {str(e)}"
+            }), 500
+
+        # Get week predictions
+        number_of_games_map, team_scores = predict_week(
+            league, week_index, day_of_week_override, injury_status_list
+        )
+
+        # Get remaining days cumulative scores
+        remaining_days_scores = get_remaining_days_cumulative_scores(
+            league, week_index, day_of_week_override, injury_status_list
+        )
+
+        # Get matchups for this week
+        scoreboard = league.scoreboard(week_index)
+
+        # Find the specific matchup if team_id provided
+        target_matchup = None
+        if team_id:
+            for matchup in scoreboard:
+                if matchup.home_team.team_id == team_id or matchup.away_team.team_id == team_id:
+                    target_matchup = matchup
+                    break
+            if not target_matchup:
+                return jsonify({
+                    "status": "error",
+                    "message": f"Team {team_id} not found in week {week_index} matchups"
+                }), 404
+        else:
+            # Use first matchup if no team specified
+            target_matchup = scoreboard[0] if scoreboard else None
+
+        if not target_matchup:
+            return jsonify({
+                "status": "error",
+                "message": f"No matchups found for week {week_index}"
+            }), 404
+
+        # Build matchup data
+        home_team = target_matchup.home_team
+        away_team = target_matchup.away_team
+
+        # Get week object for player details
+        week = Week(league, week_index)
+
+        # Helper function to get players playing for a team
+        def get_team_players_playing(team):
+            """Get list of players with games this week."""
+            players_data = []
+            for player in team.roster:
+                # Count games this player has this week
+                games_count = 0
+                game_days = []
+                for day_idx, teams_playing in enumerate(week.team_game_list):
+                    if hasattr(player, 'proTeam') and player.proTeam in [
+                        k for k, v in vars(PRO_TEAM_MAP).items() if not k.startswith('_')
+                    ]:
+                        # Check if player's team is playing this day
+                        from espn_api.basketball.constant import PRO_TEAM_MAP
+                        player_team_name = PRO_TEAM_MAP.get(player.proTeam, "Unknown")
+                        if player_team_name in teams_playing:
+                            games_count += 1
+                            game_days.append(day_idx)
+
+                if games_count > 0:  # Only include players with games
+                    players_data.append({
+                        "name": player.name,
+                        "position": getattr(player, 'position', 'Unknown'),
+                        "pro_team": PRO_TEAM_MAP.get(player.proTeam, "Unknown") if hasattr(player, 'proTeam') else "Unknown",
+                        "injury_status": getattr(player, 'injuryStatus', 'ACTIVE'),
+                        "games_this_week": games_count,
+                        "game_days": game_days
+                    })
+
+            return sorted(players_data, key=lambda x: x['games_this_week'], reverse=True)
+
+        # Get predictions for both teams
+        home_team_name = home_team.team_name
+        away_team_name = away_team.team_name
+
+        home_prediction = team_scores.get(home_team_name, (0, 0))
+        away_prediction = team_scores.get(away_team_name, (0, 0))
+
+        home_games = number_of_games_map.get(home_team_name, 0)
+        away_games = number_of_games_map.get(away_team_name, 0)
+
+        # Get remaining days predictions
+        home_remaining = remaining_days_scores.get(home_team_name, [])
+        away_remaining = remaining_days_scores.get(away_team_name, [])
+
+        # Build response
+        response_data = {
+            "week_index": week_index,
+            "date_range": {
+                "start_date": start_date.strftime("%Y-%m-%d"),
+                "end_date": end_date.strftime("%Y-%m-%d"),
+                "remaining_days": remaining_days
+            },
+            "matchup": {
+                "home_team": {
+                    "id": home_team.team_id,
+                    "name": home_team_name,
+                    "owner": (home_team.owners[0].get('displayName')
+                             if isinstance(home_team.owners[0], dict)
+                             else home_team.owners[0].displayName) if home_team.owners else "Unknown",
+                    "current_score": getattr(target_matchup, 'home_score', 0),
+                    "predicted_score": {
+                        "mean": round(home_prediction[0], 2),
+                        "std_dev": round(home_prediction[1], 2)
+                    },
+                    "total_games": home_games,
+                    "players_playing": get_team_players_playing(home_team),
+                    "remaining_days_predictions": [
+                        {
+                            "day": i,
+                            "mean": round(score[0], 2),
+                            "std_dev": round(score[1], 2)
+                        } for i, score in enumerate(home_remaining)
+                    ]
+                },
+                "away_team": {
+                    "id": away_team.team_id,
+                    "name": away_team_name,
+                    "owner": (away_team.owners[0].get('displayName')
+                             if isinstance(away_team.owners[0], dict)
+                             else away_team.owners[0].displayName) if away_team.owners else "Unknown",
+                    "current_score": getattr(target_matchup, 'away_score', 0),
+                    "predicted_score": {
+                        "mean": round(away_prediction[0], 2),
+                        "std_dev": round(away_prediction[1], 2)
+                    },
+                    "total_games": away_games,
+                    "players_playing": get_team_players_playing(away_team),
+                    "remaining_days_predictions": [
+                        {
+                            "day": i,
+                            "mean": round(score[0], 2),
+                            "std_dev": round(score[1], 2)
+                        } for i, score in enumerate(away_remaining)
+                    ]
+                },
+                "predicted_margin": round(home_prediction[0] - away_prediction[0], 2),
+                "predicted_winner": home_team_name if home_prediction[0] > away_prediction[0] else away_team_name
+            },
+            "injury_status_filter": injury_status_list
+        }
+
+        return jsonify({
+            "status": "success",
+            "data": response_data
+        }), 200
+
+    except Exception as e:
+        print(f"Error in get_current_matchup_prediction: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({
+            "status": "error",
+            "message": f"Failed to get matchup prediction: {str(e)}"
         }), 500
 
 @app.route('/api/v1/team/<int:team_id>', methods=['POST'])

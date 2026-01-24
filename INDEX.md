@@ -35,6 +35,14 @@
 - **`SCRIPT_CONTENTS.md`** - Script reference and parameter flow
 - **`INDEX.md`** - This file
 
+### API and Service Documentation
+- **`QUICKSTART_SERVICE.md`** - Quick start guide for the Flask API service
+- **`AUTHZ_AND_LOGGING_GUIDE.md`** - Authentication and logging details
+- **`MATCHUP_PREDICTION_ENDPOINT.md`** - New matchup prediction endpoint guide
+- **`CLAUDE.md`** - Claude AI integration documentation
+- **`ENDPOINT_SUMMARY.md`** - Summary of all API endpoints
+- **`TEAM_ENDPOINT.md`** - Team endpoint documentation
+
 ---
 
 ## 📖 Documentation by Purpose
