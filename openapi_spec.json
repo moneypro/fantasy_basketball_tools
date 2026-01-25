@@ -1,5 +1,5 @@
 {
-  "openapi": "3.0.0",
+  "openapi": "3.1.0",
   "info": {
     "title": "Fantasy Basketball Predictions API",
     "description": "API for fantasy basketball team analysis, predictions, and matchup forecasting",
@@ -316,7 +316,8 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object"
+                "type": "object",
+                "properties": {}
               }
             }
           }
@@ -648,7 +649,8 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object"
+                "type": "object",
+                "properties": {}
               }
             }
           }
@@ -665,8 +667,8 @@
     },
     "/api/v1/scout/free-agents": {
       "post": {
-        "summary": "Scout free agents with stats and team injury context",
-        "description": "Returns list of free agents sorted by average points (last 30 days). Includes player stats, position eligibility, injury status, and team injury context for LLM reasoning.",
+        "summary": "Scout free agents with stats, schedules, and roster context",
+        "description": "AI-friendly one-stop-shop endpoint returning free agents with 7-day schedules (ISO 8601 dates), back-to-back detection, team injury context with position matching, and optional roster context. All dates in YYYY-MM-DD format for easy AI reasoning.",
         "operationId": "scoutFreeAgents",
         "parameters": [
           {
@@ -680,12 +682,22 @@
           }
         ],
         "requestBody": {
-          "description": "Request body with free agent filtering parameters",
+          "description": "Request parameters for free agent scouting",
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
                 "properties": {
+                  "team_id": {
+                    "type": "integer",
+                    "description": "User's team ID to include roster context with schedules (optional)"
+                  },
+                  "week_index": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 23,
+                    "description": "Fantasy matchup week (1-23), defaults to current week"
+                  },
                   "limit": {
                     "type": "integer",
                     "minimum": 1,
@@ -706,7 +718,7 @@
         },
         "responses": {
           "200": {
-            "description": "Successful response with free agents data",
+            "description": "Successful response with free agents, schedules, and roster context",
             "content": {
               "application/json": {
                 "schema": {
@@ -719,6 +731,116 @@
                     "data": {
                       "type": "object",
                       "properties": {
+                        "matchup_context": {
+                          "type": "object",
+                          "properties": {
+                            "week_index": {
+                              "type": "integer",
+                              "description": "Fantasy matchup week"
+                            },
+                            "date_range": {
+                              "type": "object",
+                              "properties": {
+                                "start_date": {
+                                  "type": "string",
+                                  "format": "date",
+                                  "description": "Start date of matchup week (ISO 8601)"
+                                },
+                                "end_date": {
+                                  "type": "string",
+                                  "format": "date",
+                                  "description": "End date of matchup week (ISO 8601)"
+                                }
+                              }
+                            },
+                            "days_in_period": {
+                              "type": "integer",
+                              "example": 7
+                            }
+                          }
+                        },
+                        "roster": {
+                          "type": "object",
+                          "description": "User's roster with schedules (only if team_id provided)",
+                          "properties": {
+                            "team_id": {
+                              "type": "integer"
+                            },
+                            "team_name": {
+                              "type": "string"
+                            },
+                            "total_players": {
+                              "type": "integer"
+                            },
+                            "players": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "player_id": {
+                                    "type": "integer"
+                                  },
+                                  "name": {
+                                    "type": "string"
+                                  },
+                                  "nba_team": {
+                                    "type": "string"
+                                  },
+                                  "position": {
+                                    "type": "string"
+                                  },
+                                  "injury_status": {
+                                    "type": "string",
+                                    "enum": ["ACTIVE", "DAY_TO_DAY", "OUT", "QUESTIONABLE"]
+                                  },
+                                  "scoring": {
+                                    "type": "object",
+                                    "properties": {
+                                      "avg_last_30": {
+                                        "type": "number"
+                                      },
+                                      "avg_year": {
+                                        "type": "number"
+                                      },
+                                      "avg_projected": {
+                                        "type": "number"
+                                      }
+                                    }
+                                  },
+                                  "schedule_next_7_days": {
+                                    "type": "array",
+                                    "description": "7-day schedule with ISO 8601 dates",
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "date": {
+                                          "type": "string",
+                                          "format": "date",
+                                          "description": "Game date (YYYY-MM-DD)"
+                                        },
+                                        "has_game": {
+                                          "type": "boolean"
+                                        },
+                                        "is_back_to_back": {
+                                          "type": "boolean",
+                                          "description": "True if player has game on consecutive days"
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "total_games_next_7": {
+                                    "type": "integer",
+                                    "description": "Total games in next 7 days"
+                                  },
+                                  "back_to_back_count": {
+                                    "type": "integer",
+                                    "description": "Number of back-to-back occurrences"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        },
                         "free_agents": {
                           "type": "array",
                           "items": {
@@ -735,15 +857,32 @@
                               },
                               "injury_status": {
                                 "type": "string",
-                                "enum": ["ACTIVE", "DAY_TO_DAY", "OUT"]
+                                "enum": ["ACTIVE", "DAY_TO_DAY", "OUT", "QUESTIONABLE"]
                               },
                               "injured": {
                                 "type": "boolean",
                                 "description": "True if player has injury status OUT"
                               },
+                              "expected_return_date": {
+                                "type": "string",
+                                "format": "date",
+                                "nullable": true,
+                                "description": "Expected return date (YYYY-MM-DD) for injured players. Null if unknown or season-ending injury."
+                              },
+                              "days_until_return": {
+                                "type": "integer",
+                                "nullable": true,
+                                "description": "Number of days until expected return. Null if no return date. AI can use thresholds: >30 = too long, <=14 = stash candidate, <=3 = high priority."
+                              },
                               "on_waivers": {
                                 "type": "boolean",
                                 "description": "True if player was claimed on waivers recently"
+                              },
+                              "waiver_clear_date": {
+                                "type": "string",
+                                "format": "date",
+                                "nullable": true,
+                                "description": "Date (YYYY-MM-DD) when player clears waivers and becomes a free agent"
                               },
                               "positions_eligible": {
                                 "type": "array",
@@ -751,6 +890,35 @@
                                   "type": "string"
                                 },
                                 "example": ["SG", "SF", "G", "F"]
+                              },
+                              "schedule_next_7_days": {
+                                "type": "array",
+                                "description": "7-day schedule with ISO 8601 dates and back-to-back flags",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "date": {
+                                      "type": "string",
+                                      "format": "date",
+                                      "description": "Game date (YYYY-MM-DD)"
+                                    },
+                                    "has_game": {
+                                      "type": "boolean"
+                                    },
+                                    "is_back_to_back": {
+                                      "type": "boolean",
+                                      "description": "True if player's team has games on consecutive days"
+                                    }
+                                  }
+                                }
+                              },
+                              "total_games_next_7": {
+                                "type": "integer",
+                                "description": "Total games in next 7 days"
+                              },
+                              "back_to_back_count": {
+                                "type": "integer",
+                                "description": "Number of back-to-back game occurrences"
                               },
                               "scoring": {
                                 "type": "object",
@@ -774,6 +942,7 @@
                               },
                               "team_injuries": {
                                 "type": "array",
+                                "description": "Injured players on same NBA team with position matching",
                                 "items": {
                                   "type": "object",
                                   "properties": {
@@ -783,12 +952,23 @@
                                     "position": {
                                       "type": "string"
                                     },
+                                    "positions_eligible": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "string"
+                                      },
+                                      "description": "Positions injured player can play"
+                                    },
                                     "injury_status": {
                                       "type": "string",
                                       "enum": ["OUT", "DAY_TO_DAY"]
                                     },
                                     "avg_points": {
                                       "type": "number"
+                                    },
+                                    "position_match": {
+                                      "type": "boolean",
+                                      "description": "True if injured player can fill same roster slot as free agent"
                                     }
                                   }
                                 }
@@ -825,6 +1005,7 @@
     }
   },
   "components": {
+    "schemas": {},
     "securitySchemes": {
       "ApiKeyAuth": {
         "type": "apiKey",

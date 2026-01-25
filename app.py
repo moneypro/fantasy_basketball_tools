@@ -389,40 +389,64 @@ def team_changes_endpoint():
 @require_api_key
 @require_league
 def scout_free_agents_endpoint():
-    """Scout free agents with their stats and team injury context.
-    
+    """Scout free agents with stats, schedules, and roster context.
+
     Request body:
     {
-        "limit": 20,
-        "min_avg_points": 5.0
+        "team_id": 2,           # Optional: user's team ID for roster context
+        "week_index": 8,        # Optional: defaults to current week
+        "limit": 20,            # Optional: defaults to 20
+        "min_avg_points": 5.0   # Optional: defaults to 5.0
     }
-    
+
     Returns:
-    - free_agents: List of free agents with stats, positions, and team injury info
-    - summary: Total analyzed, returned count, and filters applied
+    - matchup_context: Week info and date range
+    - roster: User's roster with 7-day schedules (if team_id provided)
+    - free_agents: List with 7-day schedules, back-to-backs, team injuries
+    - summary: Analysis metadata
     """
     try:
         from scout.free_agent_scouting import scout_free_agents
-        
+
         data = request.json or {}
+        team_id = data.get('team_id')
+        week_index = data.get('week_index')
         limit = data.get('limit', 20)
         min_avg_points = data.get('min_avg_points', 5.0)
-        
+
         # Validate parameters
+        if team_id is not None and (not isinstance(team_id, int) or team_id < 1):
+            return jsonify({
+                "status": "error",
+                "message": "team_id must be a positive integer"
+            }), 400
+
+        if week_index is not None and (not isinstance(week_index, int) or week_index < 1 or week_index > 23):
+            return jsonify({
+                "status": "error",
+                "message": "week_index must be an integer between 1 and 23"
+            }), 400
+
         if not isinstance(limit, int) or limit < 1 or limit > 500:
             return jsonify({
                 "status": "error",
                 "message": "limit must be an integer between 1 and 500"
             }), 400
-        
+
         if not isinstance(min_avg_points, (int, float)) or min_avg_points < 0:
             return jsonify({
                 "status": "error",
                 "message": "min_avg_points must be a number >= 0"
             }), 400
-        
-        result = scout_free_agents(league, limit=limit, min_avg_points=min_avg_points)
-        
+
+        result = scout_free_agents(
+            league,
+            team_id=team_id,
+            week_index=week_index,
+            limit=limit,
+            min_avg_points=min_avg_points
+        )
+
         return jsonify({
             "status": "success",
             "data": result
