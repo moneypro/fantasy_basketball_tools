@@ -94,6 +94,27 @@ class DateScoringPeriodConverter:
         return cls.date_to_scoring_period(today)
 
     @classmethod
+    def get_current_matchup_week(cls) -> int:
+        """Get the current matchup week based on today's date.
+
+        Uses the same logic as Week._match_up_week_to_scoring_period_convert
+        but reversed to calculate week from current scoring period.
+
+        Returns:
+            Current matchup week number (1-23)
+        """
+        current_period = cls.get_current_scoring_period()
+
+        # Week 1 is special: scoring periods 0-7 (days 1-8)
+        if current_period <= 8:
+            return 1
+
+        # Week 2+: scoring period = 7 * (week - 1) to 7 * week - 1
+        # Reverse: week = ceiling((period + 1) / 7)
+        import math
+        return math.ceil((current_period + 1) / 7)
+
+    @classmethod
     def get_remaining_days_in_week(cls, week_index: int, current_date: Union[str, date, datetime] = None) -> int:
         """Calculate remaining days in a matchup week.
 

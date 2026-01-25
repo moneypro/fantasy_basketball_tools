@@ -467,8 +467,9 @@ def scout_free_agents(league: League, team_id: int = None, week_index: int = Non
     from utils.date_utils import DateScoringPeriodConverter
 
     # Default to current week if not provided
+    # Use date-based calculation instead of cached league.currentMatchupPeriod
     if not week_index:
-        week_index = league.currentMatchupPeriod
+        week_index = DateScoringPeriodConverter.get_current_matchup_week()
 
     # Get date range for matchup context
     start_date, end_date = DateScoringPeriodConverter.matchup_week_to_date_range(week_index)
