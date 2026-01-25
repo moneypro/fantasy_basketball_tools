@@ -22,6 +22,7 @@ TIER_PERMISSIONS = {
         "POST /api/v1/predictions/calculate",
         "POST /api/v1/predictions/week-analysis",
         "POST /api/v1/scout/players",
+        "POST /api/v1/scout/free-agents",
         "GET /api/v1/scout/teams",
         "POST /api/v1/team/{team_id}",
         "POST /api/v1/team/{team_id}/roster",
