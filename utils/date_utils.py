@@ -4,11 +4,11 @@ from typing import Union, Tuple
 
 
 class DateScoringPeriodConverter:
-    """Convert between dates and ESPN scoring periods for 2024-25 NBA season."""
+    """Convert between dates and ESPN scoring periods for 2025-26 NBA season."""
 
-    # NBA 2024-25 season starts on October 22, 2024 (scoring period 1)
-    SEASON_START_DATE = date(2024, 10, 22)
-    SEASON_YEAR = "2024-25"
+    # NBA 2025-26 season starts on October 21, 2025 (scoring period 1)
+    SEASON_START_DATE = date(2025, 10, 21)
+    SEASON_YEAR = "2025-26"
 
     @classmethod
     def date_to_scoring_period(cls, input_date: Union[str, date, datetime]) -> int:

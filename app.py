@@ -201,25 +201,24 @@ def calculate_predictions():
 def week_analysis():
     """
     Get detailed week analysis with JSON data for all injury statuses
-    
+
     Request body params:
-    - week_index: Week number (required, 1-23)
+    - week_index: Week number (optional, 1-23, defaults to current week)
     - day_of_week_override: Starting day override (optional, 0=Monday, 6=Sunday, default=0)
     """
     try:
         from predict.predict_week import build_week_json
-        
+        from utils.date_utils import DateScoringPeriodConverter
+
         # Get parameters from request body
         data = request.get_json() or {}
         week_index = data.get('week_index')
         day_of_week_override = data.get('day_of_week_override', 0)
-        
+
+        # Default to current week if not provided
         if not week_index:
-            return jsonify({
-                "status": "error",
-                "message": "week_index is required"
-            }), 400
-        
+            week_index = DateScoringPeriodConverter.get_current_matchup_week()
+
         # Validate week range
         if not isinstance(week_index, int) or week_index < 1 or week_index > 23:
             return jsonify({
@@ -1038,7 +1037,8 @@ def get_scoreboard(week_index):
             }), 400
         
         # Get current scoring period for live scores
-        current_period = league.currentMatchupPeriod
+        from utils.date_utils import DateScoringPeriodConverter
+        current_period = DateScoringPeriodConverter.get_current_scoring_period()
         
         # Get scoreboard for the week
         scoreboard = league.scoreboard(week_index)
@@ -1167,8 +1167,8 @@ def get_current_matchup_prediction():
                     "message": f"Invalid date: {str(e)}"
                 }), 400
         elif not week_index:
-            # Use current matchup period
-            week_index = league.currentMatchupPeriod
+            # Calculate current week from today's date (don't use cached league.currentMatchupPeriod)
+            week_index = DateScoringPeriodConverter.get_current_matchup_week()
 
         # Validate week index
         if not isinstance(week_index, int) or week_index < 1 or week_index > 23:
@@ -1370,7 +1370,8 @@ def get_team_info(team_id):
         
         # Use current week if not provided
         if week_index is None:
-            week_index = league.currentMatchupPeriod
+            from utils.date_utils import DateScoringPeriodConverter
+            week_index = DateScoringPeriodConverter.get_current_matchup_week()
         
         # Validate week range
         if not isinstance(week_index, int) or week_index < 1 or week_index > 23:
