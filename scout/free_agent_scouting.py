@@ -502,11 +502,18 @@ def scout_free_agents(league: League, team_id: int = None, week_index: int = Non
         pass
 
     # Fetch pro schedule once to avoid repeated API calls
+    # IMPORTANT: Always fetch fresh schedule data (don't rely on cached league)
     pro_schedule_data = None
     try:
+        # Force fresh fetch by calling the ESPN API directly
         pro_schedule_data = league.espn_request.get_pro_schedule()
-    except:
-        pass
+
+        if not pro_schedule_data or 'settings' not in pro_schedule_data:
+            print("⚠️ Warning: Pro schedule data is missing or invalid, schedules will show no games")
+        else:
+            print(f"✅ Fetched pro schedule data successfully")
+    except Exception as e:
+        print(f"⚠️ Warning: Could not fetch pro schedule: {e}")
 
     # Build roster context if team_id provided
     roster_data = None
