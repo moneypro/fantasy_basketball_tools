@@ -12,6 +12,92 @@
     }
   ],
   "paths": {
+    "/api/v1/teams": {
+      "get": {
+        "summary": "Get all teams in the league",
+        "description": "Returns list of all fantasy teams with their IDs, names, owners, and records. Use this to find team_id values needed for other endpoints like /team/{team_id} and /team/{team_id}/roster.",
+        "operationId": "getAllTeams",
+        "parameters": [
+          {
+            "name": "api_key",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "API authentication key"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with all teams",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "total_teams": {
+                          "type": "integer",
+                          "description": "Total number of teams in the league"
+                        },
+                        "teams": {
+                          "type": "array",
+                          "description": "List of all teams sorted by standing",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "team_id": {
+                                "type": "integer",
+                                "description": "Unique team ID (use this for /team/{team_id} endpoints)"
+                              },
+                              "team_name": {
+                                "type": "string",
+                                "description": "Team name"
+                              },
+                              "owner": {
+                                "type": "string",
+                                "description": "Owner display name"
+                              },
+                              "standing": {
+                                "type": "integer",
+                                "description": "Current league standing (1 = first place)"
+                              },
+                              "wins": {
+                                "type": "integer",
+                                "description": "Total wins"
+                              },
+                              "losses": {
+                                "type": "integer",
+                                "description": "Total losses"
+                              },
+                              "points_for": {
+                                "type": "number",
+                                "description": "Total points scored"
+                              },
+                              "points_against": {
+                                "type": "number",
+                                "description": "Total points against"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/predictions/week-analysis": {
       "post": {
         "summary": "Get detailed week analysis with team predictions",
@@ -559,7 +645,7 @@
     "/api/v1/team/{team_id}": {
       "post": {
         "summary": "Get team information and matchup details",
-        "description": "Returns comprehensive team info including predictions for a specific week",
+        "description": "Returns comprehensive team info including predictions for a specific week. To find team_id values, call GET /api/v1/teams first.",
         "operationId": "getTeamInfo",
         "parameters": [
           {
@@ -622,7 +708,7 @@
     "/api/v1/team/{team_id}/roster": {
       "post": {
         "summary": "Get team roster with player details",
-        "description": "Returns current roster with player positions, injury status, and other details",
+        "description": "Returns current roster with player positions, injury status, and other details. To find team_id values, call GET /api/v1/teams first.",
         "operationId": "getTeamRoster",
         "parameters": [
           {

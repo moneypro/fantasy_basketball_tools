@@ -854,6 +854,57 @@ def get_team_roster(team_id):
             "message": f"Failed to retrieve team roster: {str(e)}"
         }), 500
 
+@app.route('/api/v1/teams', methods=['GET'])
+@require_api_key
+@require_league
+def get_all_teams():
+    """
+    Get list of all teams in the league with IDs
+
+    Returns:
+    - List of all teams with their IDs, names, owners, and records
+    - Useful for finding team_id to use in other endpoints
+    """
+    try:
+        teams_data = []
+        for team in league.teams:
+            # Get owner name
+            owner_name = "Unknown"
+            if team.owners:
+                owner = team.owners[0]
+                owner_name = owner.get('displayName') if isinstance(owner, dict) else owner.displayName
+
+            teams_data.append({
+                "team_id": team.team_id,
+                "team_name": team.team_name,
+                "owner": owner_name,
+                "standing": team.standing,
+                "wins": team.wins,
+                "losses": team.losses,
+                "points_for": round(team.points_for, 2) if hasattr(team, 'points_for') else 0,
+                "points_against": round(team.points_against, 2) if hasattr(team, 'points_against') else 0
+            })
+
+        # Sort by standing
+        teams_data.sort(key=lambda x: x['standing'])
+
+        return jsonify({
+            "status": "success",
+            "data": {
+                "total_teams": len(teams_data),
+                "teams": teams_data
+            }
+        }), 200
+
+    except Exception as e:
+        print(f"Error in get_all_teams: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return jsonify({
+            "status": "error",
+            "message": f"Failed to retrieve teams: {str(e)}"
+        }), 500
+
 @app.route('/api/v1/players-playing/<int:scoring_period>', methods=['POST'])
 @require_api_key
 @require_league
