@@ -511,7 +511,18 @@ def scout_free_agents(league: League, team_id: int = None, week_index: int = Non
         if not pro_schedule_data or 'settings' not in pro_schedule_data:
             print("⚠️ Warning: Pro schedule data is missing or invalid, schedules will show no games")
         else:
-            print(f"✅ Fetched pro schedule data successfully")
+            # Debug: Check what scoring periods the schedule has
+            if 'settings' in pro_schedule_data and 'proTeams' in pro_schedule_data['settings']:
+                sample_team = pro_schedule_data['settings']['proTeams'][0] if pro_schedule_data['settings']['proTeams'] else None
+                if sample_team and 'proGamesByScoringPeriod' in sample_team:
+                    periods = list(sample_team['proGamesByScoringPeriod'].keys())
+                    if periods:
+                        period_nums = sorted([int(p) for p in periods if p.isdigit()])
+                        print(f"✅ Fetched pro schedule: periods {min(period_nums)}-{max(period_nums)} (week {week_index} uses periods {DateScoringPeriodConverter.date_to_scoring_period(start_date)}-{DateScoringPeriodConverter.date_to_scoring_period(end_date)})")
+                    else:
+                        print(f"✅ Fetched pro schedule but no game periods found")
+            else:
+                print(f"✅ Fetched pro schedule data successfully")
     except Exception as e:
         print(f"⚠️ Warning: Could not fetch pro schedule: {e}")
 
