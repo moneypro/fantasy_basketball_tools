@@ -1,6 +1,6 @@
 """Free agent scouting and analysis functions."""
 
-from typing import Dict, List, Any, Set
+from typing import Dict, List, Any, Set, Optional
 from espn_api.basketball import League
 from datetime import timedelta, date, datetime
 import requests
@@ -108,7 +108,64 @@ def check_team_has_game(nba_team: str, scoring_period: int, pro_schedule_data: D
         return False
 
 
-def get_schedule_next_7_days(league: League, nba_team: str, week_index: int, pro_schedule_data: Dict = None) -> List[Dict[str, Any]]:
+def get_opponent_for_game(nba_team: str, scoring_period: int, pro_schedule_data: Dict) -> Optional[str]:
+    """Get the opponent team abbreviation for a specific game.
+
+    Args:
+        nba_team: NBA team abbreviation (e.g., 'LAL')
+        scoring_period: Scoring period number
+        pro_schedule_data: Pro schedule data from ESPN
+
+    Returns:
+        Opponent team abbreviation or None if not found
+    """
+    try:
+        from espn_api.basketball.constant import PRO_TEAM_MAP
+
+        # Get pro team ID for this NBA team
+        nba_team_id = None
+        for team_id, team_abbr in PRO_TEAM_MAP.items():
+            if team_abbr == nba_team:
+                nba_team_id = team_id
+                break
+
+        if not nba_team_id or not pro_schedule_data:
+            return None
+
+        # Look up the game for this team and scoring period
+        pro_teams = pro_schedule_data.get('settings', {}).get('proTeams', [])
+        for team in pro_teams:
+            if team['id'] == nba_team_id:
+                pro_games = team.get('proGamesByScoringPeriod', {})
+                game_info = pro_games.get(str(scoring_period))
+
+                if game_info:
+                    # game_info is typically a list with one game dict
+                    if isinstance(game_info, list) and len(game_info) > 0:
+                        game = game_info[0]
+
+                        # Determine opponent based on home/away
+                        home_team_id = game.get('homeProTeamId')
+                        away_team_id = game.get('awayProTeamId')
+
+                        # If we're home, opponent is away; if we're away, opponent is home
+                        opponent_id = away_team_id if home_team_id == nba_team_id else home_team_id
+
+                        # Convert opponent team ID to abbreviation
+                        opponent_abbr = PRO_TEAM_MAP.get(opponent_id)
+                        return opponent_abbr
+
+                break
+
+        return None
+
+    except Exception as e:
+        return None
+
+
+def get_schedule_next_7_days(league: League, nba_team: str, week_index: int,
+                            pro_schedule_data: Dict = None,
+                            nba_def_ratings: Dict[str, float] = None) -> List[Dict[str, Any]]:
     """Get 7-day schedule for an NBA team with back-to-back detection.
 
     Args:
@@ -116,12 +173,15 @@ def get_schedule_next_7_days(league: League, nba_team: str, week_index: int, pro
         nba_team: NBA team abbreviation (e.g., 'LAL', 'BOS')
         week_index: Fantasy matchup week (1-23)
         pro_schedule_data: Cached pro schedule data
+        nba_def_ratings: Dict mapping team abbreviation to defensive rating
 
     Returns:
         List of 7 dicts (one per day) with:
         - date: ISO 8601 date string (YYYY-MM-DD)
         - has_game: bool
         - is_back_to_back: bool (true if team played previous day)
+        - opponent: opponent team abbreviation (or None)
+        - opponent_def_rating: opponent's defensive rating (or None)
     """
     from utils.date_utils import DateScoringPeriodConverter
 
@@ -139,13 +199,24 @@ def get_schedule_next_7_days(league: League, nba_team: str, week_index: int, pro
         # Check if team has game this day
         has_game = check_team_has_game(nba_team, scoring_period, pro_schedule_data, league)
 
+        # Get opponent info if team has a game
+        opponent = None
+        opponent_def_rating = None
+
+        if has_game and pro_schedule_data:
+            opponent = get_opponent_for_game(nba_team, scoring_period, pro_schedule_data)
+            if opponent and nba_def_ratings:
+                opponent_def_rating = nba_def_ratings.get(opponent)
+
         # Detect back-to-back
         is_back_to_back = prev_day_had_game and has_game
 
         schedule.append({
             "date": current_date.strftime("%Y-%m-%d"),
             "has_game": has_game,
-            "is_back_to_back": is_back_to_back
+            "is_back_to_back": is_back_to_back,
+            "opponent": opponent,
+            "opponent_def_rating": opponent_def_rating
         })
 
         prev_day_had_game = has_game
@@ -269,7 +340,12 @@ def get_team_injuries(all_players: Dict[int, Any], nba_team: str, free_agent_pos
     return injuries
 
 
-def build_free_agent_data(all_players: Dict[int, Any], free_agent_player: Any, waiver_player_ids: Set[int] = None, recent_transactions: List[Any] = None, league: League = None, week_index: int = None, pro_schedule_data: Dict = None) -> Dict[str, Any]:
+def build_free_agent_data(all_players: Dict[int, Any], free_agent_player: Any,
+                         waiver_player_ids: Set[int] = None,
+                         recent_transactions: List[Any] = None,
+                         league: League = None, week_index: int = None,
+                         pro_schedule_data: Dict = None,
+                         nba_def_ratings: Dict[str, float] = None) -> Dict[str, Any]:
     """Build complete free agent data including stats and team injuries.
 
     Args:
@@ -285,16 +361,24 @@ def build_free_agent_data(all_players: Dict[int, Any], free_agent_player: Any, w
         Dictionary with free agent data ready for API response
     """
     player_id = free_agent_player.playerId
-    
-    # Get stats
+
+    # Get last 7 days stats
+    stats_7 = free_agent_player.stats.get('2026_last_7', {})
+    avg_last_7 = stats_7.get('applied_avg', 0.0)
+    total_7 = stats_7.get('applied_total', 0.0)
+    games_played_last_7_days = int(round(total_7 / avg_last_7)) if avg_last_7 > 0 else 0
+
+    # Get last 30 days stats
     stats_30 = free_agent_player.stats.get('2026_last_30', {})
     avg_last_30 = stats_30.get('applied_avg', 0.0)
     total_30 = stats_30.get('applied_total', 0.0)
-    gp_30 = int(round(total_30 / avg_last_30)) if avg_last_30 > 0 else 0
-    
+    games_played_last_30_days = int(round(total_30 / avg_last_30)) if avg_last_30 > 0 else 0
+
+    # Get full year stats
     stats_year = free_agent_player.stats.get('2026_total', {})
     avg_year = stats_year.get('applied_avg', 0.0)
-    
+
+    # Get projected stats
     stats_proj = free_agent_player.stats.get('2026_projected', {})
     avg_projected = stats_proj.get('applied_avg', 0.0)
     
@@ -336,7 +420,9 @@ def build_free_agent_data(all_players: Dict[int, Any], free_agent_player: Any, w
     back_to_back_count = 0
 
     if nba_team != 'UNKNOWN' and league and week_index:
-        schedule_next_7_days = get_schedule_next_7_days(league, nba_team, week_index, pro_schedule_data)
+        schedule_next_7_days = get_schedule_next_7_days(
+            league, nba_team, week_index, pro_schedule_data, nba_def_ratings
+        )
         # Count totals
         for day in schedule_next_7_days:
             if day['has_game']:
@@ -417,9 +503,12 @@ def build_free_agent_data(all_players: Dict[int, Any], free_agent_player: Any, w
         'total_games_next_7': total_games_next_7,
         'back_to_back_count': back_to_back_count,
         'scoring': {
+            'avg_last_7': round(avg_last_7, 2),
+            'total_7': round(total_7, 2),
+            'games_played_last_7_days': games_played_last_7_days,
             'avg_last_30': round(avg_last_30, 2),
             'total_30': round(total_30, 2),
-            'gp_30': gp_30,
+            'games_played_last_30_days': games_played_last_30_days,
             'avg_year': round(avg_year, 2),
             'avg_projected': round(avg_projected, 2)
         },
@@ -427,7 +516,9 @@ def build_free_agent_data(all_players: Dict[int, Any], free_agent_player: Any, w
     }
 
 
-def build_roster_data(team: Any, league: League, week_index: int, pro_schedule_data: Dict = None) -> Dict[str, Any]:
+def build_roster_data(team: Any, league: League, week_index: int,
+                     pro_schedule_data: Dict = None,
+                     nba_def_ratings: Dict[str, float] = None) -> Dict[str, Any]:
     """Build roster data with schedules for all players.
 
     Args:
@@ -435,6 +526,7 @@ def build_roster_data(team: Any, league: League, week_index: int, pro_schedule_d
         league: League object
         week_index: Fantasy matchup week
         pro_schedule_data: Cached pro schedule
+        nba_def_ratings: Dict mapping team abbreviation to defensive rating
 
     Returns:
         Dictionary with roster data including schedules
@@ -462,7 +554,7 @@ def build_roster_data(team: Any, league: League, week_index: int, pro_schedule_d
 
         if nba_team != 'UNKNOWN':
             schedule_next_7_days = get_schedule_next_7_days(
-                league, nba_team, week_index, pro_schedule_data
+                league, nba_team, week_index, pro_schedule_data, nba_def_ratings
             )
             for day in schedule_next_7_days:
                 if day['has_game']:
@@ -494,7 +586,9 @@ def build_roster_data(team: Any, league: League, week_index: int, pro_schedule_d
     }
 
 
-def scout_free_agents(league: League, team_id: int = None, week_index: int = None, limit: int = 20, min_avg_points: float = 5.0) -> Dict[str, Any]:
+def scout_free_agents(league: League, team_id: int = None, week_index: int = None,
+                     limit: int = 20, min_avg_points: float = 5.0,
+                     nba_def_ratings: Dict[str, float] = None) -> Dict[str, Any]:
     """Scout all free agents and return ranked data with roster context.
 
     Args:
@@ -503,6 +597,7 @@ def scout_free_agents(league: League, team_id: int = None, week_index: int = Non
         week_index: Fantasy matchup week (1-23), defaults to current
         limit: Number of free agents to return
         min_avg_points: Minimum avg_last_30 to include (default 5.0)
+        nba_def_ratings: Dict mapping team abbreviation to defensive rating
 
     Returns:
         Dictionary with free agents data, roster context, and matchup info
@@ -580,7 +675,7 @@ def scout_free_agents(league: League, team_id: int = None, week_index: int = Non
 
         if target_team:
             roster_data = build_roster_data(
-                target_team, league, week_index, pro_schedule_data
+                target_team, league, week_index, pro_schedule_data, nba_def_ratings
             )
 
     free_agents_dict = {}
@@ -594,7 +689,7 @@ def scout_free_agents(league: League, team_id: int = None, week_index: int = Non
             player_data = build_free_agent_data(
                 all_players, player, waiver_player_ids,
                 recent_transactions, league, week_index,
-                pro_schedule_data
+                pro_schedule_data, nba_def_ratings
             )
             free_agents_dict[player.playerId] = player_data
 

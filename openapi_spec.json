@@ -994,6 +994,16 @@
                                     "is_back_to_back": {
                                       "type": "boolean",
                                       "description": "True if player's team has games on consecutive days"
+                                    },
+                                    "opponent": {
+                                      "type": "string",
+                                      "nullable": true,
+                                      "description": "Opponent team abbreviation (e.g., 'LAL', 'BOS'). null if no game this day."
+                                    },
+                                    "opponent_def_rating": {
+                                      "type": "number",
+                                      "nullable": true,
+                                      "description": "Opponent's defensive rating (points allowed per 100 possessions) over last 30 games. Lower is better defense. null if no game or rating unavailable. Use to evaluate matchup difficulty - players face easier matchups against teams with higher (worse) defensive ratings."
                                     }
                                   }
                                 }
@@ -1009,20 +1019,37 @@
                               "scoring": {
                                 "type": "object",
                                 "properties": {
+                                  "avg_last_7": {
+                                    "type": "number",
+                                    "description": "Average fantasy points per game over last 7 days. More recent performance indicator than last 30. Compare to avg_last_30 to identify hot/cold streaks."
+                                  },
+                                  "total_7": {
+                                    "type": "number",
+                                    "description": "Total fantasy points accumulated over last 7 days."
+                                  },
+                                  "games_played_last_7_days": {
+                                    "type": "integer",
+                                    "description": "Number of games played in last 7 days (0-7). Use to validate avg_last_7 sample size."
+                                  },
                                   "avg_last_30": {
-                                    "type": "number"
+                                    "type": "number",
+                                    "description": "Average fantasy points per game over last 30 days."
                                   },
                                   "total_30": {
-                                    "type": "number"
+                                    "type": "number",
+                                    "description": "Total fantasy points accumulated over last 30 days."
                                   },
-                                  "gp_30": {
-                                    "type": "integer"
+                                  "games_played_last_30_days": {
+                                    "type": "integer",
+                                    "description": "Number of games played in last 30 days. Use to validate avg_last_30 sample size. Renamed from gp_30 for clarity."
                                   },
                                   "avg_year": {
-                                    "type": "number"
+                                    "type": "number",
+                                    "description": "Average fantasy points per game for full season."
                                   },
                                   "avg_projected": {
-                                    "type": "number"
+                                    "type": "number",
+                                    "description": "ESPN's projected average fantasy points per game."
                                   }
                                 }
                               },

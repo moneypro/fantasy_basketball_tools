@@ -33,6 +33,9 @@ app = Flask(__name__)
 # Global league instance (loaded once at module import time)
 league = None
 
+# Global NBA stats cache (defensive ratings, etc.)
+nba_stats = None
+
 def init_league():
     """Initialize league from cached file or ESPN API.
     
@@ -59,10 +62,30 @@ def init_league():
 # Initialize league lazily on first request
 @app.before_request
 def ensure_league_loaded():
-    """Ensure league is loaded before handling requests"""
-    global league
+    """Ensure league and NBA stats are loaded before handling requests"""
+    global league, nba_stats
+
     if league is None:
         init_league()
+
+    if nba_stats is None:
+        init_nba_stats()
+
+def init_nba_stats():
+    """Initialize NBA stats from cached file or NBA API."""
+    global nba_stats
+    if nba_stats is not None:
+        return True  # Already initialized
+
+    try:
+        from utils.create_nba_stats import get_nba_team_defensive_ratings
+        nba_stats = get_nba_team_defensive_ratings(season='2024-25')
+        print("✅ NBA stats loaded successfully")
+        return True
+    except Exception as e:
+        print(f"⚠️ Warning: Could not load NBA stats: {e}")
+        nba_stats = {}  # Empty dict fallback
+        return False
 
 def require_league(f):
     """Decorator to check if league is loaded"""
@@ -443,7 +466,8 @@ def scout_free_agents_endpoint():
             team_id=team_id,
             week_index=week_index,
             limit=limit,
-            min_avg_points=min_avg_points
+            min_avg_points=min_avg_points,
+            nba_def_ratings=nba_stats
         )
 
         return jsonify({
@@ -680,59 +704,79 @@ def list_api_keys():
 @app.route('/api/v1/admin/refresh-league', methods=['POST'])
 @require_admin
 def refresh_league():
-    """Force refresh league data from ESPN (bypasses cache)
-    
+    """Force refresh league data AND NBA stats from APIs (bypasses cache)
+
     This endpoint requires admin authentication.
-    Useful when the cached league data is stale.
-    Deletes the cache file and fetches fresh data from ESPN.
+    Useful when the cached league data or NBA stats are stale.
+    Deletes both cache files and fetches fresh data from ESPN and NBA APIs.
     """
     try:
-        global league
+        global league, nba_stats
         import os
-        
-        print("🔄 Admin requested league refresh...")
-        
-        # Delete the cache file to force fresh fetch
+
+        print("🔄 Admin requested refresh of league and NBA stats...")
+
+        # Clear league cache
         from utils.create_league import get_cache_path
-        cache_path = get_cache_path(2026)  # Default year
-        
-        if os.path.exists(cache_path):
+        league_cache_path = get_cache_path(2026)
+        league_cache_cleared = False
+
+        if os.path.exists(league_cache_path):
             try:
-                os.remove(cache_path)
-                print(f"✅ Deleted stale cache: {cache_path}")
+                os.remove(league_cache_path)
+                print(f"✅ Deleted stale league cache: {league_cache_path}")
+                league_cache_cleared = True
             except Exception as e:
-                print(f"⚠️  Could not delete cache: {e}")
-        
-        # Create a new league instance without using cache
+                print(f"⚠️ Could not delete league cache: {e}")
+
+        # Clear NBA stats cache
+        from utils.create_nba_stats import get_nba_cache_path
+        nba_cache_path = get_nba_cache_path('2024-25')
+        nba_cache_cleared = False
+
+        if os.path.exists(nba_cache_path):
+            try:
+                os.remove(nba_cache_path)
+                print(f"✅ Deleted stale NBA stats cache: {nba_cache_path}")
+                nba_cache_cleared = True
+            except Exception as e:
+                print(f"⚠️ Could not delete NBA stats cache: {e}")
+
+        # Fetch fresh league data from ESPN
         from utils.create_league import create_league
-        
-        # Fetch fresh league data from ESPN (bypass cache)
         new_league = create_league(use_local_cache=False)
-        
         if new_league:
             league = new_league
             print("✅ League refreshed successfully from ESPN")
-            return jsonify({
-                "status": "success",
-                "message": "League refreshed successfully from ESPN API (cache cleared)",
-                "league_name": league.league_name if hasattr(league, 'league_name') else "Unknown",
-                "year": league.year if hasattr(league, 'year') else "Unknown",
-                "cache_cleared": True
-            }), 200
-        else:
-            print("❌ Failed to refresh league")
-            return jsonify({
-                "status": "error",
-                "message": "Failed to refresh league from ESPN"
-            }), 500
-    
+
+        # Fetch fresh NBA stats from NBA API
+        from utils.create_nba_stats import get_nba_team_defensive_ratings
+        new_nba_stats = get_nba_team_defensive_ratings(season='2024-25', use_local_cache=False)
+        if new_nba_stats:
+            nba_stats = new_nba_stats
+            print("✅ NBA stats refreshed successfully from NBA API")
+
+        return jsonify({
+            "status": "success",
+            "message": "League and NBA stats refreshed successfully from APIs (caches cleared)",
+            "league_data": {
+                "league_name": league.league_name if league and hasattr(league, 'league_name') else "N/A",
+                "year": league.year if league and hasattr(league, 'year') else "N/A",
+                "cache_cleared": league_cache_cleared
+            },
+            "nba_stats_data": {
+                "teams_loaded": len(nba_stats) if nba_stats else 0,
+                "cache_cleared": nba_cache_cleared
+            }
+        }), 200
+
     except Exception as e:
         print(f"Error in refresh_league: {str(e)}")
         import traceback
         traceback.print_exc()
         return jsonify({
             "status": "error",
-            "message": f"Failed to refresh league: {str(e)}"
+            "message": f"Failed to refresh: {str(e)}"
         }), 500
 
 @app.route('/api/v1/auth/keys/revoke', methods=['POST'])
