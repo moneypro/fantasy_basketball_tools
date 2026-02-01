@@ -2,9 +2,20 @@
 
 from typing import Dict, List, Any, Set
 from espn_api.basketball import League
-from datetime import timedelta, date
+from datetime import timedelta, date, datetime
 import requests
 import json
+import os
+
+# Waiver period configuration
+# Number of days a player stays on waivers after being dropped
+WAIVER_PERIOD_DAYS = int(os.environ.get('WAIVER_PERIOD_DAYS', 2))
+
+# Game start time cutoff for waiver period calculation
+# Drops after this hour (Eastern Time) incur an extra day penalty
+# Using 7:30pm ET (19.5 hour) as conservative estimate for when games typically start
+# If a player is dropped after this time, waiver period starts the next day
+GAME_START_HOUR_ET = 19.5  # 7:30pm Eastern Time
 
 
 def get_waiver_player_ids(league: League) -> Set[int]:
@@ -345,7 +356,7 @@ def build_free_agent_data(all_players: Dict[int, Any], free_agent_player: Any, w
     if waiver_player_ids and player_id in waiver_player_ids:
         on_waivers = True
 
-        # Find when player was dropped
+        # Find when player was dropped and calculate when waivers clear
         if recent_transactions:
             from utils.date_utils import DateScoringPeriodConverter
 
@@ -354,9 +365,41 @@ def build_free_agent_data(all_players: Dict[int, Any], free_agent_player: Any, w
                     for item in trans.items:
                         item_str = str(item)
                         if 'DROP' in item_str and free_agent_player.name in item_str:
-                            # Convert scoring period to date
-                            if hasattr(trans, 'scoring_period') and trans.scoring_period:
-                                waiver_clear_date = DateScoringPeriodConverter.scoring_period_to_date(trans.scoring_period)
+                            # Get drop date and time if available
+                            drop_date = None
+                            extra_day_penalty = 0
+
+                            # Try to use trans.date (processDate from ESPN) for better timing
+                            if hasattr(trans, 'date') and trans.date:
+                                # Parse ESPN's processDate (may be timestamp with time info)
+                                if isinstance(trans.date, datetime):
+                                    drop_datetime = trans.date
+                                    drop_date = drop_datetime.date()
+
+                                    # If dropped after typical game start time (7:30pm ET),
+                                    # add 1 extra day since waiver period starts next day
+                                    drop_hour_decimal = drop_datetime.hour + (drop_datetime.minute / 60.0)
+                                    if drop_hour_decimal >= GAME_START_HOUR_ET:
+                                        extra_day_penalty = 1
+                                elif isinstance(trans.date, (int, float)):
+                                    # Unix timestamp (milliseconds)
+                                    drop_datetime = datetime.fromtimestamp(trans.date / 1000)
+                                    drop_date = drop_datetime.date()
+                                    drop_hour_decimal = drop_datetime.hour + (drop_datetime.minute / 60.0)
+                                    if drop_hour_decimal >= GAME_START_HOUR_ET:
+                                        extra_day_penalty = 1
+
+                            # Fallback to scoring_period if trans.date unavailable
+                            if not drop_date and hasattr(trans, 'scoring_period') and trans.scoring_period:
+                                drop_date = DateScoringPeriodConverter.scoring_period_to_date(trans.scoring_period)
+                                # Conservative: assume evening drop (add extra day)
+                                extra_day_penalty = 1
+
+                            if drop_date:
+                                # Calculate when waivers clear
+                                # Base waiver period + extra day if dropped after games started
+                                total_days = WAIVER_PERIOD_DAYS + extra_day_penalty
+                                waiver_clear_date = drop_date + timedelta(days=total_days)
                             break
     
     return {

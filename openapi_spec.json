@@ -968,7 +968,7 @@
                                 "type": "string",
                                 "format": "date",
                                 "nullable": true,
-                                "description": "Date (YYYY-MM-DD) when player clears waivers and becomes a free agent"
+                                "description": "Date (YYYY-MM-DD) when player clears waivers and can be added. Calculated as drop_date + waiver_period (2 days). If dropped after 7:30pm ET (games likely started), adds 1 extra day. null if player is not on waivers or drop date unknown. Example: dropped Monday 2pm → clears Wednesday; dropped Monday 8pm → clears Thursday."
                               },
                               "positions_eligible": {
                                 "type": "array",
