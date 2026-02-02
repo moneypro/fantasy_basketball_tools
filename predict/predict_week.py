@@ -7,6 +7,7 @@ from predict.internal.roster_week_predictor import RosterWeekPredictor
 from utils.create_league import create_league
 from common.styling import get_table_css
 from common.week import Week
+from utils.espn_cache import cached_scoreboard
 import os
 
 
@@ -112,7 +113,7 @@ def predict_match_up(league: League, week_index: int, team_scores: Dict[str, Tup
         ["Home Team", "Estimate Points", "# of Games", "Away Team", "Estimate Points", "# of Games", "+/-"]
     ]
     
-    for matchup in league.scoreboard(week_index):
+    for matchup in cached_scoreboard(league, week_index):
         home_team_name = matchup.home_team.team_name
         away_team_name = matchup.away_team.team_name
         

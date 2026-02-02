@@ -26,6 +26,10 @@ from scheduling.schedule_free_agent_add import schedule_with_at
 from auth.decorators import require_api_key, optional_api_key
 from auth.api_key import get_api_key_manager
 from auth.admin import require_admin
+from utils.espn_cache import (
+    cached_scoreboard, cached_box_scores, cached_free_agents,
+    invalidate_cache, get_cache_stats
+)
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -129,6 +133,14 @@ def health():
         "status": "healthy",
         "league": league_status,
         "service": "fantasy-basketball-api"
+    }), 200
+
+@app.route('/api/v1/cache/stats', methods=['GET'])
+def cache_stats():
+    """Get ESPN API cache statistics"""
+    return jsonify({
+        "status": "success",
+        "caches": get_cache_stats()
     }), 200
 
 @app.route('/privacy', methods=['GET'])
@@ -742,6 +754,10 @@ def refresh_league():
             except Exception as e:
                 print(f"⚠️ Could not delete NBA stats cache: {e}")
 
+        # Clear ESPN API cache (in-memory TTL caches)
+        invalidate_cache()
+        print("✅ Cleared ESPN API in-memory caches")
+
         # Fetch fresh league data from ESPN
         from utils.create_league import create_league
         new_league = create_league(use_local_cache=False)
@@ -767,7 +783,8 @@ def refresh_league():
             "nba_stats_data": {
                 "teams_loaded": len(nba_stats) if nba_stats else 0,
                 "cache_cleared": nba_cache_cleared
-            }
+            },
+            "espn_api_cache": "cleared"
         }), 200
 
     except Exception as e:
@@ -1135,12 +1152,12 @@ def get_scoreboard(week_index):
         from utils.date_utils import DateScoringPeriodConverter
         current_period = DateScoringPeriodConverter.get_current_scoring_period()
         
-        # Get scoreboard for the week
-        scoreboard = league.scoreboard(week_index)
-        
-        # Get live box scores for accurate current scores
+        # Get scoreboard for the week (cached)
+        scoreboard = cached_scoreboard(league, week_index)
+
+        # Get live box scores for accurate current scores (cached)
         try:
-            box_scores = league.box_scores(week_index, current_period, matchup_total=True)
+            box_scores = cached_box_scores(league, week_index, current_period, matchup_total=True)
         except:
             box_scores = None
         
@@ -1292,8 +1309,8 @@ def get_current_matchup_prediction():
             league, week_index, day_of_week_override, injury_status_list
         )
 
-        # Get matchups for this week
-        scoreboard = league.scoreboard(week_index)
+        # Get matchups for this week (cached)
+        scoreboard = cached_scoreboard(league, week_index)
 
         # Find the specific matchup if team_id provided
         target_matchup = None
@@ -1502,7 +1519,7 @@ def get_team_info(team_id):
         
         # Find the matchup for this team
         matchup_data = None
-        for matchup in league.scoreboard(week_index):
+        for matchup in cached_scoreboard(league, week_index):
             if matchup.home_team.team_id == team_id:
                 matchup_data = {
                     "home_team": matchup.home_team.team_name,

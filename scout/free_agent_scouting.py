@@ -6,6 +6,7 @@ from datetime import timedelta, date, datetime
 import requests
 import json
 import os
+from utils.espn_cache import cached_free_agents
 
 # Waiver period configuration
 # Number of days a player stays on waivers after being dropped
@@ -618,8 +619,8 @@ def scout_free_agents(league: League, team_id: int = None, week_index: int = Non
         for player in team.roster:
             all_players[player.playerId] = player
 
-    # Get all free agents
-    free_agents_list = league.free_agents(size=1000)
+    # Get all free agents (cached)
+    free_agents_list = cached_free_agents(league, size=1000)
     for player in free_agents_list:
         all_players[player.playerId] = player
 

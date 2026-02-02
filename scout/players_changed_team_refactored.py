@@ -4,6 +4,7 @@ from typing import List, Dict, Any
 
 from espn_api.basketball import League
 from utils.create_league import create_league
+from utils.espn_cache import cached_free_agents
 
 
 @dataclass
@@ -62,7 +63,7 @@ def get_all_players_team_map(league: League, year: int) -> Dict[int, Dict[str, A
                 'avg_fpts': player.stats.get(f'{year}_total', {}).get('applied_avg', 0.0)
             }
     # Add all free agents (may overwrite, but that's fine for this validation)
-    for player in league.free_agents(size=1000):
+    for player in cached_free_agents(league, size=1000):
         player_team[player.playerId] = {
             'name': player.name,
             'team_abbr': getattr(player, 'proTeam', 'Unknown'),

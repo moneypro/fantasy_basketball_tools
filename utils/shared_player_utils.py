@@ -3,6 +3,7 @@ from typing import Dict, List
 
 from espn_api.basketball import League
 from nba_api.stats.static import teams as nba_teams_static
+from utils.espn_cache import cached_free_agents
 
 
 def get_all_players(league: League) -> Dict[int, any]:
@@ -20,7 +21,7 @@ def get_all_players(league: League) -> Dict[int, any]:
     players: List[any] = []
     for team in league.teams:
         players.extend(team.roster)
-    players.extend(league.free_agents(size=1000))
+    players.extend(cached_free_agents(league, size=1000))
     unique_players: Dict[int, any] = {p.playerId: p for p in players}
     return unique_players
 
@@ -34,7 +35,7 @@ def get_free_agents(league: League) -> Dict[int, any]:
     Returns:
         Dictionary mapping player IDs to free agent player objects
     """
-    free_agents_list = league.free_agents(size=1000)
+    free_agents_list = cached_free_agents(league, size=1000)
     return {p.playerId: p for p in free_agents_list}
 
 

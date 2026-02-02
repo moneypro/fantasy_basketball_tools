@@ -3,6 +3,7 @@ from typing import Optional, Tuple, List, Dict
 
 from espn_api.basketball.constant import PRO_TEAM_MAP
 from espn_api.basketball.league import League
+from utils.espn_cache import cached_pro_schedule
 
 
 class Week:
@@ -47,7 +48,7 @@ class Week:
         Returns:
             List of lists where each inner list contains team names playing that day
         """
-        return [[PRO_TEAM_MAP[team_id] for team_id in self.league._get_pro_schedule(scoring_period).keys()] 
+        return [[PRO_TEAM_MAP[team_id] for team_id in cached_pro_schedule(self.league, scoring_period).keys()]
                 for scoring_period in range(self.scoring_period[0], self.scoring_period[1] + 1)]
 
     @staticmethod
