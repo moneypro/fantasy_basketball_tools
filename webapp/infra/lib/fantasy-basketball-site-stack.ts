@@ -33,6 +33,17 @@ export class FantasyBasketballSiteStack extends Stack {
       name: AMPLIFY_APP_NAME,
       platform: 'WEB',
       enableBranchAutoDeletion: false,
+      customHeaders: [
+        'customHeaders:',
+        "  - pattern: '**'",
+        '    headers:',
+        "      - key: 'Strict-Transport-Security'",
+        "        value: 'max-age=31536000; includeSubDomains'",
+        "      - key: 'X-Content-Type-Options'",
+        "        value: 'nosniff'",
+        "      - key: 'Referrer-Policy'",
+        "        value: 'strict-origin-when-cross-origin'",
+      ].join('\n'),
       buildSpec: [
         'version: 1',
         'frontend:',
@@ -103,8 +114,11 @@ export class FantasyBasketballSiteStack extends Stack {
       code: lambda.Code.fromAsset(
         path.join(__dirname, '..', '..', 'lambda', 'build'),
       ),
-      timeout: Duration.seconds(30),
+      timeout: Duration.seconds(15),
       memorySize: 512,
+      // The API is public, so cap how much of the account's 1000-execution
+      // concurrency pool a flood against this one function can consume.
+      reservedConcurrentExecutions: 25,
       logRetention: logs.RetentionDays.ONE_MONTH,
       environment: {
         ESPN_SECRET_NAME: ESPN_SECRET_NAME,
@@ -229,7 +243,7 @@ export class FantasyBasketballSiteStack extends Stack {
         // allows it and the CDK CLI may tag the assumed session.
         actions: ['sts:AssumeRole', 'sts:TagSession'],
         resources: [
-          `arn:aws:iam::*:role/cdk-hnb659fds-*-role-${this.account}-${this.region}`,
+          `arn:aws:iam::${this.account}:role/cdk-hnb659fds-*-role-${this.account}-${this.region}`,
         ],
       }),
     );

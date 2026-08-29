@@ -18,6 +18,7 @@ from __future__ import annotations
 import json
 import logging
 import os
+import re
 import sys
 import traceback
 from datetime import datetime, timezone
@@ -106,6 +107,27 @@ def _respond(
         "body": json.dumps(body, default=str),
         "isBase64Encoded": False,
     }
+
+
+# The vendored espn_api library builds its access-denied message out of the live
+# cookies (espn_requests.py: "League N cannot be accessed with espn_s2=... and
+# swid=..."). That message must never reach a caller or CloudWatch, so scrub any
+# credential material out of a string before it leaves this module.
+_CRED_PATTERN = re.compile(r"(espn_s2|swid)(\s*[=:]\s*)(\S+)", re.IGNORECASE)
+
+
+def _redact(text: str) -> str:
+    if not text:
+        return text
+    scrubbed = _CRED_PATTERN.sub(r"\1\2<redacted>", text)
+    try:
+        for key in ("ESPN_S2", "SWID"):
+            value = fb_league.get_espn_credentials().get(key)
+            if value and len(value) >= 8:
+                scrubbed = scrubbed.replace(value, "<redacted>")
+    except Exception:  # noqa: BLE001 - redaction must never raise
+        pass
+    return scrubbed
 
 
 def _error(event: Dict[str, Any], status: int, message: str) -> Dict[str, Any]:
@@ -402,8 +424,18 @@ def lambda_handler(event: Dict[str, Any], context: Any = None) -> Dict[str, Any]
     except NotFound as exc:
         return _error(event, 404, str(exc))
     except Exception as exc:  # noqa: BLE001 - top-level safety net
-        LOG.error("Unhandled error: %s\n%s", exc, traceback.format_exc())
-        return _error(event, 500, "internal error: %s" % exc)
+        # Never put the exception text in the response: it can carry the
+        # league's ESPN session cookie (see _redact) or internal AWS detail.
+        # Callers get a fixed message plus a request id to quote; the detail
+        # goes to CloudWatch, redacted.
+        request_id = getattr(context, "aws_request_id", "-")
+        LOG.error(
+            "Unhandled %s (request %s): %s",
+            type(exc).__name__,
+            request_id,
+            _redact(traceback.format_exc()),
+        )
+        return _error(event, 500, "internal error (request %s)" % request_id)
 
 
 # Common alternate entry-point names, so the infra side can point at any of them.
