@@ -1,0 +1,8 @@
+# Lambda bundle dependencies for the public read-only fantasy basketball API.
+#
+# boto3/botocore are intentionally absent: they ship with the Lambda runtime.
+# The repo's forecast pipeline (predict/, common/, utils/) is pure stdlib apart
+# from these two packages.
+
+espn-api==0.45.1          # ESPN fantasy client (pulls in requests + urllib3/idna/certifi)
+cachetools>=5.3.0         # required by utils/espn_cache.py (in-memory TTL caches)

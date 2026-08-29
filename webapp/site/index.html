@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fantasy Basketball Forecast</title>
+<meta name="description" content="Public forecast board for the league: weekly point projections with standard deviations, standings, scoreboard and rosters.">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0D1218">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62.5..125,500..800&family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="/assets/css/app.css">
+<script src="/config.js"></script>
+</head>
+<body>
+
+<a class="skiplink" href="#main">Skip to content</a>
+
+<header class="topbar">
+  <div class="topbar__inner">
+    <a class="brand" href="#/forecast">
+      <span class="brand__mark" aria-hidden="true">&plusmn;</span>
+      <span class="brand__text">
+        <span class="brand__name" id="brandName">Fantasy Basketball</span>
+        <span class="brand__sub" id="brandSub">Forecast board</span>
+      </span>
+    </a>
+
+    <nav class="tabs" id="tabs" aria-label="Sections">
+      <a class="tab" href="#/league"     data-tab="league">League</a>
+      <a class="tab" href="#/forecast"   data-tab="forecast">Forecast</a>
+      <a class="tab" href="#/scoreboard" data-tab="scoreboard">Scoreboard</a>
+      <a class="tab" href="#/roster"     data-tab="roster">Roster</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main" tabindex="-1">
+  <div class="hero">
+    <div class="hero__inner">
+      <p class="hero__eyebrow" id="heroEyebrow">Loading league</p>
+      <h1 class="hero__title" id="heroTitle">Forecast</h1>
+      <p class="hero__lede" id="heroLede"></p>
+    </div>
+  </div>
+
+  <div class="view" id="view" role="region" aria-live="polite" aria-busy="true">
+    <!-- First-paint placeholder, replaced as soon as the app module runs. -->
+    <div class="tablewrap" aria-hidden="true">
+      <div class="skelrow"><span class="skel" style="flex:0 0 22%"></span><span class="skel" style="flex:1"></span><span class="skel" style="flex:1"></span><span class="skel" style="flex:1"></span></div>
+      <div class="skelrow"><span class="skel" style="flex:0 0 19%"></span><span class="skel" style="flex:1"></span><span class="skel" style="flex:1"></span><span class="skel" style="flex:1"></span></div>
+      <div class="skelrow"><span class="skel" style="flex:0 0 24%"></span><span class="skel" style="flex:1"></span><span class="skel" style="flex:1"></span><span class="skel" style="flex:1"></span></div>
+      <div class="skelrow"><span class="skel" style="flex:0 0 17%"></span><span class="skel" style="flex:1"></span><span class="skel" style="flex:1"></span><span class="skel" style="flex:1"></span></div>
+      <div class="skelrow"><span class="skel" style="flex:0 0 21%"></span><span class="skel" style="flex:1"></span><span class="skel" style="flex:1"></span><span class="skel" style="flex:1"></span></div>
+      <div class="skelrow"><span class="skel" style="flex:0 0 20%"></span><span class="skel" style="flex:1"></span><span class="skel" style="flex:1"></span><span class="skel" style="flex:1"></span></div>
+    </div>
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="foot__inner">
+    <p class="foot__line">Read-only preview of the league. No accounts, no sign-in &mdash; everyone sees the same board.</p>
+    <p class="foot__line foot__line--dim" id="footMeta"></p>
+  </div>
+</footer>
+
+<script type="module" src="/assets/js/app.js"></script>
+</body>
+</html>

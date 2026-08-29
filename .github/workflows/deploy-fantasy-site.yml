@@ -1,0 +1,92 @@
+name: Deploy fantasy basketball site
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'webapp/**'
+      - '.github/workflows/deploy-fantasy-site.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: fantasy-basketball-site
+  cancel-in-progress: false
+
+env:
+  AWS_REGION: us-west-2
+  STACK_NAME: FantasyBasketballSiteStack
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: webapp/infra/package-lock.json
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: us-west-2
+
+      - name: Build lambda bundle
+        run: ./webapp/scripts/build-lambda.sh
+
+      - name: Install CDK dependencies
+        working-directory: webapp/infra
+        run: npm ci
+
+      - name: Deploy CDK stack
+        working-directory: webapp/infra
+        run: npx cdk deploy --require-approval never
+
+      - name: Push ESPN credentials into Secrets Manager
+        env:
+          ESPN_S2: ${{ secrets.ESPN_S2 }}
+          SWID: ${{ secrets.SWID }}
+          LEAGUE_ID: ${{ secrets.LEAGUE_ID }}
+        run: |
+          set -euo pipefail
+          if [[ -z "$ESPN_S2" || -z "$SWID" || -z "$LEAGUE_ID" ]]; then
+            echo "ERROR: repository secrets ESPN_S2, SWID and LEAGUE_ID must all be set" >&2
+            exit 1
+          fi
+          SECRET_NAME="$(aws cloudformation describe-stacks \
+            --stack-name "$STACK_NAME" \
+            --region "$AWS_REGION" \
+            --query "Stacks[0].Outputs[?OutputKey=='EspnSecretName'].OutputValue | [0]" \
+            --output text)"
+          if [[ -z "$SECRET_NAME" || "$SECRET_NAME" == "None" ]]; then
+            echo "ERROR: could not read EspnSecretName from stack $STACK_NAME" >&2
+            exit 1
+          fi
+          SECRET_JSON="$(jq -n \
+            --arg espn_s2 "$ESPN_S2" \
+            --arg swid "$SWID" \
+            --arg league_id "$LEAGUE_ID" \
+            '{ESPN_S2: $espn_s2, SWID: $swid, LEAGUE_ID: $league_id}')"
+          aws secretsmanager put-secret-value \
+            --secret-id "$SECRET_NAME" \
+            --secret-string "$SECRET_JSON" \
+            --region "$AWS_REGION" >/dev/null
+          echo "Updated $SECRET_NAME"
+
+      - name: Deploy static site to Amplify
+        run: ./webapp/scripts/deploy-amplify.sh
