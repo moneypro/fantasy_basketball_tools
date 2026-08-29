@@ -56,6 +56,99 @@ else
   echo "    warning: $REQUIREMENTS not found, skipping dependency install"
 fi
 
+# --- security patch: espn_api's own access-denied exception ---------------
+# espn-api==0.45.1 builds its 401 exception out of the LIVE session cookies:
+#   raise ESPNAccessDenied(f"League {id} cannot be accessed with "
+#                           f"espn_s2={self.cookies.get('espn_s2')} and "
+#                           f"swid={self.cookies.get('SWID')}")
+# (webapp/lambda/build/espn_api/requests/espn_requests.py). That means the
+# league owner's ESPN session lives inside the exception's own message the
+# moment ESPN answers 401 -- before handler.py's _redact()/fixed-error-message
+# layer (see webapp/lambda/api/handler.py) ever gets a chance to touch it.
+# _redact() stays as defense in depth for anything else that might leak
+# credentials into a log or response, but the cookie should never be
+# assembled into a string in the first place. Patch it out of the installed
+# package at build time.
+#
+# This MUST fail the build loudly, not silently no-op, if a future espn-api
+# version changes this line -- see the PATTERN check in the inline patch
+# script below.
+ESPN_REQUESTS_FILE="$BUILD_DIR/espn_api/requests/espn_requests.py"
+if [[ -f "$REQUIREMENTS" ]] && grep -q '^espn-api' "$REQUIREMENTS"; then
+  if [[ ! -f "$ESPN_REQUESTS_FILE" ]]; then
+    echo "ERROR: espn-api is in $REQUIREMENTS but $ESPN_REQUESTS_FILE" >&2
+    echo "       does not exist after pip install. Package layout changed?" >&2
+    exit 1
+  fi
+
+  echo "==> Patching espn_api's ESPNAccessDenied to drop the session cookies"
+  "$PYTHON_BIN" - "$ESPN_REQUESTS_FILE" <<'PATCH_ESPN_REQUESTS'
+import re
+import sys
+
+path = sys.argv[1]
+with open(path, "r", encoding="utf-8") as fh:
+    src = fh.read()
+
+# Matches the exact vulnerable statement in espn-api==0.45.1. Deliberately
+# specific (not just "raise ESPNAccessDenied(...)") so that if a dependency
+# bump reflows, renames, or otherwise changes this line, the pattern stops
+# matching and the build fails below instead of silently shipping the
+# original credential-leaking code.
+PATTERN = re.compile(
+    r"raise ESPNAccessDenied\(f\"League \{self\.league_id\} cannot be accessed "
+    r"with espn_s2=\{self\.cookies\.get\('espn_s2'\)\} and "
+    r"swid=\{self\.cookies\.get\('SWID'\)\}\"\)"
+)
+
+REPLACEMENT = (
+    "raise ESPNAccessDenied("
+    'f"League {self.league_id} cannot be accessed: ESPN denied the request '
+    '(credentials rejected or expired)")'
+)
+
+matches = PATTERN.findall(src)
+if len(matches) != 1:
+    sys.stderr.write(
+        "ERROR: expected exactly 1 occurrence of the credential-leaking "
+        "ESPNAccessDenied f-string in\n"
+        f"       {path}\n"
+        f"       found {len(matches)}. espn-api's source has changed "
+        "(version bump?) in a way this\n"
+        "       patch does not recognise. Update the PATTERN in "
+        "webapp/scripts/build-lambda.sh to\n"
+        "       match the new line before proceeding -- until then, the "
+        "live ESPN session cookie\n"
+        "       would ship inside this exception's message.\n"
+    )
+    sys.exit(1)
+
+patched = PATTERN.sub(REPLACEMENT, src, count=1)
+
+# Belt and suspenders: the substitution above is the only place in this file
+# that reads the raw cookie values out of self.cookies for use in a message;
+# confirm it actually left no such reference behind.
+if "cookies.get('espn_s2')" in patched or "cookies.get('SWID')" in patched:
+    sys.stderr.write(
+        "ERROR: patch replaced the known line but another cookies.get('espn_s2'"
+        "'/'SWID') reference remains in the file; aborting rather than shipping "
+        "a partial fix.\n"
+    )
+    sys.exit(1)
+
+with open(path, "w", encoding="utf-8") as fh:
+    fh.write(patched)
+
+print(f"    patched {path}")
+PATCH_ESPN_REQUESTS
+
+  # The patched file must still be valid Python before it ships.
+  "$PYTHON_BIN" -m py_compile "$ESPN_REQUESTS_FILE"
+  rm -rf "$BUILD_DIR/espn_api/requests/__pycache__"
+else
+  echo "    espn-api not in $REQUIREMENTS; skipping ESPNAccessDenied patch"
+fi
+
 # --- shared repo code -----------------------------------------------------
 for pkg in "${SHARED_PACKAGES[@]}"; do
   if [[ -d "$REPO_ROOT/$pkg" ]]; then
