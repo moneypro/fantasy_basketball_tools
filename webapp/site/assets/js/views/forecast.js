@@ -1,16 +1,16 @@
 import { api } from '../api.js';
 import {
   el, mount, block, tableWrap, skeletonTable, errorState, emptyState,
-  round0, signed, sortableTh, applySort, injuryChips,
-  projectionScale, projectionCell, projectionLegend, weekStepper, relativeTime
+  round0, signed, sortableTh, applySort, injuryMarks,
+  projectionScale, intervalBar, projectionLegend, weekChips, relativeTime
 } from '../ui.js';
 import { predictionScaffold } from '../scaffold.js';
 
 const COLUMNS = [
   { key: 'teamName', label: 'Team', numeric: false },
-  { key: 'games', label: '# of games', numeric: true },
-  { key: 'mean', label: 'Projected', numeric: false },
-  { key: 'meanWithDtd', label: 'With day-to-day', numeric: true }
+  { key: 'games', label: 'G', numeric: true },
+  { key: 'mean', label: 'Projected', numeric: true },
+  { key: 'meanWithDtd', label: 'With DTD', numeric: true }
 ];
 
 const ACCESSORS = {
@@ -25,11 +25,11 @@ export function forecastHero(league, week) {
     'Each day the model takes the nine highest-scoring available players on a roster and adds up their means and variances, ' +
     'then carries that total through to Sunday.';
 
-  // With no league loaded, say nothing about whether the season is running.
   if (!league) return { title: 'Forecast', lede: method };
 
   return {
     title: `Week ${week} forecast`,
+    numeral: String(week).padStart(2, '0'),
     lede:
       `${method} ` +
       (league.seasonComplete
@@ -42,14 +42,19 @@ export async function renderForecast(root, ctx) {
   let sort = { key: 'mean', dir: 'desc' };
   const week = ctx.week;
 
+  const chips = weekChips(week, ctx.minWeek, ctx.maxWeek, (w) => ctx.setWeek(w));
+
   const toolbar = el(
     'div',
     { class: 'toolbar' },
-    weekStepper(week, ctx.minWeek, ctx.maxWeek, (w) => ctx.setWeek(w)),
+    chips,
     el('span', { class: 'block__note', id: 'forecastMeta', text: 'Loading forecast…' })
   );
 
-  mount(root, toolbar, block(`Week ${week} projection`, 'Loading', skeletonTable(12, 5)));
+  mount(root, toolbar, block(`Week ${week} board`, 'Loading', skeletonTable(12, 6)));
+
+  const current = chips.querySelector('.weekchip[aria-current="true"]');
+  if (current) current.scrollIntoView({ block: 'nearest', inline: 'center' });
 
   let data;
   try {
@@ -58,7 +63,7 @@ export async function renderForecast(root, ctx) {
     mount(
       root,
       toolbar,
-      block(`Week ${week} projection`, null, errorState(err, () => ctx.reload())),
+      block(`Week ${week} board`, null, errorState(err, () => ctx.reload())),
       predictionScaffold(week, ctx.maxWeek)
     );
     toolbar.querySelector('#forecastMeta').textContent = 'Forecast unavailable';
@@ -69,19 +74,19 @@ export async function renderForecast(root, ctx) {
 
   const generated = relativeTime(data.generatedAt);
   toolbar.querySelector('#forecastMeta').textContent = generated
-    ? `Generated ${generated}`
-    : `${teams.length} teams`;
+    ? `Generated ${generated} · sorted by projected points`
+    : `${teams.length} teams · sorted by projected points`;
 
   if (!teams.length) {
     mount(
       root,
       toolbar,
       block(
-        `Week ${week} projection`,
+        `Week ${week} board`,
         null,
         emptyState(
           `No forecast for week ${week}`,
-          'Nothing has been generated for this week. Pick another week from the selector above.'
+          'Nothing has been generated for this week. Pick another week from the strip above.'
         )
       ),
       predictionScaffold(week, ctx.maxWeek)
@@ -91,7 +96,11 @@ export async function renderForecast(root, ctx) {
 
   const scale = projectionScale(teams);
 
-  const projBlock = el('div');
+  // Desktop table and mobile list live in separate sub-containers inside the
+  // same board block; CSS shows one or the other by viewport width.
+  const desktopWrap = el('div', { class: 'fboard-desktop' });
+  const mobileWrap = el('div', { class: 'fboard-mobile' });
+  const boardBlock = el('div', null, desktopWrap, mobileWrap);
   const daysBlock = el('div');
 
   /* ---------------------------------------------------- day column model */
@@ -109,22 +118,23 @@ export async function renderForecast(root, ctx) {
     dayLookup.set(t.teamId, map);
   }
 
-  /* ------------------------------------------------------------- drawing */
+  /* ------------------------------------------------------ desktop table */
 
-  const drawProjection = (rows) => {
+  const drawDesktop = (rows) => {
     const thead = el(
       'thead',
       null,
       el(
         'tr',
         null,
-        el('th', { scope: 'col', class: 'col-rank', text: '#' }),
-        ...COLUMNS.map((c) => {
+        el('th', { scope: 'col', class: 'col-rank', text: 'Rk' }),
+        ...COLUMNS.map((c, i) => {
           const th = sortableTh(c, sort, onSort);
           if (c.key === 'teamName') th.classList.add('col-team');
+          if (i === 2) th.setAttribute('colspan', '2'); // Projected number + range bar
           return th;
         }),
-        el('th', { scope: 'col', text: 'Injuries' })
+        el('th', { scope: 'col', text: 'Unavailable' })
       )
     );
 
@@ -133,6 +143,7 @@ export async function renderForecast(root, ctx) {
       null,
       ...rows.map((t, i) => {
         const gap = typeof t.meanWithDtd === 'number' && typeof t.mean === 'number' ? t.meanWithDtd - t.mean : 0;
+        const hasDelta = Math.round(gap) > 0;
         return el(
           'tr',
           null,
@@ -143,25 +154,83 @@ export async function renderForecast(root, ctx) {
             el('span', { class: 'teamname', text: t.teamName || '—' })
           ),
           el('td', { class: 'num dim', text: t.games != null ? String(t.games) : '—' }),
-          el('td', null, projectionCell(t, scale, i)),
           el(
             'td',
-            { class: 'num' },
-            el('span', { text: round0(t.meanWithDtd) }),
-            el('span', { class: 'dim', text: ` ± ${round0(t.stdDevWithDtd)}` }),
-            Math.round(gap) > 0
-              ? el('span', { style: { color: 'var(--flag)' }, text: `  ${signed(gap)}` })
-              : null
+            { class: 'proj' },
+            el('span', { class: 'proj__val', text: round0(t.mean) }),
+            el('span', { class: 'proj__sd', text: ` ± ${round0(t.stdDev)}` })
           ),
-          el('td', null, injuryChips(t.injuries))
+          el('td', null, intervalBar(t.mean, t.stdDev, scale, i)),
+          el(
+            'td',
+            { class: 'num', style: { whiteSpace: 'nowrap' } },
+            el('span', { class: 'dtdval', text: round0(t.meanWithDtd) }),
+            hasDelta ? el('span', { class: 'dtddelta', text: `  ${signed(gap)}` }) : null
+          ),
+          el('td', null, injuryMarks(t.injuries))
         );
       })
     );
 
     mount(
-      projBlock,
-      tableWrap(el('table', { class: 'grid grid--sticky' }, thead, tbody), `Week ${week} projection`),
+      desktopWrap,
+      tableWrap(el('table', { class: 'grid grid--sticky' }, thead, tbody), `Week ${week} forecast board`),
       projectionLegend()
+    );
+  };
+
+  /* ------------------------------------------------------- mobile board */
+
+  const drawMobile = (rows) => {
+    const list = el(
+      'div',
+      { class: 'fboard-mobile__list' },
+      ...rows.map((t, i) => {
+        const gap = typeof t.meanWithDtd === 'number' && typeof t.mean === 'number' ? t.meanWithDtd - t.mean : 0;
+        const hasDelta = Math.round(gap) > 0;
+        return el(
+          'div',
+          { class: 'fboard-mobile__row' },
+          el('span', { class: 'fboard-mobile__rank', text: String(i + 1) }),
+          el(
+            'div',
+            { class: 'fboard-mobile__mid' },
+            el('div', { class: 'fboard-mobile__name', text: t.teamName || '—' }),
+            el(
+              'div',
+              { class: 'fboard-mobile__barrow' },
+              el('span', { class: 'fboard-mobile__games', text: `${t.games != null ? t.games : '—'}g` }),
+              intervalBar(t.mean, t.stdDev, scale, i, true)
+            )
+          ),
+          el(
+            'div',
+            { class: 'fboard-mobile__stat' },
+            el(
+              'div',
+              null,
+              el('span', { class: 'proj__val', text: round0(t.mean) }),
+              el('span', { class: 'proj__sd', text: ` ±${round0(t.stdDev)}` })
+            ),
+            hasDelta ? el('div', { class: 'fboard-mobile__delta', text: `${signed(gap)} w/ DTD` }) : null
+          )
+        );
+      })
+    );
+
+    mount(
+      mobileWrap,
+      el(
+        'div',
+        { class: 'fboard-mobile__head' },
+        el('span', { text: 'Team' }),
+        el('span', { text: 'Projected ▼' })
+      ),
+      list,
+      el('p', {
+        class: 'fboard-mobile__note',
+        text: 'The day-by-day split is further down the page. Read-only — everyone sees the same board.'
+      })
     );
   };
 
@@ -224,7 +293,8 @@ export async function renderForecast(root, ctx) {
 
   const drawAll = () => {
     const rows = applySort(teams, sort, ACCESSORS);
-    drawProjection(rows);
+    drawDesktop(rows);
+    drawMobile(rows);
     drawDays(rows);
   };
 
@@ -239,7 +309,11 @@ export async function renderForecast(root, ctx) {
   mount(
     root,
     toolbar,
-    block(`Week ${week} projection`, 'Sorted by projected points — click any heading to re-sort', projBlock),
+    block(
+      `Week ${week} board`,
+      'Sorted by projected points — click any heading to re-sort',
+      boardBlock
+    ),
     block('Remaining days, cumulative', 'Same order as above', daysBlock),
     predictionScaffold(week, ctx.maxWeek)
   );

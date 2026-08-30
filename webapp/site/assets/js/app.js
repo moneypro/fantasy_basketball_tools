@@ -22,6 +22,7 @@ const dom = {
   view: document.getElementById('view'),
   tabs: document.getElementById('tabs'),
   heroEyebrow: document.getElementById('heroEyebrow'),
+  heroNumeral: document.getElementById('heroNumeral'),
   heroTitle: document.getElementById('heroTitle'),
   heroLede: document.getElementById('heroLede'),
   brandName: document.getElementById('brandName'),
@@ -84,6 +85,14 @@ function setHero(route) {
 
   dom.heroTitle.textContent = hero.title;
   dom.heroLede.textContent = hero.lede;
+
+  if (hero.numeral) {
+    dom.heroNumeral.textContent = hero.numeral;
+    dom.heroNumeral.classList.add('hero__numeral--on');
+  } else {
+    dom.heroNumeral.textContent = '';
+    dom.heroNumeral.classList.remove('hero__numeral--on');
+  }
 
   mount(dom.heroEyebrow);
   if (league) {

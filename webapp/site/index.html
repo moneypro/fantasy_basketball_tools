@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Fantasy Basketball Forecast</title>
 <meta name="description" content="Public forecast board for the league: weekly point projections with standard deviations, standings, scoreboard and rosters.">
-<meta name="color-scheme" content="dark">
-<meta name="theme-color" content="#0D1218">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#E9E6E0">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -41,8 +41,13 @@
   <div class="hero">
     <div class="hero__inner">
       <p class="hero__eyebrow" id="heroEyebrow">Loading league</p>
-      <h1 class="hero__title" id="heroTitle">Forecast</h1>
-      <p class="hero__lede" id="heroLede"></p>
+      <div class="hero__head">
+        <span class="hero__numeral" id="heroNumeral"></span>
+        <div class="hero__titlewrap">
+          <h1 class="hero__title" id="heroTitle">Forecast</h1>
+          <p class="hero__lede" id="heroLede"></p>
+        </div>
+      </div>
     </div>
   </div>
 

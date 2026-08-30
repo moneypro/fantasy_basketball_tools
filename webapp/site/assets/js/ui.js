@@ -254,49 +254,6 @@ export function projectionScale(teams) {
   };
 }
 
-/**
- * One projection cell: `mean ± sd` above a bar showing the ±1σ band, the
- * active-only projection, and the day-to-day-included projection. The gap
- * between the two ticks is the points riding on questionable players.
- */
-export function projectionCell(team, scale, index) {
-  const mean = team.mean;
-  const sd = isNum(team.stdDev) ? team.stdDev : 0;
-  const dtd = team.meanWithDtd;
-
-  const label =
-    `Projected ${round0(mean)} points, standard deviation ${round0(sd)}` +
-    (isNum(dtd) && Math.round(dtd) !== Math.round(mean) ? `, ${round0(dtd)} with day-to-day players` : '');
-
-  const bar = el('div', { class: 'ivl', role: 'img', 'aria-label': label, style: { '--i': String(index || 0) } });
-
-  const l = scale(mean - sd);
-  const r = scale(mean + sd);
-  if (l !== null && r !== null) {
-    bar.append(el('span', { class: 'ivl__band', style: { left: `${l}%`, width: `${Math.max(r - l, 1.2)}%` } }));
-  }
-
-  const m = scale(mean);
-  if (m !== null) bar.append(el('span', { class: 'ivl__tick', style: { left: `${m}%` } }));
-
-  const d = scale(dtd);
-  if (d !== null && isNum(dtd) && Math.round(dtd) !== Math.round(mean)) {
-    bar.append(el('span', { class: 'ivl__dtd', style: { left: `${d}%` } }));
-  }
-
-  return el(
-    'div',
-    { class: 'proj' },
-    el(
-      'div',
-      { class: 'proj__val' },
-      el('span', { text: round0(mean) }),
-      el('span', { class: 'proj__sd', text: ` ± ${round0(sd)}` })
-    ),
-    bar
-  );
-}
-
 const legendItem = (swatch, label) =>
   el(
     'span',
@@ -310,11 +267,58 @@ export function projectionLegend() {
     'div',
     { class: 'legend' },
     legendItem('band', '±1 standard deviation'),
-    legendItem('tick', 'active players only'),
-    legendItem('dtd', 'day-to-day included'),
+    legendItem('tick', 'mean'),
     el('span', { class: 'legend__sep', 'aria-hidden': 'true', text: '│' }),
-    legendItem('out', 'out'),
-    legendItem('d2d', 'day to day')
+    el('span', { class: 'legend__item' }, el('span', { class: 'legend__mark legend__mark--out', text: 'Name' }), ' out'),
+    el('span', { class: 'legend__item' }, el('span', { class: 'legend__mark legend__mark--dtd', text: 'Name' }), ' day to day')
+  );
+}
+
+/* --------------------------------------------------- forecast board bits */
+
+/**
+ * Just the ±1σ band + mean tick, with no value text — the forecast board
+ * puts the number in its own column and the bar in the next one.
+ */
+export function intervalBar(mean, sd, scale, index, thin) {
+  const label = `Projected ${round0(mean)} points, standard deviation ${round0(isNum(sd) ? sd : 0)}`;
+  const bar = el('div', {
+    class: `ivl${thin ? ' ivl--thin' : ''}`,
+    role: 'img',
+    'aria-label': label,
+    style: { '--i': String(index || 0) }
+  });
+
+  const l = scale(mean - (isNum(sd) ? sd : 0));
+  const r = scale(mean + (isNum(sd) ? sd : 0));
+  if (l !== null && r !== null) {
+    bar.append(el('span', { class: 'ivl__band', style: { left: `${l}%`, width: `${Math.max(r - l, 1.2)}%` } }));
+  }
+
+  const m = scale(mean);
+  if (m !== null) bar.append(el('span', { class: 'ivl__tick', style: { left: `${m}%` } }));
+
+  return bar;
+}
+
+/**
+ * Injury marks rendered as underlined names — solid orange for out, dotted
+ * for day-to-day — instead of pill chips, so a row with several injuries
+ * still reads as prose rather than a wall of badges.
+ */
+export function injuryMarks(injuries) {
+  const out = (injuries && Array.isArray(injuries.out) ? injuries.out : []).filter(Boolean);
+  const dtd = (injuries && Array.isArray(injuries.dayToDay) ? injuries.dayToDay : []).filter(Boolean);
+
+  if (!out.length && !dtd.length) {
+    return el('span', { class: 'imark imark--full', text: '—' });
+  }
+
+  return el(
+    'div',
+    { class: 'imarks' },
+    ...out.map((n) => el('span', { class: 'imark imark--out', title: `Out: ${n}`, text: n })),
+    ...dtd.map((n) => el('span', { class: 'imark imark--dtd', title: `Day to day: ${n}`, text: n }))
   );
 }
 
@@ -404,5 +408,33 @@ export function weekStepper(week, minWeek, maxWeek, onChange) {
         on: { click: () => onChange(week + 1) }
       })
     )
+  );
+}
+
+/**
+ * Ledger-style week strip: a hairline with a dial dot, and every week as a
+ * clickable chip, the current one filled solid. Used by the forecast board
+ * in place of the plain select-and-arrows stepper.
+ */
+export function weekChips(week, minWeek, maxWeek, onChange) {
+  const chips = el('div', { class: 'weekchips', role: 'group', 'aria-label': 'Week' });
+  for (let w = minWeek; w <= maxWeek; w++) {
+    const current = w === week;
+    chips.append(
+      el('button', {
+        class: 'weekchip',
+        type: 'button',
+        'aria-current': current ? 'true' : null,
+        text: String(w).padStart(2, '0'),
+        on: { click: () => onChange(w) }
+      })
+    );
+  }
+
+  return el(
+    'div',
+    { class: 'weekbar' },
+    el('div', { class: 'weekdial' }, el('span', { class: 'weekdial__dot', 'aria-hidden': 'true' })),
+    chips
   );
 }
