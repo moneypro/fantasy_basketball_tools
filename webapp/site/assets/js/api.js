@@ -89,7 +89,23 @@ export function clearCache() {
   cache.clear();
 }
 
+async function snapshot(path) {
+  if (cache.has(path)) return cache.get(path);
+  let res;
+  try {
+    res = await fetch(path, { headers: { Accept: 'application/json' } });
+  } catch (err) {
+    throw new ApiError('Cannot reach the draft archive. Try again.', 0, 'network');
+  }
+  if (!res.ok) throw new ApiError('This draft snapshot is unavailable.', res.status, 'http');
+  const body = await res.json();
+  cache.set(path, body);
+  return body;
+}
+
 export const api = {
+  draftSeasons: () => snapshot('/data/draft/index.json'),
+  draft: (season) => snapshot(`/data/draft/${season}.json`),
   league: () => get('/api/league'),
   forecast: (week) => get('/api/forecast', { week }),
   scoreboard: (week) => get('/api/scoreboard', { week }),

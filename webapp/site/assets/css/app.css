@@ -166,6 +166,19 @@ button { font: inherit; color: inherit; }
 
 .tabs { display: flex; gap: 0.25rem; flex-wrap: wrap; }
 
+.draft-season-name { margin: 0 0 1rem; color: var(--muted); }
+.draft-notice { padding: 0.8rem 1rem; border-left: 3px solid var(--leather); background: var(--surface); line-height: 1.5; }
+.draft-winner { padding: 1.5rem; margin-bottom: 2rem; border: 1px solid var(--leather); }
+.draft-winner h2 { margin: 0.5rem 0; }
+.draft-winner p { margin: 0; }
+.draft-awards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; }
+.draft-awards .grid { min-width: 650px; }
+.draft-team { border-top: 1px solid var(--muted); scroll-margin-top: 2rem; }
+.draft-team summary { padding: 1rem 0; cursor: pointer; font-weight: 600; }
+.draft-team__body { padding: 0.5rem 0 1.5rem; }
+.draft-method p { margin: 0 0 0.8rem; line-height: 1.6; }
+@media (max-width: 1000px) { .draft-awards { grid-template-columns: 1fr; } }
+
 .tab {
   text-decoration: none;
   font-size: 0.83rem;

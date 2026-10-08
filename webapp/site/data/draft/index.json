@@ -1,0 +1,77 @@
+{
+  "generatedAt": "2026-10-08T03:26:05.541238+00:00",
+  "firstSeason": 2017,
+  "latestSeason": 2026,
+  "seasons": [
+    {
+      "season": 2026,
+      "seasonComplete": true,
+      "draftAvailable": true,
+      "missingPlayers": 0,
+      "benchmarkScoring": false
+    },
+    {
+      "season": 2025,
+      "seasonComplete": true,
+      "draftAvailable": true,
+      "missingPlayers": 0,
+      "benchmarkScoring": false
+    },
+    {
+      "season": 2024,
+      "seasonComplete": true,
+      "draftAvailable": true,
+      "missingPlayers": 0,
+      "benchmarkScoring": false
+    },
+    {
+      "season": 2023,
+      "seasonComplete": true,
+      "draftAvailable": true,
+      "missingPlayers": 0,
+      "benchmarkScoring": false
+    },
+    {
+      "season": 2022,
+      "seasonComplete": true,
+      "draftAvailable": true,
+      "missingPlayers": 0,
+      "benchmarkScoring": false
+    },
+    {
+      "season": 2021,
+      "seasonComplete": true,
+      "draftAvailable": true,
+      "missingPlayers": 0,
+      "benchmarkScoring": false
+    },
+    {
+      "season": 2020,
+      "seasonComplete": true,
+      "draftAvailable": true,
+      "missingPlayers": 0,
+      "benchmarkScoring": false
+    },
+    {
+      "season": 2019,
+      "seasonComplete": true,
+      "draftAvailable": true,
+      "missingPlayers": 0,
+      "benchmarkScoring": false
+    },
+    {
+      "season": 2018,
+      "seasonComplete": true,
+      "draftAvailable": true,
+      "missingPlayers": 0,
+      "benchmarkScoring": false
+    },
+    {
+      "season": 2017,
+      "seasonComplete": true,
+      "draftAvailable": true,
+      "missingPlayers": 1,
+      "benchmarkScoring": true
+    }
+  ]
+}
