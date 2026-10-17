@@ -2,7 +2,10 @@
 from collections import defaultdict
 
 
-def season_recap(year, league, players, benchmark_items):
+def season_recap(year, league, players, benchmark_items, *, points_basis='actual'):
+    if points_basis not in ('actual', 'projected'):
+        raise ValueError('points_basis must be actual or projected')
+    projected = points_basis == 'projected'
     scoring = league['settings']['scoringSettings']
     benchmark = scoring['scoringType'] not in ('H2H_POINTS', 'TOTAL_POINTS')
     weights = benchmark_items if benchmark else scoring['scoringItems']
@@ -12,13 +15,16 @@ def season_recap(year, league, players, benchmark_items):
     for pick in league.get('draftDetail', {}).get('picks', []):
         player = player_map.get(pick['playerId'], {})
         total = next((s for s in player.get('stats', [])
-                      if s.get('seasonId') == year and s.get('statSourceId') == 0
+                      if s.get('seasonId') == year and s.get('statSourceId') == (1 if projected else 0)
                       and s.get('statSplitTypeId') == 0), None)
         points = None
         if total is not None:
-            if not benchmark and total.get('appliedTotal') is not None:
+            if projected and total.get('stats'):
+                # Apply this league's weights to ESPN's full-season projections.
+                points = sum(float(total['stats'].get(str(w['statId']), 0)) * float(w['points']) for w in weights)
+            elif not benchmark and total.get('appliedTotal') is not None:
                 points = float(total['appliedTotal'])
-            elif total.get('stats') is not None:
+            elif total.get('stats') is not None and (not projected or total['stats']):
                 points = sum(float(total['stats'].get(str(w['statId']), 0)) * float(w['points']) for w in weights)
         picks.append({
             'playerId': pick['playerId'], 'name': player.get('fullName') or f"Player {pick['playerId']}",
@@ -64,11 +70,14 @@ def season_recap(year, league, players, benchmark_items):
             previous = team['totalPoints']
     status = league.get('status', {})
     missing = len(picks) - len(known)
-    # Incomplete coverage makes rank-based labels unreliable, so omit awards.
-    steals = sorted((p for p in known if p['value'] > 0), key=lambda p: (-p['value'], p['pick']))[:5] if not missing else []
-    busts = sorted((p for p in known if p['value'] < 0 and p['round'] <= 10), key=lambda p: (p['value'], p['pick']))[:5] if not missing else []
+    # Historical awards require complete coverage. Projection comparisons can
+    # be provisional; the page explicitly limits them to players with forecasts.
+    show_values = not missing or projected
+    steals = sorted((p for p in known if p['value'] > 0), key=lambda p: (-p['value'], p['pick']))[:5] if show_values else []
+    busts = sorted((p for p in known if p['value'] < 0 and p['round'] <= 10), key=lambda p: (p['value'], p['pick']))[:5] if show_values else []
     return {
         'season': year, 'leagueName': league['settings'].get('name', ''),
+        'pointsBasis': points_basis,
         'seasonComplete': status.get('latestScoringPeriod', 0) > status.get('finalScoringPeriod', 0),
         'scoringType': scoring['scoringType'], 'benchmarkScoring': benchmark,
         'draftAvailable': bool(picks), 'missingPlayers': missing,

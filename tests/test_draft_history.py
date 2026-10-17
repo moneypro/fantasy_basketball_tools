@@ -56,6 +56,43 @@ class DraftHistoryTests(unittest.TestCase):
         recap = season_recap(2025, self.league(), [self.player(i, None) for i in range(1, 4)], [{'statId': 0, 'points': 3}])
         self.assertEqual(recap['teams'][0]['totalPoints'], 400)
 
+    def test_projection_rankings_use_only_same_season_projected_totals(self):
+        players = []
+        for player_id, projected_stat in [(1, 10), (2, 50), (3, 20)]:
+            player = self.player(player_id, 99999)
+            player['player']['stats'].extend([
+                {'seasonId': 2024, 'statSourceId': 1, 'statSplitTypeId': 0, 'stats': {'0': 99999}},
+                {'seasonId': 2025, 'statSourceId': 1, 'statSplitTypeId': 1, 'stats': {'0': 99999}},
+                {'seasonId': 2025, 'statSourceId': 1, 'statSplitTypeId': 0,
+                 'appliedTotal': 99999, 'stats': {'0': projected_stat}},
+            ])
+            players.append(player)
+        recap = season_recap(2025, self.league(), players, [], points_basis='projected')
+        self.assertEqual(recap['pointsBasis'], 'projected')
+        self.assertEqual([(t['teamId'], t['rank'], t['totalPoints']) for t in recap['teams']],
+                         [(2, 1, 100), (1, 2, 60)])
+        self.assertEqual(recap['steals'][0]['playerId'], 2)
+        self.assertEqual(recap['busts'][0]['playerId'], 1)
+        self.assertEqual([p['playerId'] for p in recap['teams'][1]['topScorers']], [3, 1])
+        self.assertEqual(len(recap['teams'][1]['worstScorers']), 1)
+
+    def test_missing_projection_never_falls_back_to_actuals_or_empty_stats(self):
+        players = [self.player(1, 99999), self.player(2, None, statSourceId=1, stats={}),
+                   self.player(3, 0, statSourceId=1, stats={'0': 0})]
+        recap = season_recap(2025, self.league(), players, [], points_basis='projected')
+        self.assertEqual(recap['missingPlayers'], 2)
+        self.assertTrue(all(t['totalPoints'] is None and t['rank'] is None for t in recap['teams']))
+        self.assertEqual([p['playerId'] for p in recap['steals']], [3])
+        self.assertEqual(recap['busts'], [])
+        self.assertEqual(recap['teams'][0]['picks'][1]['points'], 0)
+
+    def test_projected_ties_share_rank(self):
+        players = [self.player(i, None, statSourceId=1, stats={'0': n})
+                   for i, n in [(1, 20), (2, 20), (3, 0)]]
+        recap = season_recap(2025, self.league(), players, [], points_basis='projected')
+        self.assertEqual([t['rank'] for t in recap['teams']], [1, 1])
+        self.assertEqual([p['scoringRank'] for t in recap['teams'] for p in t['picks']], [1, 3, 1])
+
 
 if __name__ == '__main__':
     unittest.main()

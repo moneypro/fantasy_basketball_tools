@@ -37,7 +37,9 @@ def fetch(creds, year, views, filters=None):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--season', type=int, default=2026, help='Latest ESPN season (ending year)')
+    parser.add_argument('--season', type=int, default=2027, help='Latest ESPN season (ending year)')
+    parser.add_argument('--projected', action='store_true', help='Use only full-season projections for the latest season')
+    parser.add_argument('--latest-only', action='store_true', help='Preserve existing historical snapshots; fetch only the requested season')
     args = parser.parse_args()
     creds = {k: os.environ.get(k) for k in ('ESPN_S2', 'SWID', 'LEAGUE_ID')}
     if not all(creds.values()):
@@ -48,7 +50,7 @@ def main():
             '--query', 'SecretString', '--output', 'text',
         ]))
     current = fetch(creds, args.season, ['mSettings', 'mTeam', 'mDraftDetail'])
-    years = sorted(set(current['status'].get('previousSeasons', []) + [args.season]), reverse=True)
+    years = [args.season] if args.latest_only else sorted(set(current['status'].get('previousSeasons', []) + [args.season]), reverse=True)
     benchmark = current['settings']['scoringSettings']['scoringItems']
     if current['settings']['scoringSettings']['scoringType'] != 'H2H_POINTS':
         raise RuntimeError('Latest season must have points scoring for the historical benchmark')
@@ -58,24 +60,37 @@ def main():
     recaps = []
     for year in years:
         league = current if year == args.season else fetch(creds, year, ['mSettings', 'mTeam', 'mDraftDetail'])
+        projected = args.projected and year == args.season
+        if projected:
+            draft = league.get('draftDetail', {})
+            picks = draft.get('picks', [])
+            if not draft.get('drafted') or not picks or any(p.get('playerId', 0) <= 0 for p in picks):
+                raise RuntimeError('Projected recap requires a completed draft with every selection recorded')
+            if len({p['playerId'] for p in picks}) != len(picks):
+                raise RuntimeError('Duplicate drafted players; refusing to publish rankings')
         ids = sorted({p['playerId'] for p in league.get('draftDetail', {}).get('picks', [])})
         players = []
         # Batching avoids oversized filter headers in leagues with large drafts.
         for start in range(0, len(ids), 80):
             filters = {'players': {'filterIds': {'value': ids[start:start + 80]},
-                       'filterStatsForTopScoringPeriodIds': {'value': league['status']['finalScoringPeriod'],
-                                                           'additionalValue': [f'00{year}', f'10{year}']}}}
+                       'filterStatsForTopScoringPeriodIds': {'value': 1 if projected else league['status']['finalScoringPeriod'],
+                                                           'additionalValue': [f'10{year}'] if projected else [f'00{year}']}}}
             players.extend(fetch(creds, year, ['kona_playercard'], filters).get('players', []))
-        recap = season_recap(year, league, players, benchmark)
+        recap = season_recap(year, league, players, benchmark, points_basis='projected' if projected else 'actual')
         recap.update(generatedAt=generated, benchmarkSeason=args.season)
         recaps.append(recap)
-        print(f"{year}: {len(ids)} picks, {recap['missingPlayers']} missing player totals", flush=True)
+        print(f"{year}: {len(ids)} picks, {recap['missingPlayers']} missing {recap['pointsBasis']} player totals", flush=True)
+    manifest_path = output / 'index.json'
+    seasons = {}
+    if args.latest_only and manifest_path.exists():
+        seasons = {r['season']: r for r in json.loads(manifest_path.read_text())['seasons']}
+    seasons.update({r['season']: {k: r[k] for k in ('season', 'seasonComplete', 'draftAvailable', 'missingPlayers', 'benchmarkScoring', 'pointsBasis')} for r in recaps})
     # Fetch every season successfully before replacing any published snapshots.
     for recap in recaps:
         (output / f"{recap['season']}.json").write_text(json.dumps(recap, ensure_ascii=False, separators=(',', ':')) + '\n')
-    manifest = {'generatedAt': generated, 'firstSeason': min(years), 'latestSeason': max(years),
-                'seasons': [{k: r[k] for k in ('season', 'seasonComplete', 'draftAvailable', 'missingPlayers', 'benchmarkScoring')} for r in recaps]}
-    (output / 'index.json').write_text(json.dumps(manifest, indent=2) + '\n')
+    manifest = {'generatedAt': generated, 'firstSeason': min(seasons), 'latestSeason': max(seasons),
+                'seasons': [seasons[year] for year in sorted(seasons, reverse=True)]}
+    manifest_path.write_text(json.dumps(manifest, indent=2) + '\n')
 
 
 if __name__ == '__main__':
