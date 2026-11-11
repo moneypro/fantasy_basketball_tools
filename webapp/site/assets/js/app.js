@@ -12,11 +12,12 @@ import { renderLeague, leagueHero } from './views/league.js';
 import { renderForecast, forecastHero } from './views/forecast.js';
 import { renderScoreboard, scoreboardHero } from './views/scoreboard.js';
 import { renderRoster, rosterHero } from './views/roster.js';
+import { renderDraft, draftHero } from './views/draft.js';
 
 const MIN_WEEK = 1;
 const MAX_WEEK = 23;
 const DEFAULT_TAB = 'forecast';
-const TABS = ['league', 'forecast', 'scoreboard', 'roster'];
+const TABS = ['league', 'forecast', 'scoreboard', 'roster', 'draft'];
 
 const dom = {
   view: document.getElementById('view'),
@@ -47,6 +48,7 @@ function parseRoute() {
 
   return {
     tab,
+    season: /^\d{4}$/.test(params.get('season') || '') ? Number(params.get('season')) : null,
     week: Number.isFinite(weekRaw) && weekRaw >= MIN_WEEK && weekRaw <= MAX_WEEK ? weekRaw : null,
     teamId: Number.isFinite(teamRaw) && teamRaw > 0 ? teamRaw : null
   };
@@ -56,6 +58,7 @@ function go(patch) {
   const current = parseRoute();
   const next = { ...current, ...patch };
   const params = new URLSearchParams();
+  if (next.season != null && next.tab === 'draft') params.set('season', String(next.season));
   if (next.week != null && (next.tab === 'forecast' || next.tab === 'scoreboard')) {
     params.set('week', String(next.week));
   }
@@ -79,7 +82,8 @@ function setHero(route) {
     league: () => leagueHero(league),
     forecast: () => forecastHero(league, route.week),
     scoreboard: () => scoreboardHero(league, route.week),
-    roster: () => rosterHero(league)
+    roster: () => rosterHero(league),
+    draft: () => draftHero(route.season)
   };
   const hero = heroes[route.tab]();
 
@@ -95,7 +99,9 @@ function setHero(route) {
   }
 
   mount(dom.heroEyebrow);
-  if (league) {
+  if (route.tab === 'draft') {
+    dom.heroEyebrow.append('League draft archive');
+  } else if (league) {
     // The league name already sits in the masthead; the eyebrow carries season state.
     const label = seasonLabel(league.season);
     if (label) dom.heroEyebrow.append(`${label} season`);
@@ -142,6 +148,25 @@ async function render() {
   const route = parseRoute();
 
   setTabs(route.tab);
+
+  // Historical snapshots work independently of the live ESPN API.
+  if (route.tab === 'draft') {
+    setHero(route);
+    const draftRoot = el('div');
+    mount(dom.view, draftRoot);
+    dom.view.setAttribute('aria-busy', 'true');
+    try {
+      await renderDraft(draftRoot, {
+        season: route.season,
+        setSeason: (season) => go({ season }),
+        reload: () => { clearCache(); render(); }
+      });
+    } catch (err) {
+      if (token === renderToken) mount(draftRoot, errorState(err, () => render()));
+    }
+    if (token === renderToken) dom.view.setAttribute('aria-busy', 'false');
+    return;
+  }
 
   if (!league && !leagueError) {
     // Name the section straight away; with no league yet the hero titles are

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Fantasy Pre-Lock Injury Opportunities"
+  short_description: "Find ESPN injury replacements before roster lock"
+  default_prompt: "Use $fantasy-prelock-injury-opportunities to check today’s significant absences, available replacements, and pickup deadline using ESPN APIs first."

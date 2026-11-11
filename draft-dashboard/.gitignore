@@ -1,0 +1,14 @@
+node_modules/
+dist/
+dist-server/
+data/
+playwright-report/
+test-results/
+.env
+research/*.previous
+research/*.tmp
+research/*.lock
+community/cache.json
+community/*.previous
+community/*.tmp
+community/*.lock

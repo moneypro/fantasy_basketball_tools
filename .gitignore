@@ -17,3 +17,13 @@ __pycache__/
 *.egg-info/
 dist/
 build/
+
+# Local runtime state and private assistant history
+.venv/
+.venv-mcp/
+.pytest_cache/
+cache/
+logs/
+*.log
+.DS_Store
+tools/FANTASY_ASSISTANT.md

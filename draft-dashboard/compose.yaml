@@ -1,0 +1,24 @@
+services:
+  draftroom:
+    build: .
+    ports:
+      - "127.0.0.1:${DRAFTROOM_PORT:-3030}:3030"
+      - "${DRAFTROOM_LAN_IP:-192.168.86.100}:${DRAFTROOM_PORT:-3030}:3030"
+      - "${DRAFTROOM_TAILSCALE_IP:-100.67.45.13}:${DRAFTROOM_PORT:-3030}:3030"
+    env_file:
+      - ../.env
+    environment:
+      SEASON_YEAR: "2027"
+      TEAM_ID: "2"
+      DATA_DIR: /app/data
+      SEED_DIR: /seed
+      RESEARCH_DIR: /research
+      COMMUNITY_DIR: /community
+    volumes:
+      - draftroom-data:/app/data
+      - ../output/draft_research_2026-10-06:/seed:ro
+      - ./research:/research:ro
+      - ./community:/community:ro
+    restart: unless-stopped
+volumes:
+  draftroom-data:
