@@ -1,11 +1,14 @@
 """Lineup editing and optimization for fantasy basketball."""
-from typing import List, Any, Tuple, Dict, Set
+from __future__ import annotations
+from typing import List, Any, Tuple, Dict, Set, TYPE_CHECKING
 
-from espn_api.basketball import League, Player
-from espn_api.basketball.constant import POSITION_MAP
+if TYPE_CHECKING:
+    from espn_api.basketball import League, Player
 
-from utils.basketball_espn_request import BasketballEspnFantasyRequests
-from .game_day_player_getter import GameDayPlayerGetter
+# Keep legacy dependency injection points while allowing the stdlib CLI to run
+# without the optional espn_api package installed.
+GameDayPlayerGetter = None
+BasketballEspnFantasyRequests = None
 
 
 class LineUpEditor:
@@ -26,6 +29,9 @@ class LineUpEditor:
             league: The fantasy basketball league object
             team_id: The team ID
         """
+        global GameDayPlayerGetter
+        if GameDayPlayerGetter is None:
+            from .game_day_player_getter import GameDayPlayerGetter
         self.league = league
         self.team_id = team_id
         self.swid: str = self.league.espn_request.cookies['SWID']
@@ -41,6 +47,9 @@ class LineUpEditor:
         Returns:
             Response from the API
         """
+        global BasketballEspnFantasyRequests
+        if BasketballEspnFantasyRequests is None:
+            from utils.basketball_espn_request import BasketballEspnFantasyRequests
         request = BasketballEspnFantasyRequests.from_espn_fantasy_request(self.league.espn_request)
         data = request.post(payload=payload, extend="/transactions/")
         return data
@@ -53,6 +62,7 @@ class LineUpEditor:
         Args:
             scoring_period: The scoring period ID
         """
+        from espn_api.basketball.constant import POSITION_MAP
         bench_slot_id: int = POSITION_MAP['BE']
 
         move_to_bench_command: List[Dict[str, Any]] = [
@@ -124,6 +134,7 @@ class LineUpEditor:
         Returns:
             List of (player_id, position_slot_id) tuples
         """
+        from espn_api.basketball.constant import POSITION_MAP
         fixed_slots: Dict[str, int] = {}
         util_list: List[int] = []
         assigned_player_id_set: Set[int] = set()
@@ -171,6 +182,7 @@ class LineUpEditor:
         Returns:
             List of eligible primary positions
         """
+        from espn_api.basketball.constant import POSITION_MAP
         available_positions: List[str] = [POSITION_MAP[i] for i in range(5)]
         return [eligible_slot for eligible_slot in eligible_slots if eligible_slot in available_positions]
 
@@ -184,3 +196,122 @@ class LineUpEditor:
             TODO: Implement this method to handle multiple periods
         """
         pass
+
+
+def plan_explicit_moves(api, team_id, period, moves):
+    """Validate a minimal atomic lineup change using live settings and locks."""
+    from collections import Counter
+    from add_drop import require, normalize_owner, roster_summary, now
+    league = api.get('?view=mSettings&view=mTeam')
+    require(league['id'] == api.league and league['seasonId'] == api.season, 'League/season mismatch')
+    require(period >= league['scoringPeriodId'], 'Cannot edit a past scoring period')
+    require(period <= league['status']['finalScoringPeriod'], 'Period beyond season')
+    team = next(t for t in league['teams'] if t['id'] == team_id)
+    owners = [team.get('primaryOwner'), *team.get('owners', [])]
+    require(api.owner in {normalize_owner(o) for o in owners if o}, 'Session does not own this team')
+    require(not team.get('isTransactionLocked'), 'Team transactions locked')
+    before = roster_summary(api.roster(period, team_id))
+    old = {p['id']: p['slot'] for p in before}
+    require(bool(moves) and set(moves) <= set(old), 'Move players must be on the target roster')
+    pool = api.players(period, list(moves))
+    settings = league['settings']['rosterSettings']
+    counts = {int(k): v for k, v in settings['lineupSlotCounts'].items()}
+    items = []
+    for pid, target in moves.items():
+        entry = pool[pid]
+        require(entry['onTeamId'] == team_id and entry['status'] == 'ONTEAM', 'Ownership changed')
+        require(target in counts and counts[target] > 0, 'Slot unavailable in this league')
+        require(target in entry['player']['eligibleSlots'], 'Player is ineligible for target slot')
+        require(target not in (13, 14) and old[pid] not in (13, 14), 'IR moves require separate review')
+        if old[pid] == target:
+            continue
+        require(entry.get('lineupLocked') is False, 'Player lineup is locked')
+        require(target == 12 or entry['player'].get('injuryStatus', 'ACTIVE') not in
+                ('OUT', 'INJURY_RESERVE', 'SUSPENSION'), 'Cannot activate a ruled-out player')
+        items.append({'playerId': pid, 'type': 'LINEUP', 'fromLineupSlotId': old[pid],
+                      'toLineupSlotId': target})
+    expected = {**old, **moves}
+    for slot, count in Counter(expected.values()).items():
+        require(slot == 12 and settings.get('isBenchUnlimited') or count <= counts.get(slot, 0),
+                'Result exceeds league slot capacity')
+    return {'season': api.season, 'league': api.league, 'team': team_id, 'period': period,
+            'before': before, 'expectedSlots': expected, 'checkedAt': now(),
+            'payload': {'isLeagueManager': False, 'teamId': team_id,
+                        'type': 'ROSTER' if period == league['scoringPeriodId'] else 'FUTURE_ROSTER',
+                        'scoringPeriodId': period, 'executionType': 'EXECUTE', 'items': items}}
+
+
+def verify_explicit_moves(api, plan, submission):
+    from add_drop import roster_summary, now
+    roster = roster_summary(api.roster(plan['period'], plan['team']))
+    expected = {int(k): v for k, v in plan['expectedSlots'].items()}
+    observed = {p['id']: p['slot'] for p in roster}
+    response = submission.get('response', {})
+    executed = response.get('status') == 'EXECUTED' and response.get('isPending') is False
+    if not executed:
+        executed = any(t.get('id') == response.get('id') and t.get('status') == 'EXECUTED'
+                       and t.get('isPending') is False for t in api.transactions())
+    return {'state': 'verified_completed' if observed == expected and executed else 'unverified',
+            'period': plan['period'], 'lineup': roster, 'checkedAt': now()}
+
+
+def explicit_cli():
+    """Preview by default; --execute sends one date-appropriate lineup request, never retries."""
+    import argparse
+    import json
+    import sys
+    from pathlib import Path
+    root = Path(__file__).resolve().parents[1]
+    sys.path.insert(0, str(root / '.agents/skills/espn-add-drop/scripts'))
+    from add_drop import ESPN, DEFAULT_ENV, Refused, require, write_json
+    parser = argparse.ArgumentParser(description=explicit_cli.__doc__)
+    parser.add_argument('--season', type=int)
+    parser.add_argument('--league', type=int, default=30695)
+    parser.add_argument('--team', type=int, default=2)
+    parser.add_argument('--period', type=int)
+    parser.add_argument('--move', action='append', default=[], help='PLAYER_ID:SLOT_ID; repeat for swaps')
+    parser.add_argument('--env-file', default=DEFAULT_ENV)
+    parser.add_argument('--execute', action='store_true')
+    parser.add_argument('--journal', type=Path)
+    parser.add_argument('--verify', type=Path)
+    args = parser.parse_args()
+    try:
+        if args.verify:
+            require(not args.execute, 'Verification cannot execute')
+            plan = json.loads((args.verify / 'plan.json').read_text())
+            api = ESPN(plan['season'], plan['league'], args.env_file)
+            path = args.verify / 'submission.json'
+            result = verify_explicit_moves(api, plan, json.loads(path.read_text()) if path.exists() else {})
+            write_json(args.verify / 'verification.json', result)
+        else:
+            require(args.season and args.period and args.move, 'Season, period and moves required')
+            pairs = [tuple(map(int, move.split(':'))) for move in args.move]
+            require(all(len(p) == 2 for p in pairs), 'Use PLAYER_ID:SLOT_ID')
+            moves = dict(pairs)
+            require(len(moves) == len(pairs), 'Duplicate player move')
+            api = ESPN(args.season, args.league, args.env_file)
+            plan = plan_explicit_moves(api, args.team, args.period, moves)
+            result = {'state': 'preview_only', 'plan': plan}
+            if args.execute:
+                require(args.journal is not None, 'Execution requires a unique journal')
+                if not plan['payload']['items']:
+                    result = {'state': 'already_set', 'plan': plan}
+                else:
+                    args.journal.mkdir(parents=True, exist_ok=False)
+                    write_json(args.journal / 'plan.json', plan)
+                    write_json(args.journal / 'attempt.json', {'state': 'attempting_once'})
+                    submission = api.post(plan['payload'])
+                    write_json(args.journal / 'submission.json', submission)
+                    result = verify_explicit_moves(api, plan, submission)
+                    result['submission'] = submission
+                    write_json(args.journal / 'result.json', result)
+        print(json.dumps(result, indent=2))
+        return 0 if result['state'] in ('preview_only', 'verified_completed', 'already_set') else 2
+    except (Refused, OSError, ValueError, KeyError, StopIteration) as exc:
+        print(json.dumps({'state': 'stopped', 'reason': str(exc) if isinstance(exc, Refused)
+                          else type(exc).__name__}), file=sys.stderr)
+        return 2
+
+
+if __name__ == '__main__':
+    raise SystemExit(explicit_cli())

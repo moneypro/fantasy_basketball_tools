@@ -1,0 +1,1676 @@
+{
+  "version": 1,
+  "season": 2027,
+  "articles": [
+    {
+      "id": "espn-50127220",
+      "season": 2027,
+      "title": "Fantasy basketball: André Snellings' Ultimate Draft Board",
+      "url": "https://www.espn.com/fantasy/basketball/story/_/id/50127220/fantasy-basketball-ultimate-draft-board-perfect-picks-every-round-nba-2026-27",
+      "publisher": "ESPN",
+      "authors": ["André Snellings"],
+      "publishedAt": "2026-10-08",
+      "reviewedAt": "2026-10-15T21:51:03.058577+00:00",
+      "format": "both",
+      "summary": "Round references use ESPN ADP at publication; adjust for fourteen teams.",
+      "mentions": [
+        {
+          "playerId": 3112335,
+          "playerName": "Nikola Jokic",
+          "tags": ["target"],
+          "note": "First in points.",
+          "section": "Round 1"
+        },
+        {
+          "playerId": 5104157,
+          "playerName": "Victor Wembanyama",
+          "tags": ["target"],
+          "note": "Category-first alternative.",
+          "section": "Round 1"
+        },
+        {
+          "playerId": 3032977,
+          "playerName": "Giannis Antetokounmpo",
+          "tags": ["target"],
+          "note": "Points format advantage.",
+          "section": "Round 1"
+        },
+        {
+          "playerId": 4701230,
+          "playerName": "Jalen Johnson",
+          "tags": ["target"],
+          "note": "Versatile points production.",
+          "section": "Round 1"
+        },
+        {
+          "playerId": 4594268,
+          "playerName": "Anthony Edwards",
+          "tags": ["target"],
+          "note": "Category preference.",
+          "section": "Round 1"
+        },
+        {
+          "playerId": 4065648,
+          "playerName": "Jayson Tatum",
+          "tags": ["target"],
+          "note": "Recovery-dependent upside.",
+          "section": "Round 1"
+        },
+        {
+          "playerId": 3155942,
+          "playerName": "Domantas Sabonis",
+          "tags": ["target"],
+          "note": "Strong points value.",
+          "section": "Round 2"
+        },
+        {
+          "playerId": 5041939,
+          "playerName": "Cooper Flagg",
+          "tags": ["target"],
+          "note": "Category upside.",
+          "section": "Round 2"
+        },
+        {
+          "playerId": 4277905,
+          "playerName": "Trae Young",
+          "tags": ["target"],
+          "note": "Assists-driven points value.",
+          "section": "Round 2"
+        },
+        {
+          "playerId": 4871145,
+          "playerName": "Josh Giddey",
+          "tags": ["target"],
+          "note": "Points value.",
+          "section": "Round 2"
+        },
+        {
+          "playerId": 4396993,
+          "playerName": "Tyrese Haliburton",
+          "tags": ["target"],
+          "note": "Categories; Achilles return.",
+          "section": "Round 2"
+        },
+        {
+          "playerId": 3202,
+          "playerName": "Kevin Durant",
+          "tags": ["target"],
+          "note": "Early-third value.",
+          "section": "Round 3"
+        },
+        {
+          "playerId": 4684740,
+          "playerName": "Amen Thompson",
+          "tags": ["target"],
+          "note": "Early-third value.",
+          "section": "Round 3"
+        },
+        {
+          "playerId": 4871144,
+          "playerName": "Alperen Sengun",
+          "tags": ["target"],
+          "note": "Early-third value.",
+          "section": "Round 3"
+        },
+        {
+          "playerId": 4432816,
+          "playerName": "LaMelo Ball",
+          "tags": ["target"],
+          "note": "Health-dependent ceiling.",
+          "section": "Round 3"
+        },
+        {
+          "playerId": 3992,
+          "playerName": "James Harden",
+          "tags": ["target"],
+          "note": "Veteran production.",
+          "section": "Round 3"
+        },
+        {
+          "playerId": 6583,
+          "playerName": "Anthony Davis",
+          "tags": ["target"],
+          "note": "Late-third injury gamble.",
+          "section": "Round 3"
+        },
+        {
+          "playerId": 4683021,
+          "playerName": "Deni Avdija",
+          "tags": ["target"],
+          "note": "Offensive centerpiece.",
+          "section": "Round 4"
+        },
+        {
+          "playerId": 4066457,
+          "playerName": "Austin Reaves",
+          "tags": ["target"],
+          "note": "Expanded offensive responsibility.",
+          "section": "Round 4"
+        },
+        {
+          "playerId": 3078576,
+          "playerName": "Derrick White",
+          "tags": ["target"],
+          "note": "Especially categories.",
+          "section": "Round 4"
+        },
+        {
+          "playerId": 3147657,
+          "playerName": "Mikal Bridges",
+          "tags": ["target"],
+          "note": "Games-played advantage.",
+          "section": "Rounds 5–8"
+        },
+        {
+          "playerId": 4278039,
+          "playerName": "Nickeil Alexander-Walker",
+          "tags": ["target"],
+          "note": "Undervalued projection.",
+          "section": "Rounds 5–8"
+        },
+        {
+          "playerId": 4869342,
+          "playerName": "Dyson Daniels",
+          "tags": ["target"],
+          "note": "Defensive contributions.",
+          "section": "Rounds 5–8"
+        },
+        {
+          "playerId": 4396971,
+          "playerName": "Naz Reid",
+          "tags": ["target"],
+          "note": "Expanded role.",
+          "section": "Rounds 5–8"
+        },
+        {
+          "playerId": 4433136,
+          "playerName": "Walker Kessler",
+          "tags": ["target"],
+          "note": "Category shot-blocking.",
+          "section": "Rounds 5–8"
+        },
+        {
+          "playerId": 4065733,
+          "playerName": "Ty Jerome",
+          "tags": ["target"],
+          "note": "Opportunity-dependent upside.",
+          "section": "Round 9+"
+        },
+        {
+          "playerId": 4017837,
+          "playerName": "Ivica Zubac",
+          "tags": ["target"],
+          "note": "Rebounding recovery.",
+          "section": "Round 9+"
+        },
+        {
+          "playerId": 4251,
+          "playerName": "Paul George",
+          "tags": ["target"],
+          "note": "Durability gamble.",
+          "section": "Round 9+"
+        },
+        {
+          "playerId": 5105623,
+          "playerName": "Kel'el Ware",
+          "tags": ["target"],
+          "note": "Minutes upside.",
+          "section": "Round 9+"
+        },
+        {
+          "playerId": 5142620,
+          "playerName": "Darius Acuff Jr.",
+          "tags": ["target"],
+          "note": "Rookie scoring.",
+          "section": "Round 9+"
+        },
+        {
+          "playerId": 5041955,
+          "playerName": "Darryn Peterson",
+          "tags": ["target"],
+          "note": "Rookie scoring.",
+          "section": "Round 9+"
+        },
+        {
+          "playerId": 4437244,
+          "playerName": "Jalen Green",
+          "tags": ["target"],
+          "note": "Scoring recovery.",
+          "section": "Round 9+"
+        },
+        {
+          "playerId": 3917376,
+          "playerName": "Jaylen Brown",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 1966,
+          "playerName": "LeBron James",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 3945274,
+          "playerName": "Luka Doncic",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 3908809,
+          "playerName": "Donovan Mitchell",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Round 2 heading"
+        },
+        {
+          "playerId": 4431678,
+          "playerName": "Tyrese Maxey",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Round 2 heading"
+        }
+      ]
+    },
+    {
+      "id": "espn-50110301",
+      "season": 2027,
+      "title": "Fantasy basketball: Eric Karabell's 'Do not draft' list",
+      "url": "https://www.espn.com/fantasy/basketball/story/_/id/50110301/fantasy-basketball-do-not-draft-list-nba-2026-27",
+      "publisher": "ESPN",
+      "authors": ["Eric Karabell"],
+      "publishedAt": "2026-10-05",
+      "reviewedAt": "2026-10-15T21:51:03.058577+00:00",
+      "format": "both",
+      "summary": "Price-dependent warnings, not universal bans. Some objections concern categories specifically.",
+      "mentions": [
+        {
+          "playerId": 6450,
+          "playerName": "Kawhi Leonard",
+          "tags": ["avoid"],
+          "note": "Early price ignores durability and usage risk.",
+          "section": "Price warnings"
+        },
+        {
+          "playerId": 4432816,
+          "playerName": "LaMelo Ball",
+          "tags": ["avoid"],
+          "note": "Round 3 too costly; fit and durability.",
+          "section": "Price warnings"
+        },
+        {
+          "playerId": 6583,
+          "playerName": "Anthony Davis",
+          "tags": ["avoid"],
+          "note": "Availability risk.",
+          "section": "Price warnings"
+        },
+        {
+          "playerId": 3059318,
+          "playerName": "Joel Embiid",
+          "tags": ["avoid"],
+          "note": "Round 5 still expensive; managed workload.",
+          "section": "Price warnings"
+        },
+        {
+          "playerId": 4395628,
+          "playerName": "Zion Williamson",
+          "tags": ["avoid"],
+          "note": "Categories: weak supporting stats.",
+          "section": "Price warnings"
+        },
+        {
+          "playerId": 6606,
+          "playerName": "Damian Lillard",
+          "tags": ["avoid"],
+          "note": "Achilles recovery, age, crowded backcourt.",
+          "section": "Price warnings"
+        },
+        {
+          "playerId": 4279888,
+          "playerName": "Ja Morant",
+          "tags": ["avoid"],
+          "note": "Availability and production concerns.",
+          "section": "Price warnings"
+        },
+        {
+          "playerId": 3147657,
+          "playerName": "Mikal Bridges",
+          "tags": ["avoid"],
+          "note": "Categories: modest per-game production.",
+          "section": "Price warnings"
+        },
+        {
+          "playerId": 4066336,
+          "playerName": "Lauri Markkanen",
+          "tags": ["avoid"],
+          "note": "Scoring dependence and missed games.",
+          "section": "Price warnings"
+        },
+        {
+          "playerId": 4277961,
+          "playerName": "Jaren Jackson Jr.",
+          "tags": ["avoid"],
+          "note": "Limited rebounds; fewer blocks.",
+          "section": "Price warnings"
+        },
+        {
+          "playerId": 3102531,
+          "playerName": "Kristaps Porzingis",
+          "tags": ["avoid"],
+          "note": "Unreliable availability, insufficient compensation.",
+          "section": "Price warnings"
+        },
+        {
+          "playerId": 1966,
+          "playerName": "LeBron James",
+          "tags": ["target"],
+          "note": "Round 4 considered reasonable.",
+          "section": "Exceptions"
+        },
+        {
+          "playerId": 4277905,
+          "playerName": "Trae Young",
+          "tags": ["watch"],
+          "note": "Early risk; preferred over Davis.",
+          "section": "Comparisons"
+        },
+        {
+          "playerId": 4433134,
+          "playerName": "Scottie Barnes",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 4395724,
+          "playerName": "Immanuel Quickley",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 4395625,
+          "playerName": "RJ Barrett",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 3134908,
+          "playerName": "Jakob Poeltl",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 4594268,
+          "playerName": "Anthony Edwards",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 4431678,
+          "playerName": "Tyrese Maxey",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 3917376,
+          "playerName": "Jaylen Brown",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 4396993,
+          "playerName": "Tyrese Haliburton",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        }
+      ]
+    },
+    {
+      "id": "espn-50070415",
+      "season": 2027,
+      "title": "Fantasy basketball: Players to know and position battles to watch during NBA preseason",
+      "url": "https://www.espn.com/fantasy/basketball/story/_/id/50070415/fantasy-basketball-position-battles-watch-nba-preseason",
+      "publisher": "ESPN",
+      "authors": ["Eric Moody"],
+      "publishedAt": "2026-10-01",
+      "reviewedAt": "2026-10-15T21:51:03.058577+00:00",
+      "format": "general",
+      "summary": "Preseason rotation questions. Watch minutes, creation duties and closing lineups; these are conditional opportunities.",
+      "mentions": [
+        {
+          "playerId": 6606,
+          "playerName": "Damian Lillard",
+          "tags": ["watch"],
+          "note": "Minutes distribution.",
+          "section": "Portland"
+        },
+        {
+          "playerId": 4279888,
+          "playerName": "Ja Morant",
+          "tags": ["watch"],
+          "note": "Staggered usage.",
+          "section": "Portland"
+        },
+        {
+          "playerId": 3995,
+          "playerName": "Jrue Holiday",
+          "tags": ["watch"],
+          "note": "Crowded rotation.",
+          "section": "Portland"
+        },
+        {
+          "playerId": 4683678,
+          "playerName": "Scoot Henderson",
+          "tags": ["watch"],
+          "note": "Needs 25-plus minutes.",
+          "section": "Portland"
+        },
+        {
+          "playerId": 4683021,
+          "playerName": "Deni Avdija",
+          "tags": ["watch"],
+          "note": "Retained creation role?",
+          "section": "Portland"
+        },
+        {
+          "playerId": 4869780,
+          "playerName": "Derik Queen",
+          "tags": ["watch"],
+          "note": "Larger role favors upside.",
+          "section": "New Orleans"
+        },
+        {
+          "playerId": 5061589,
+          "playerName": "Yves Missi",
+          "tags": ["watch"],
+          "note": "Rebounds and blocks.",
+          "section": "New Orleans"
+        },
+        {
+          "playerId": 4711272,
+          "playerName": "Reed Sheppard",
+          "tags": ["watch"],
+          "note": "Creation and closing minutes.",
+          "section": "Houston"
+        },
+        {
+          "playerId": 2991230,
+          "playerName": "Fred VanVleet",
+          "tags": ["watch"],
+          "note": "Returning competition.",
+          "section": "Houston"
+        },
+        {
+          "playerId": 2990992,
+          "playerName": "Marcus Smart",
+          "tags": ["watch"],
+          "note": "Rotation competition.",
+          "section": "Houston"
+        },
+        {
+          "playerId": 4432165,
+          "playerName": "Jalen Suggs",
+          "tags": ["watch"],
+          "note": "Starting favorite.",
+          "section": "Orlando"
+        },
+        {
+          "playerId": 4712849,
+          "playerName": "Anthony Black",
+          "tags": ["watch"],
+          "note": "Closing and ball-handling role.",
+          "section": "Orlando"
+        },
+        {
+          "playerId": 5239561,
+          "playerName": "Jase Richardson",
+          "tags": ["watch"],
+          "note": "Rotation access.",
+          "section": "Orlando"
+        },
+        {
+          "playerId": 4397424,
+          "playerName": "Neemias Queta",
+          "tags": ["watch"],
+          "note": "Safer if minutes lead.",
+          "section": "Boston"
+        },
+        {
+          "playerId": 4351852,
+          "playerName": "Mitchell Robinson",
+          "tags": ["watch"],
+          "note": "Needs 20–25 minutes.",
+          "section": "Boston"
+        },
+        {
+          "playerId": 4433249,
+          "playerName": "Moussa Diabate",
+          "tags": ["watch"],
+          "note": "Safer defensive production.",
+          "section": "Charlotte"
+        },
+        {
+          "playerId": 5281370,
+          "playerName": "Hannes Steinbach",
+          "tags": ["watch"],
+          "note": "Needs 20–25 minutes.",
+          "section": "Charlotte"
+        },
+        {
+          "playerId": 4433627,
+          "playerName": "Keyonte George",
+          "tags": ["watch"],
+          "note": "Most secure role.",
+          "section": "Utah"
+        },
+        {
+          "playerId": 5041955,
+          "playerName": "Darryn Peterson",
+          "tags": ["watch"],
+          "note": "Starting and creation opportunity.",
+          "section": "Utah"
+        },
+        {
+          "playerId": 4683766,
+          "playerName": "Isaiah Collier",
+          "tags": ["watch"],
+          "note": "Minutes vulnerable.",
+          "section": "Utah"
+        },
+        {
+          "playerId": 4873138,
+          "playerName": "Ace Bailey",
+          "tags": ["watch"],
+          "note": "Closing lineup opportunity.",
+          "section": "Utah"
+        },
+        {
+          "playerId": 3138196,
+          "playerName": "Cameron Johnson",
+          "tags": ["watch"],
+          "note": "Three-point volume.",
+          "section": "Denver"
+        },
+        {
+          "playerId": 3978,
+          "playerName": "DeMar DeRozan",
+          "tags": ["watch"],
+          "note": "Creation opportunities.",
+          "section": "Denver"
+        },
+        {
+          "playerId": 4591725,
+          "playerName": "Ryan Rollins",
+          "tags": ["watch"],
+          "note": "Rotation competition.",
+          "section": "Milwaukee"
+        },
+        {
+          "playerId": 5082206,
+          "playerName": "Brayden Burries",
+          "tags": ["watch"],
+          "note": "Needs 20-plus minutes.",
+          "section": "Milwaukee"
+        },
+        {
+          "playerId": 4397140,
+          "playerName": "Kevin Porter Jr.",
+          "tags": ["watch"],
+          "note": "Post-surgery role.",
+          "section": "Milwaukee"
+        },
+        {
+          "playerId": 4914336,
+          "playerName": "Shaedon Sharpe",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 4684740,
+          "playerName": "Amen Thompson",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 4396971,
+          "playerName": "Naz Reid",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 4395725,
+          "playerName": "Tyler Herro",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        }
+      ]
+    },
+    {
+      "id": "espn-50069755",
+      "season": 2027,
+      "title": "Fantasy basketball: Ajay Mitchell, Ayo Dosunmu and other top sleepers to target",
+      "url": "https://www.espn.com/fantasy/basketball/story/_/id/50069755/fantasy-basketball-top-sleepers-target-nba-2026-27",
+      "publisher": "ESPN",
+      "authors": ["Jim McCormick"],
+      "publishedAt": "2026-09-30",
+      "reviewedAt": "2026-10-15T21:51:03.058577+00:00",
+      "format": "both",
+      "summary": "Sleepers mostly outside the first hundred picks; roles and health remain conditional.",
+      "mentions": [
+        {
+          "playerId": 4900671,
+          "playerName": "Ajay Mitchell",
+          "tags": ["sleeper"],
+          "note": "Concentrated rotation could increase creation opportunities.",
+          "section": "Sleepers"
+        },
+        {
+          "playerId": 4600663,
+          "playerName": "Zach Edey",
+          "tags": ["sleeper"],
+          "note": "Strong interior production; availability determines value.",
+          "section": "Sleepers"
+        },
+        {
+          "playerId": 4576087,
+          "playerName": "Peyton Watson",
+          "tags": ["sleeper"],
+          "note": "Unusual wing blocks; offensive fit matters.",
+          "section": "Sleepers"
+        },
+        {
+          "playerId": 3138196,
+          "playerName": "Cameron Johnson",
+          "tags": ["sleeper"],
+          "note": "More minutes and three-point opportunities.",
+          "section": "Sleepers"
+        },
+        {
+          "playerId": 4594327,
+          "playerName": "Keegan Murray",
+          "tags": ["sleeper"],
+          "note": "Stable minutes; extra upside with absences.",
+          "section": "Sleepers"
+        },
+        {
+          "playerId": 4397002,
+          "playerName": "Ayo Dosunmu",
+          "tags": ["sleeper"],
+          "note": "Bench creation; ceiling rises during absences.",
+          "section": "Sleepers"
+        },
+        {
+          "playerId": 5093267,
+          "playerName": "Collin Murray-Boyles",
+          "tags": ["sleeper"],
+          "note": "Defensive upside if center minutes expand.",
+          "section": "Sleepers"
+        },
+        {
+          "playerId": 4712849,
+          "playerName": "Anthony Black",
+          "tags": ["sleeper"],
+          "note": "Reaffirmed as another sleeper selection.",
+          "section": "Also endorsed"
+        },
+        {
+          "playerId": 4591725,
+          "playerName": "Ryan Rollins",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 3136193,
+          "playerName": "Devin Booker",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 4433627,
+          "playerName": "Keyonte George",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 4278073,
+          "playerName": "Shai Gilgeous-Alexander",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 5041935,
+          "playerName": "Cameron Boozer",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 3112335,
+          "playerName": "Nikola Jokic",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 3992,
+          "playerName": "James Harden",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 2528210,
+          "playerName": "Tim Hardaway Jr.",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context",
+          "aliases": ["Tim Hardaway Jr"]
+        },
+        {
+          "playerId": 6440,
+          "playerName": "Tobias Harris",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 3155942,
+          "playerName": "Domantas Sabonis",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 3064440,
+          "playerName": "Zach LaVine",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 4432816,
+          "playerName": "LaMelo Ball",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 4594268,
+          "playerName": "Anthony Edwards",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 3134908,
+          "playerName": "Jakob Poeltl",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        }
+      ]
+    },
+    {
+      "id": "espn-50052052",
+      "season": 2027,
+      "title": "Fantasy basketball: Eric Karabell's 'Do Draft' list",
+      "url": "https://www.espn.com/fantasy/basketball/story/_/id/50052052/fantasy-basketball-eric-karabell-do-draft-list-nba-2026-27",
+      "publisher": "ESPN",
+      "authors": ["Eric Karabell"],
+      "publishedAt": "2026-09-29",
+      "reviewedAt": "2026-10-15T21:51:03.058577+00:00",
+      "format": "both",
+      "summary": "Karabell favors production and opportunity relative to draft price.",
+      "mentions": [
+        {
+          "playerId": 3064514,
+          "playerName": "Julius Randle",
+          "tags": ["target"],
+          "note": "Usage rebound.",
+          "section": "Targets"
+        },
+        {
+          "playerId": 3992,
+          "playerName": "James Harden",
+          "tags": ["target"],
+          "note": "Round 2 acceptable.",
+          "section": "Targets"
+        },
+        {
+          "playerId": 4701230,
+          "playerName": "Jalen Johnson",
+          "tags": ["target"],
+          "note": "Assists at PF.",
+          "section": "Targets"
+        },
+        {
+          "playerId": 3155942,
+          "playerName": "Domantas Sabonis",
+          "tags": ["target"],
+          "note": "Round 2 value.",
+          "section": "Targets"
+        },
+        {
+          "playerId": 4871144,
+          "playerName": "Alperen Sengun",
+          "tags": ["target"],
+          "note": "Balanced production.",
+          "section": "Targets"
+        },
+        {
+          "playerId": 4432158,
+          "playerName": "Evan Mobley",
+          "tags": ["target"],
+          "note": "Round 4 stability.",
+          "section": "Targets"
+        },
+        {
+          "playerId": 4017837,
+          "playerName": "Ivica Zubac",
+          "tags": ["target"],
+          "note": "Beyond top 50.",
+          "section": "Targets"
+        },
+        {
+          "playerId": 4066457,
+          "playerName": "Austin Reaves",
+          "tags": ["target"],
+          "note": "Efficient volume.",
+          "section": "Targets"
+        },
+        {
+          "playerId": 4845367,
+          "playerName": "Stephon Castle",
+          "tags": ["target"],
+          "note": "Continued growth.",
+          "section": "Targets"
+        },
+        {
+          "playerId": 4396907,
+          "playerName": "Darius Garland",
+          "tags": ["target"],
+          "note": "After Round 5.",
+          "section": "Targets"
+        },
+        {
+          "playerId": 5105623,
+          "playerName": "Kel'el Ware",
+          "tags": ["target"],
+          "note": "More minutes.",
+          "section": "Targets"
+        },
+        {
+          "playerId": 4396971,
+          "playerName": "Naz Reid",
+          "tags": ["target"],
+          "note": "Scoring and threes.",
+          "section": "Targets"
+        },
+        {
+          "playerId": 4600663,
+          "playerName": "Zach Edey",
+          "tags": ["target"],
+          "note": "Discounted injury risk.",
+          "section": "Memphis"
+        },
+        {
+          "playerId": 4903027,
+          "playerName": "Cedric Coward",
+          "tags": ["target"],
+          "note": "Scoring opportunity.",
+          "section": "Memphis"
+        },
+        {
+          "playerId": 4431785,
+          "playerName": "Scotty Pippen Jr.",
+          "tags": ["target"],
+          "note": "Assists upside.",
+          "section": "Memphis"
+        },
+        {
+          "playerId": 4065733,
+          "playerName": "Ty Jerome",
+          "tags": ["target"],
+          "note": "Useful; monitor price.",
+          "section": "Memphis"
+        },
+        {
+          "playerId": 5142620,
+          "playerName": "Darius Acuff Jr.",
+          "tags": ["target"],
+          "note": "Late option.",
+          "section": "Later picks"
+        },
+        {
+          "playerId": 4432848,
+          "playerName": "Jaime Jaquez Jr.",
+          "tags": ["target"],
+          "note": "Late option.",
+          "section": "Later picks"
+        },
+        {
+          "playerId": 3134908,
+          "playerName": "Jakob Poeltl",
+          "tags": ["target"],
+          "note": "Late option.",
+          "section": "Later picks"
+        },
+        {
+          "playerId": 4278585,
+          "playerName": "Collin Gillespie",
+          "tags": ["target"],
+          "note": "Late option.",
+          "section": "Later picks"
+        },
+        {
+          "playerId": 5144091,
+          "playerName": "Jeremiah Fears",
+          "tags": ["target"],
+          "note": "Late option.",
+          "section": "Later picks"
+        },
+        {
+          "playerId": 5175643,
+          "playerName": "Egor Demin",
+          "tags": ["target"],
+          "note": "Late option.",
+          "section": "Later picks"
+        },
+        {
+          "playerId": 4683692,
+          "playerName": "Cason Wallace",
+          "tags": ["target"],
+          "note": "Late option.",
+          "section": "Later picks"
+        },
+        {
+          "playerId": 4432194,
+          "playerName": "Day'Ron Sharpe",
+          "tags": ["target"],
+          "note": "Late option.",
+          "section": "Later picks"
+        },
+        {
+          "playerId": 4396993,
+          "playerName": "Tyrese Haliburton",
+          "tags": ["watch"],
+          "note": "Aggressive recovery pricing.",
+          "section": "Cautions"
+        },
+        {
+          "playerId": 5041935,
+          "playerName": "Cameron Boozer",
+          "tags": ["watch"],
+          "note": "Rookie price caution.",
+          "section": "Cautions"
+        },
+        {
+          "playerId": 3136195,
+          "playerName": "Karl-Anthony Towns",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 4278104,
+          "playerName": "Michael Porter Jr.",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context",
+          "aliases": ["Michael Porter Jr"]
+        },
+        {
+          "playerId": 3112335,
+          "playerName": "Nikola Jokic",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 4277905,
+          "playerName": "Trae Young",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 5037871,
+          "playerName": "Dylan Harper",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 3032976,
+          "playerName": "Rudy Gobert",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 4279888,
+          "playerName": "Ja Morant",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        }
+      ]
+    },
+    {
+      "id": "espn-50008644",
+      "season": 2027,
+      "title": "Fantasy basketball: Our experts each list five players they hope to draft",
+      "url": "https://www.espn.com/fantasy/basketball/story/_/id/50008644/fantasy-basketball-our-experts-favorite-players-nba-2026-27-season",
+      "publisher": "ESPN",
+      "authors": ["ESPN Fantasy"],
+      "publishedAt": "2026-09-22",
+      "reviewedAt": "2026-10-15T21:51:03.058577+00:00",
+      "format": "both",
+      "summary": "Each analyst names desired picks; shared selections can increase draft demand.",
+      "mentions": [
+        {
+          "playerId": 4871145,
+          "playerName": "Josh Giddey",
+          "tags": ["target"],
+          "note": "Assist growth.",
+          "section": "Targets",
+          "analyst": "André Snellings"
+        },
+        {
+          "playerId": 3078576,
+          "playerName": "Derrick White",
+          "tags": ["target"],
+          "note": "Category breadth.",
+          "section": "Targets",
+          "analyst": "André Snellings"
+        },
+        {
+          "playerId": 4845367,
+          "playerName": "Stephon Castle",
+          "tags": ["target"],
+          "note": "Further growth.",
+          "section": "Targets",
+          "analyst": "André Snellings; Eric Karabell; Eric Moody"
+        },
+        {
+          "playerId": 5037871,
+          "playerName": "Dylan Harper",
+          "tags": ["target"],
+          "note": "Upside; uncertain role.",
+          "section": "Targets",
+          "analyst": "André Snellings; Steve Alexander; Michael F. Florio"
+        },
+        {
+          "playerId": 4278039,
+          "playerName": "Nickeil Alexander-Walker",
+          "tags": ["target"],
+          "note": "Durable scorer.",
+          "section": "Targets",
+          "analyst": "André Snellings; Jim McCormick",
+          "aliases": ["Nickiel Alexander-Walker"]
+        },
+        {
+          "playerId": 5095151,
+          "playerName": "Caleb Wilson",
+          "tags": ["target"],
+          "note": "Rookie versatility.",
+          "section": "Targets",
+          "analyst": "André Snellings; Steve Alexander"
+        },
+        {
+          "playerId": 3992,
+          "playerName": "James Harden",
+          "tags": ["target"],
+          "note": "Proven production.",
+          "section": "Targets",
+          "analyst": "Eric Karabell"
+        },
+        {
+          "playerId": 4432158,
+          "playerName": "Evan Mobley",
+          "tags": ["target"],
+          "note": "Consistency.",
+          "section": "Targets",
+          "analyst": "Eric Karabell"
+        },
+        {
+          "playerId": 4396907,
+          "playerName": "Darius Garland",
+          "tags": ["target"],
+          "note": "Usage growth.",
+          "section": "Targets",
+          "analyst": "Eric Karabell"
+        },
+        {
+          "playerId": 3064514,
+          "playerName": "Julius Randle",
+          "tags": ["target"],
+          "note": "Production recovery.",
+          "section": "Targets",
+          "analyst": "Eric Karabell"
+        },
+        {
+          "playerId": 3945274,
+          "playerName": "Luka Doncic",
+          "tags": ["target"],
+          "note": "Offensive control.",
+          "section": "Targets",
+          "analyst": "Steve Alexander"
+        },
+        {
+          "playerId": 5041939,
+          "playerName": "Cooper Flagg",
+          "tags": ["target"],
+          "note": "Broad upside.",
+          "section": "Targets",
+          "analyst": "Steve Alexander; Eric Moody"
+        },
+        {
+          "playerId": 4711294,
+          "playerName": "Matas Buzelis",
+          "tags": ["target"],
+          "note": "Continued development.",
+          "section": "Targets",
+          "analyst": "Steve Alexander"
+        },
+        {
+          "playerId": 5160992,
+          "playerName": "Alex Sarr",
+          "tags": ["target"],
+          "note": "Defensive upside.",
+          "section": "Targets",
+          "analyst": "Jim McCormick"
+        },
+        {
+          "playerId": 4065733,
+          "playerName": "Ty Jerome",
+          "tags": ["target"],
+          "note": "Creation opportunity.",
+          "section": "Targets",
+          "analyst": "Jim McCormick"
+        },
+        {
+          "playerId": 5105623,
+          "playerName": "Kel'el Ware",
+          "tags": ["target"],
+          "note": "Expanded role.",
+          "section": "Targets",
+          "analyst": "Jim McCormick"
+        },
+        {
+          "playerId": 5041935,
+          "playerName": "Cameron Boozer",
+          "tags": ["target"],
+          "note": "Rookie versatility.",
+          "section": "Targets",
+          "analyst": "Jim McCormick; Michael F. Florio"
+        },
+        {
+          "playerId": 4684740,
+          "playerName": "Amen Thompson",
+          "tags": ["target"],
+          "note": "Defensive impact.",
+          "section": "Targets",
+          "analyst": "Michael F. Florio"
+        },
+        {
+          "playerId": 4066457,
+          "playerName": "Austin Reaves",
+          "tags": ["target"],
+          "note": "Larger role.",
+          "section": "Targets",
+          "analyst": "Michael F. Florio"
+        },
+        {
+          "playerId": 3934719,
+          "playerName": "OG Anunoby",
+          "tags": ["target"],
+          "note": "Scoring upside.",
+          "section": "Targets",
+          "analyst": "Michael F. Florio"
+        },
+        {
+          "playerId": 5105565,
+          "playerName": "Donovan Clingan",
+          "tags": ["target"],
+          "note": "Interior production.",
+          "section": "Targets",
+          "analyst": "Eric Moody"
+        },
+        {
+          "playerId": 4433287,
+          "playerName": "Brandon Miller",
+          "tags": ["target"],
+          "note": "Offensive responsibility.",
+          "section": "Targets",
+          "analyst": "Eric Moody"
+        },
+        {
+          "playerId": 4278067,
+          "playerName": "Nic Claxton",
+          "tags": ["target"],
+          "note": "Efficiency opportunity.",
+          "section": "Targets",
+          "analyst": "Eric Moody"
+        },
+        {
+          "playerId": 4277905,
+          "playerName": "Trae Young",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 4433136,
+          "playerName": "Walker Kessler",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 6442,
+          "playerName": "Kyrie Irving",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 5104157,
+          "playerName": "Victor Wembanyama",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 4278073,
+          "playerName": "Shai Gilgeous-Alexander",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 4600663,
+          "playerName": "Zach Edey",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 2779,
+          "playerName": "Chris Paul",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 1966,
+          "playerName": "LeBron James",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 4432816,
+          "playerName": "LaMelo Ball",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 4066383,
+          "playerName": "Miles Bridges",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 6478,
+          "playerName": "Nikola Vucevic",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        }
+      ]
+    },
+    {
+      "id": "espn-49999304",
+      "season": 2027,
+      "title": "Fantasy basketball: Sleepers, breakouts and busts for 2026-27",
+      "url": "https://www.espn.com/fantasy/basketball/story/_/id/49999304/fantasy-basketball-sleepers-breakouts-busts-nba-2026-27",
+      "publisher": "ESPN",
+      "authors": ["ESPN Fantasy"],
+      "publishedAt": "2026-09-22",
+      "reviewedAt": "2026-10-15T21:51:03.058577+00:00",
+      "format": "both",
+      "summary": "Analyst selections; role and injury assumptions are dated opinions.",
+      "mentions": [
+        {
+          "playerId": 4396971,
+          "playerName": "Naz Reid",
+          "tags": ["sleeper"],
+          "note": "Starting opportunity.",
+          "section": "Sleepers",
+          "analyst": "André Snellings; Steve Alexander"
+        },
+        {
+          "playerId": 3064514,
+          "playerName": "Julius Randle",
+          "tags": ["sleeper"],
+          "note": "Usage recovery.",
+          "section": "Sleepers",
+          "analyst": "Eric Karabell"
+        },
+        {
+          "playerId": 5095151,
+          "playerName": "Caleb Wilson",
+          "tags": ["sleeper"],
+          "note": "Rookie opportunity.",
+          "section": "Sleepers",
+          "analyst": "Michael F. Florio"
+        },
+        {
+          "playerId": 4712849,
+          "playerName": "Anthony Black",
+          "tags": ["sleeper"],
+          "note": "Developing creation.",
+          "section": "Sleepers",
+          "analyst": "Jim McCormick"
+        },
+        {
+          "playerId": 4432848,
+          "playerName": "Jaime Jaquez Jr.",
+          "tags": ["sleeper"],
+          "note": "Expanded minutes.",
+          "section": "Sleepers",
+          "analyst": "Eric Moody"
+        },
+        {
+          "playerId": 4433136,
+          "playerName": "Walker Kessler",
+          "tags": ["breakout"],
+          "note": "Categories; health conditional.",
+          "section": "Breakouts",
+          "analyst": "André Snellings"
+        },
+        {
+          "playerId": 4903027,
+          "playerName": "Cedric Coward",
+          "tags": ["breakout"],
+          "note": "Scoring upside.",
+          "section": "Breakouts",
+          "analyst": "Eric Karabell"
+        },
+        {
+          "playerId": 4431785,
+          "playerName": "Scotty Pippen Jr.",
+          "tags": ["breakout"],
+          "note": "Assists upside.",
+          "section": "Breakouts",
+          "analyst": "Eric Karabell"
+        },
+        {
+          "playerId": 4433287,
+          "playerName": "Brandon Miller",
+          "tags": ["breakout"],
+          "note": "Growing usage.",
+          "section": "Breakouts",
+          "analyst": "Jim McCormick"
+        },
+        {
+          "playerId": 5105623,
+          "playerName": "Kel'el Ware",
+          "tags": ["breakout"],
+          "note": "Minutes conditional.",
+          "section": "Breakouts",
+          "analyst": "Steve Alexander"
+        },
+        {
+          "playerId": 4683688,
+          "playerName": "Dereck Lively II",
+          "tags": ["breakout"],
+          "note": "Health and minutes.",
+          "section": "Breakouts",
+          "analyst": "Eric Moody"
+        },
+        {
+          "playerId": 4873138,
+          "playerName": "Ace Bailey",
+          "tags": ["breakout"],
+          "note": "Rising offensive role.",
+          "section": "Breakouts",
+          "analyst": "Michael F. Florio"
+        },
+        {
+          "playerId": 1966,
+          "playerName": "LeBron James",
+          "tags": ["bust"],
+          "note": "Usage and rest.",
+          "section": "Busts",
+          "analyst": "André Snellings; Michael F. Florio"
+        },
+        {
+          "playerId": 4279888,
+          "playerName": "Ja Morant",
+          "tags": ["bust"],
+          "note": "Availability concern.",
+          "section": "Busts",
+          "analyst": "Eric Karabell"
+        },
+        {
+          "playerId": 6583,
+          "playerName": "Anthony Davis",
+          "tags": ["bust"],
+          "note": "Price ignores risk.",
+          "section": "Busts",
+          "analyst": "Eric Moody"
+        },
+        {
+          "playerId": 4395628,
+          "playerName": "Zion Williamson",
+          "tags": ["bust"],
+          "note": "Categories; limited breadth.",
+          "section": "Busts",
+          "analyst": "Steve Alexander"
+        },
+        {
+          "playerId": 3134908,
+          "playerName": "Jakob Poeltl",
+          "tags": ["bust"],
+          "note": "Minutes and price.",
+          "section": "Busts",
+          "analyst": "Jim McCormick"
+        },
+        {
+          "playerId": 4600663,
+          "playerName": "Zach Edey",
+          "tags": ["target"],
+          "note": "Preferred to Poeltl.",
+          "section": "Alternatives",
+          "analyst": "Jim McCormick"
+        },
+        {
+          "playerId": 4869780,
+          "playerName": "Derik Queen",
+          "tags": ["target"],
+          "note": "Preferred to Poeltl.",
+          "section": "Alternatives",
+          "analyst": "Jim McCormick"
+        },
+        {
+          "playerId": 4278067,
+          "playerName": "Nic Claxton",
+          "tags": ["target"],
+          "note": "Preferred to Poeltl.",
+          "section": "Alternatives",
+          "analyst": "Jim McCormick"
+        },
+        {
+          "playerId": 4395651,
+          "playerName": "Coby White",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 5061575,
+          "playerName": "Kon Knueppel",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 3032977,
+          "playerName": "Giannis Antetokounmpo",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 4395725,
+          "playerName": "Tyler Herro",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 3945274,
+          "playerName": "Luka Doncic",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 5041935,
+          "playerName": "Cameron Boozer",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 4251,
+          "playerName": "Paul George",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 3133628,
+          "playerName": "Myles Turner",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 5041939,
+          "playerName": "Cooper Flagg",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 6442,
+          "playerName": "Kyrie Irving",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 4278049,
+          "playerName": "Daniel Gafford",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 4066457,
+          "playerName": "Austin Reaves",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 4431678,
+          "playerName": "Tyrese Maxey",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 3917376,
+          "playerName": "Jaylen Brown",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 3059318,
+          "playerName": "Joel Embiid",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 5124612,
+          "playerName": "VJ Edgecombe",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 6606,
+          "playerName": "Damian Lillard",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 3995,
+          "playerName": "Jrue Holiday",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 4277905,
+          "playerName": "Trae Young",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 5142718,
+          "playerName": "AJ Dybantsa",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        },
+        {
+          "playerId": 5093267,
+          "playerName": "Collin Murray-Boyles",
+          "tags": ["mention"],
+          "note": "",
+          "section": "Context"
+        }
+      ]
+    }
+  ]
+}

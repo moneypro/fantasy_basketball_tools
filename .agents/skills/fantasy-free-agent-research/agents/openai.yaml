@@ -1,0 +1,4 @@
+interface:
+  display_name: "Fantasy Free Agent Research"
+  short_description: "Research pickups with injuries, roles and schedules"
+  default_prompt: "Use $fantasy-free-agent-research to compare available pickups, teammate injuries, matchups and usable games for my roster."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "ESPN Roster Rollover"
+  short_description: "Plan and schedule pickups at the daily roster lock"
+  default_prompt: "Use $espn-roster-rollover to recommend a next-day pickup and schedule my authorized replacement at first tip while preserving today's lineup."

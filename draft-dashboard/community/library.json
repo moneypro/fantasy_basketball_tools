@@ -1,0 +1,2994 @@
+{
+  "version": 1,
+  "season": 2027,
+  "posts": [
+    {
+      "id": "1x7lwae",
+      "subreddit": "nba",
+      "url": "https://www.reddit.com/r/nba/comments/1x7lwae/if_seattle_doesnt_get_the_sonics_back_i_am/",
+      "title": "If Seattle doesn’t get the Sonics back I am starting a league to compete with the NBA where all of the teams are the Seattle Super Sonics",
+      "publishedAt": "2026-10-16T17:07:49.000Z",
+      "collectedAt": "2026-10-16T17:09:01.974Z",
+      "reviewedAt": "2026-10-16T17:15:06.708382Z",
+      "contentHash": "9e12b884f3cf4e44f5a9f891b60de9de8a83056057c40bcd3ad1c941ea767368",
+      "rating": 3,
+      "confidence": "high",
+      "basis": "title-and-body",
+      "summary": "A humorous expansion discussion imagining an all-Sonics league. No player outlook or draft advice.",
+      "mentions": []
+    },
+    {
+      "id": "1x7luyd",
+      "subreddit": "nba",
+      "url": "https://www.reddit.com/r/nba/comments/1x7luyd/highlights_andre_drummond_full_highlights_vs/",
+      "title": "[Highlights] Andre Drummond full highlights vs. Toronto Raptors (122-120 W) - preseason:14 Points on 6/7 FG (85.7%), 2/5 FT (40.0%), 8 Rebounds (2 Off. Rebs), 4 Assists (1 TOV), 1 Block, 1 PF, and a +/- of +5 in 15:02 minutes played off the bench.",
+      "publishedAt": "2026-10-16T17:06:26.000Z",
+      "collectedAt": "2026-10-16T17:09:01.974Z",
+      "reviewedAt": "2026-10-16T17:15:06.708382Z",
+      "contentHash": "88ef8e8f65affb9131f801e3b3804360b1b5ad07d9d6bdb578504dca65c2ca2a",
+      "rating": 4,
+      "confidence": "low",
+      "basis": "title-and-body",
+      "summary": "The posted preseason line credits Drummond with efficient scoring, eight rebounds and four assists in about 15 bench minutes. An encouraging single-game sample; the RSS text does not establish a regular-season role.",
+      "mentions": [
+        {
+          "playerId": 6585,
+          "playerName": "Andre Drummond",
+          "rating": 4,
+          "note": "An efficient preseason bench line offers a modest positive signal; one game does not establish his season role."
+        }
+      ]
+    },
+    {
+      "id": "1x7lu46",
+      "subreddit": "fantasybball",
+      "url": "https://www.reddit.com/r/fantasybball/comments/1x7lu46/best_pairing_with_tatum/",
+      "title": "Best pairing with Tatum?",
+      "publishedAt": "2026-10-16T17:05:32.000Z",
+      "collectedAt": "2026-10-16T17:08:45.394Z",
+      "reviewedAt": "2026-10-16T17:15:06.708382Z",
+      "contentHash": "f657276560f0efe68b464c292196d2aadd7f8f4f506d2670aeef6b4c32ead940",
+      "rating": 3,
+      "confidence": "low",
+      "basis": "title-and-body",
+      "summary": "An unanswered nine-category roster-building question asks whether Giannis or Cunningham pairs better with Tatum at pick five. No recommendation is supplied in the collected post.",
+      "mentions": [
+        {
+          "playerId": 4065648,
+          "playerName": "Jayson Tatum",
+          "rating": null,
+          "note": "Named in an unanswered nine-category pairing question; no endorsed selection is given.",
+          "aliases": [
+            "Tatum"
+          ]
+        },
+        {
+          "playerId": 3032977,
+          "playerName": "Giannis Antetokounmpo",
+          "rating": null,
+          "note": "Named in an unanswered nine-category pairing question; no endorsed selection is given.",
+          "aliases": [
+            "Giannis"
+          ]
+        },
+        {
+          "playerId": 4432166,
+          "playerName": "Cade Cunningham",
+          "rating": null,
+          "note": "Named in an unanswered nine-category pairing question; no endorsed selection is given.",
+          "aliases": [
+            "Cade"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1x7ls6n",
+      "subreddit": "nba",
+      "url": "https://www.reddit.com/r/nba/comments/1x7ls6n/highlights_jalen_brunson_full_highlights_vs/",
+      "title": "[Highlights] Jalen Brunson full highlights vs. Toronto Raptors (122-120 W) - preseason:20 Points on 7/15 FG (46.7%), 1/1 from 3, 5/6 FT (83.3%), 3 Rebounds (2 Off. Rebs), 7 Assists (3 TOV), 3 fouls, and a +/- of -1 in 28:51 minutes played.",
+      "publishedAt": "2026-10-16T17:03:21.000Z",
+      "collectedAt": "2026-10-16T17:09:01.974Z",
+      "reviewedAt": "2026-10-16T17:15:06.708382Z",
+      "contentHash": "5b1b26771675bc632ccabbfca8aa8dcfa45ee372ea40bb4bcb131970e78dc98a",
+      "rating": 4,
+      "confidence": "low",
+      "basis": "title-and-body",
+      "summary": "The title reports 20 points and seven assists for Brunson in roughly 29 preseason minutes. A positive isolated line, not a season projection; the video was not collected.",
+      "mentions": [
+        {
+          "playerId": 3934672,
+          "playerName": "Jalen Brunson",
+          "rating": 4,
+          "note": "The title reports productive preseason scoring and playmaking; only one game is represented."
+        }
+      ]
+    },
+    {
+      "id": "1x7lm6q",
+      "subreddit": "fantasybball",
+      "url": "https://www.reddit.com/r/fantasybball/comments/1x7lm6q/pick_10_any_suggestion_for_my_first_pick/",
+      "title": "Pick 10 any suggestion for my first pick",
+      "publishedAt": "2026-10-16T16:57:24.000Z",
+      "collectedAt": "2026-10-16T17:08:45.394Z",
+      "reviewedAt": "2026-10-16T17:15:06.708382Z",
+      "contentHash": "70d1a1122209c5f01e03ceaca592d1d99b978bf05850f8ceee78324eab541459",
+      "rating": 3,
+      "confidence": "low",
+      "basis": "title-and-body",
+      "summary": "A manager requests first-round advice at pick ten without naming candidates or a scoring format. Replies were not collected.",
+      "mentions": []
+    },
+    {
+      "id": "1x7lkuz",
+      "subreddit": "nba",
+      "url": "https://www.reddit.com/r/nba/comments/1x7lkuz/highlights_karlanthony_towns_full_highlights_vs/",
+      "title": "[Highlights] Karl-Anthony Towns full highlights vs. Toronto Raptors (122-120 W) - preseason:13 Points on 4/8 FG, 2/5 from 3, 3/4 FT, 15 Rebounds (3 Off. Rebs), 9 Assists (3 TOV), 3 PF, and a +/- of -1 in 28:51 minutes played",
+      "publishedAt": "2026-10-16T16:55:58.000Z",
+      "collectedAt": "2026-10-16T17:09:01.974Z",
+      "reviewedAt": "2026-10-16T17:15:06.708382Z",
+      "contentHash": "6c2fc882522d3bfdc69c4ce902c5802849b7cf9ccf6db2cffa8513fbc95d5313",
+      "rating": 4,
+      "confidence": "low",
+      "basis": "title",
+      "summary": "A title-only preseason highlight reports 13 points, 15 rebounds and nine assists for Towns. Strong production in one exhibition; no video or additional role evidence was collected.",
+      "mentions": [
+        {
+          "playerId": 3136195,
+          "playerName": "Karl-Anthony Towns",
+          "rating": 4,
+          "note": "A strong rebounding and passing line is reported in the title, with no video or additional role evidence collected."
+        }
+      ]
+    },
+    {
+      "id": "1x7lkro",
+      "subreddit": "fantasybball",
+      "url": "https://www.reddit.com/r/fantasybball/comments/1x7lkro/14_team_espn_basketball_fantasy_league_draft/",
+      "title": "14 Team ESPN Basketball Fantasy League, Draft Saturday The 17th at 8 PM.",
+      "publishedAt": "2026-10-16T16:55:51.000Z",
+      "collectedAt": "2026-10-16T17:08:45.394Z",
+      "reviewedAt": "2026-10-16T17:15:06.708382Z",
+      "contentHash": "60f7007c55582c50937ef04b02f3b37d398eabe53225bdc89301be9997496eec",
+      "rating": 3,
+      "confidence": "high",
+      "basis": "title-and-body",
+      "summary": "Recruitment for a free 14-team ESPN league and its draft. No player evaluation.",
+      "mentions": []
+    },
+    {
+      "id": "1x7l31e",
+      "subreddit": "nba",
+      "url": "https://www.reddit.com/r/nba/comments/1x7l31e/which_player_is_the_biggest_please_just_let_them/",
+      "title": "Which player is the biggest \"please just let them have one healthy season\" this year?",
+      "publishedAt": "2026-10-16T16:37:11.000Z",
+      "collectedAt": "2026-10-16T17:09:01.974Z",
+      "reviewedAt": "2026-10-16T17:15:06.708382Z",
+      "contentHash": "936943d06078e43abb8da44982f5c603c7969252eeaf08a31410045f61dd65f7",
+      "rating": 3,
+      "confidence": "medium",
+      "basis": "title-and-body",
+      "summary": "A discussion hopes for healthier seasons from several frequently unavailable players, balancing enthusiasm for their talent with historical availability concerns. The participation percentages are the poster’s figures, not independently verified forecasts or current injury reports.",
+      "mentions": [
+        {
+          "playerId": 4066421,
+          "playerName": "Lonzo Ball",
+          "rating": 3,
+          "note": "The poster hopes for a healthy season while highlighting past missed games. Talent optimism and availability concerns are mixed; no new diagnosis or confirmed restriction is supplied."
+        },
+        {
+          "playerId": 3907387,
+          "playerName": "Ben Simmons",
+          "rating": 3,
+          "note": "The poster hopes for a healthy season while highlighting past missed games. Talent optimism and availability concerns are mixed; no new diagnosis or confirmed restriction is supplied."
+        },
+        {
+          "playerId": 4914336,
+          "playerName": "Shaedon Sharpe",
+          "rating": 3,
+          "note": "The poster hopes for a healthy season while highlighting past missed games. Talent optimism and availability concerns are mixed; no new diagnosis or confirmed restriction is supplied."
+        },
+        {
+          "playerId": 3059318,
+          "playerName": "Joel Embiid",
+          "rating": 3,
+          "note": "The poster hopes for a healthy season while highlighting past missed games. Talent optimism and availability concerns are mixed; no new diagnosis or confirmed restriction is supplied."
+        },
+        {
+          "playerId": 4279888,
+          "playerName": "Ja Morant",
+          "rating": 3,
+          "note": "The poster hopes for a healthy season while highlighting past missed games. Talent optimism and availability concerns are mixed; no new diagnosis or confirmed restriction is supplied."
+        },
+        {
+          "playerId": 4432816,
+          "playerName": "LaMelo Ball",
+          "rating": 3,
+          "note": "The poster hopes for a healthy season while highlighting past missed games. Talent optimism and availability concerns are mixed; no new diagnosis or confirmed restriction is supplied."
+        }
+      ]
+    },
+    {
+      "id": "1x7l1o1",
+      "subreddit": "nba",
+      "url": "https://www.reddit.com/r/nba/comments/1x7l1o1/nba_in_mexico_city_as_someone_who_actually_lives/",
+      "title": "NBA in Mexico City as someone who actually lives here",
+      "publishedAt": "2026-10-16T16:35:43.000Z",
+      "collectedAt": "2026-10-16T17:09:01.974Z",
+      "reviewedAt": "2026-10-16T17:15:06.708382Z",
+      "contentHash": "8be163b68cc6575ccf04a4ec19d0ebe51b6d189078b8dc058d2b35b6e47e7e67",
+      "rating": 3,
+      "confidence": "high",
+      "basis": "title-and-body",
+      "summary": "A Mexico City resident argues for NBA expansion there. League-market discussion without a fantasy player recommendation.",
+      "mentions": []
+    },
+    {
+      "id": "1x7l0io",
+      "subreddit": "fantasybball",
+      "url": "https://www.reddit.com/r/fantasybball/comments/1x7l0io/aday_mara_is_coming_after_hartensteins_role_and/",
+      "title": "Aday Mara is coming after Hartenstein's role and will send him packing",
+      "publishedAt": "2026-10-16T16:34:28.000Z",
+      "collectedAt": "2026-10-16T17:08:45.394Z",
+      "reviewedAt": "2026-10-16T17:15:06.708382Z",
+      "contentHash": "5c109e96b6446abb73583c87ef342925309f1627333d2b3294cd80c6dfebebbe",
+      "rating": 3,
+      "confidence": "low",
+      "basis": "title-and-body",
+      "summary": "The poster enthusiastically predicts that Mara will displace Hartenstein, but supplies no minutes, lineup announcement or supporting analysis. This is speculative enthusiasm for Mara and pessimism about Hartenstein.",
+      "mentions": [
+        {
+          "playerId": 5174983,
+          "playerName": "Aday Mara",
+          "rating": 5,
+          "note": "Strong speculative endorsement from this poster, who predicts a larger role without supporting rotation evidence."
+        },
+        {
+          "playerId": 4222252,
+          "playerName": "Isaiah Hartenstein",
+          "rating": 2,
+          "note": "The poster predicts Mara will threaten his role; this is unsupported speculation, not a confirmed demotion.",
+          "aliases": [
+            "Hartenstein",
+            "I-Hart"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1x7kzfj",
+      "subreddit": "fantasybball",
+      "url": "https://www.reddit.com/r/fantasybball/comments/1x7kzfj/chet_homlgren_injury/",
+      "title": "chet homlgren injury",
+      "publishedAt": "2026-10-16T16:33:19.000Z",
+      "collectedAt": "2026-10-16T17:08:45.394Z",
+      "reviewedAt": "2026-10-16T17:15:06.708382Z",
+      "contentHash": "4421dae03c10543bc1d430fe47fdcb59b6390d0333e1eaddca0b63a4a63bfe12",
+      "rating": 3,
+      "confidence": "low",
+      "basis": "title-and-body",
+      "summary": "A poster asks whether an alleged preseason absence makes Holmgren a do-not-draft player. The question supplies no sourced diagnosis, recovery timetable or answer; it does not confirm an injury.",
+      "mentions": [
+        {
+          "playerId": 4433255,
+          "playerName": "Chet Holmgren",
+          "rating": null,
+          "note": "The misspelled title and body ask about an alleged preseason injury. No diagnosis, timetable or supported do-not-draft conclusion is provided.",
+          "aliases": [
+            "chet homlgren"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1x7kspn",
+      "subreddit": "fantasybball",
+      "url": "https://www.reddit.com/r/fantasybball/comments/1x7kspn/late_rounds/",
+      "title": "Late rounds",
+      "publishedAt": "2026-10-16T16:26:32.000Z",
+      "collectedAt": "2026-10-16T17:08:45.394Z",
+      "reviewedAt": "2026-10-16T17:15:06.708382Z",
+      "contentHash": "aa5b66df563c95a2803a486982a31873b7cee1a91e15b5af3222c6ad10e7dad5",
+      "rating": 3,
+      "confidence": "low",
+      "basis": "title-and-body",
+      "summary": "A 16-team points-league manager asks for late-round options after round six or seven. No candidates or replies are included.",
+      "mentions": []
+    },
+    {
+      "id": "1x7kmxn",
+      "subreddit": "nba",
+      "url": "https://www.reddit.com/r/nba/comments/1x7kmxn/stein_thunder_spokesperson_on_the_status_of/",
+      "title": "[Stein] Thunder spokesperson on the status of rookie big man Aday Mara: “Aday last played three years of NCAA college basketball and therefore, as advised by the NBA, no clearance from the Spanish team is required for him to play in the NBA.”",
+      "publishedAt": "2026-10-16T16:20:26.000Z",
+      "collectedAt": "2026-10-16T17:09:01.974Z",
+      "reviewedAt": "2026-10-16T17:15:06.708382Z",
+      "contentHash": "a385d5d6f7a454199cd1cd2de78e35e4d682688bcae5d1c3a8c77ff6c93ae6e0",
+      "rating": 4,
+      "confidence": "medium",
+      "basis": "title-and-body",
+      "summary": "The post relays Oklahoma City’s position that Mara can play without clearance from his former Spanish club, while also noting that club’s competing contractual claim. This is a favorable eligibility signal within a disputed situation, not independent confirmation of its resolution.",
+      "mentions": [
+        {
+          "playerId": 5174983,
+          "playerName": "Aday Mara",
+          "rating": 4,
+          "note": "A relayed Thunder statement says he is eligible to play, while the former club disputes his contractual status. The disagreement is unresolved in the collected material."
+        }
+      ]
+    },
+    {
+      "id": "1x7kkle",
+      "subreddit": "nba",
+      "url": "https://www.reddit.com/r/nba/comments/1x7kkle/vorkunov_the_nba_will_also_have_former_nfl/",
+      "title": "[Vorkunov] The NBA will also have former NFL cornerback Charles Tillman, who went on to work for the FBI, conduct training for each NBA team on the league’s sports betting rules.",
+      "publishedAt": "2026-10-16T16:17:56.000Z",
+      "collectedAt": "2026-10-16T17:09:01.974Z",
+      "reviewedAt": "2026-10-16T17:15:06.708382Z",
+      "contentHash": "5222a4735d830f74526a7c29c566b09e9acf8ecfc945b6c6ee2a349b3346e177",
+      "rating": 3,
+      "confidence": "low",
+      "basis": "title",
+      "summary": "A title-only report discusses league sports-betting training. No player availability or draft implications are established.",
+      "mentions": []
+    },
+    {
+      "id": "1x7kjrt",
+      "subreddit": "nba",
+      "url": "https://www.reddit.com/r/nba/comments/1x7kjrt/highlight_mohamed_diawara_misses_the_easy_clutch/",
+      "title": "[Highlight] Mohamed Diawara misses the easy clutch layup attempt, as he cannot believe it, and Malachi Smith hits the clutch 3 at the other end.",
+      "publishedAt": "2026-10-16T16:17:03.000Z",
+      "collectedAt": "2026-10-16T17:09:01.974Z",
+      "reviewedAt": "2026-10-16T17:15:06.708382Z",
+      "contentHash": "d0e7cc2a1a5795f662a5e85370f0c642022685637744a4fd118498ad043fd415",
+      "rating": 3,
+      "confidence": "low",
+      "basis": "title",
+      "summary": "A title-only highlight describes a missed Diawara layup followed by an opponent’s three. One sequence supplies too little evidence for a season-long fantasy judgment.",
+      "mentions": [
+        {
+          "playerId": 5289900,
+          "playerName": "Mohamed Diawara",
+          "rating": null,
+          "note": "A single missed-layup highlight does not establish fantasy value."
+        }
+      ]
+    },
+    {
+      "id": "1x7jzoz",
+      "subreddit": "nba",
+      "url": "https://www.reddit.com/r/nba/comments/1x7jzoz/ben_simmons_taking_the_year_off_was_the_best/",
+      "title": "Ben Simmons \"Taking the year off was the best thing I've done in my career. I took a year away from the game and I didn't watch a game until the playoffs. Not 1 game. I didn't pick up a ball until the start of summer and that was on purpose. I needed to get my body right and that was the main thing\"",
+      "publishedAt": "2026-10-16T15:56:40.000Z",
+      "collectedAt": "2026-10-16T17:09:01.974Z",
+      "reviewedAt": "2026-10-16T17:15:06.708382Z",
+      "contentHash": "48a4f2befe13bd58e91ed886bfa7cdcf3cb231ceed8892762a31a5199eb90324",
+      "rating": 4,
+      "confidence": "medium",
+      "basis": "title-and-body",
+      "summary": "The post quotes Simmons describing a year away to address his back and saying he now feels ready to compete. His own optimism is a modest positive signal; the post does not establish medical clearance, sustained availability or a substantial rotation role.",
+      "mentions": [
+        {
+          "playerId": 3907387,
+          "playerName": "Ben Simmons",
+          "rating": 4,
+          "note": "His reported comments about feeling healthy and ready are encouraging, but remain self-reported and do not establish minutes or durable availability."
+        }
+      ]
+    },
+    {
+      "id": "1x7jvy7",
+      "subreddit": "nba",
+      "url": "https://www.reddit.com/r/nba/comments/1x7jvy7/owczarski_the_nba_and_the_milwaukee_bucks_have/",
+      "title": "[Owczarski] The NBA and the Milwaukee Bucks have moved their home opener vs. Chicago to 3 p.m. CT on October 23, so there is no direct conflict with the Brewers and Game 1 of the World Series.",
+      "publishedAt": "2026-10-16T15:52:50.000Z",
+      "collectedAt": "2026-10-16T17:09:01.974Z",
+      "reviewedAt": "2026-10-16T17:15:06.708382Z",
+      "contentHash": "0a5229535f394d550a31d787538502d1c317a5420beb2fc5c742b279665aeb7a",
+      "rating": 3,
+      "confidence": "low",
+      "basis": "title",
+      "summary": "A title-only report describes a Bucks home-opener time change. No player-specific fantasy outlook.",
+      "mentions": []
+    },
+    {
+      "id": "1x7jsvr",
+      "subreddit": "nba",
+      "url": "https://www.reddit.com/r/nba/comments/1x7jsvr/espn_the_warriors_were_unwilling_to_consider/",
+      "title": "[ESPN] The Warriors were unwilling to consider trading Jimmy Butler for Jaylen Brown or Anthony Davis, consequently losing their chance to land Lebron James",
+      "publishedAt": "2026-10-16T15:49:44.000Z",
+      "collectedAt": "2026-10-16T17:09:01.974Z",
+      "reviewedAt": "2026-10-16T17:15:06.708382Z",
+      "contentHash": "ecb412ecf88d139958463aa7ba7533da1b6ee6e705f92bd11ff421b6112bf960",
+      "rating": 2,
+      "confidence": "medium",
+      "basis": "title-and-body",
+      "summary": "The excerpt describes Golden State retaining Butler through ACL rehabilitation and quotes Kerr anticipating a return around February. The near-term availability concern is unfavorable despite organizational optimism. Other named stars are discussed as unrealized trade possibilities, not confirmed moves.",
+      "mentions": [
+        {
+          "playerId": 6430,
+          "playerName": "Jimmy Butler III",
+          "rating": 2,
+          "note": "The excerpt anticipates months of missed time during ACL rehabilitation despite the team’s longer-term confidence. Kerr’s February expectation is an attributed estimate, not a guaranteed return.",
+          "aliases": [
+            "Jimmy Butler",
+            "Butler"
+          ]
+        },
+        {
+          "playerId": 4432171,
+          "playerName": "Moses Moody",
+          "rating": 2,
+          "note": "The excerpt calls him injured and unavailable with the starting wings; no specific recovery timetable is given."
+        },
+        {
+          "playerId": 3917376,
+          "playerName": "Jaylen Brown",
+          "rating": null,
+          "note": "Named in trade-history or salary context; no transaction or current fantasy role change is established."
+        },
+        {
+          "playerId": 6583,
+          "playerName": "Anthony Davis",
+          "rating": null,
+          "note": "Named in trade-history or salary context; no transaction or current fantasy role change is established."
+        },
+        {
+          "playerId": 1966,
+          "playerName": "LeBron James",
+          "rating": null,
+          "note": "Named in trade-history or salary context; no transaction or current fantasy role change is established."
+        },
+        {
+          "playerId": 3032977,
+          "playerName": "Giannis Antetokounmpo",
+          "rating": null,
+          "note": "Named in trade-history or salary context; no transaction or current fantasy role change is established."
+        },
+        {
+          "playerId": 6589,
+          "playerName": "Draymond Green",
+          "rating": null,
+          "note": "Named in trade-history or salary context; no transaction or current fantasy role change is established."
+        }
+      ]
+    },
+    {
+      "id": "1x7jsl8",
+      "subreddit": "fantasybball",
+      "url": "https://www.reddit.com/r/fantasybball/comments/1x7jsl8/who_are_your_xfactors_for_this_year_leonard/",
+      "title": "Who are your X-Factors for this year? Leonard Miller? The Utah training staff? Moussa Diabate? Lemme hear yours!",
+      "publishedAt": "2026-10-16T15:49:24.000Z",
+      "collectedAt": "2026-10-16T17:08:45.394Z",
+      "reviewedAt": "2026-10-16T17:15:06.708382Z",
+      "contentHash": "4ad1492ba5a96dc96d4ca40d1cf1f4d7927dd8abf16cb1a25f23cf924423abfe",
+      "rating": 3,
+      "confidence": "low",
+      "basis": "title",
+      "summary": "A title-only question invites possible X-factors, naming Leonard Miller and Diabate without explaining their roles or value. No replies or supported endorsement were collected.",
+      "mentions": [
+        {
+          "playerId": 5044385,
+          "playerName": "Leonard Miller",
+          "rating": null,
+          "note": "Listed as a possible X-factor in a question without supporting analysis."
+        },
+        {
+          "playerId": 4433249,
+          "playerName": "Moussa Diabate",
+          "rating": null,
+          "note": "Listed as a possible X-factor in a question without supporting analysis."
+        }
+      ]
+    },
+    {
+      "id": "1x7jrkn",
+      "subreddit": "nba",
+      "url": "https://www.reddit.com/r/nba/comments/1x7jrkn/dereck_lively_buys_and_opens_a_45000_pokémon_base/",
+      "title": "Dereck Lively buys and opens a $45,000 Pokémon base set box",
+      "publishedAt": "2026-10-16T15:48:15.000Z",
+      "collectedAt": "2026-10-16T17:09:01.974Z",
+      "reviewedAt": "2026-10-16T17:15:06.708382Z",
+      "contentHash": "dcc79ad07c9da83780437b7f31170233c5794a99b4e4c2a32fe999e8a4560d5e",
+      "rating": 3,
+      "confidence": "low",
+      "basis": "title",
+      "summary": "A title-only post about Lively opening a collectible card box. Off-court entertainment without a basketball outlook.",
+      "mentions": [
+        {
+          "playerId": 4683688,
+          "playerName": "Dereck Lively II",
+          "rating": null,
+          "note": "Off-court collectible-card content; no fantasy assessment.",
+          "aliases": [
+            "Dereck Lively"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1x7jc12",
+      "subreddit": "fantasybball",
+      "url": "https://www.reddit.com/r/fantasybball/comments/1x7jc12/who_should_i_draft_player_vs_player_discussion/",
+      "title": "Who Should I Draft / Player vs Player Discussion - October 16, 2026",
+      "publishedAt": "2026-10-16T15:31:15.000Z",
+      "collectedAt": "2026-10-16T17:08:45.394Z",
+      "reviewedAt": "2026-10-16T17:15:06.708382Z",
+      "contentHash": "d4243d555bd0d419d6a80e07115be8b4cd29e8978e943956db0a22d946c0212b",
+      "rating": 3,
+      "confidence": "high",
+      "basis": "title-and-body",
+      "summary": "A daily draft and player-comparison discussion hub. The collected introductory text contains no player advice; comments were not fetched.",
+      "mentions": []
+    },
+    {
+      "id": "1x7j77o",
+      "subreddit": "fantasybball",
+      "url": "https://www.reddit.com/r/fantasybball/comments/1x7j77o/7_injury_replacement_players_that_should_be/",
+      "title": "7 Injury Replacement Players That Should Be Rostered In Standard Leagues",
+      "publishedAt": "2026-10-16T15:26:13.000Z",
+      "collectedAt": "2026-10-16T17:08:45.394Z",
+      "reviewedAt": "2026-10-16T17:15:06.708382Z",
+      "contentHash": "6dc5bd6214855525fd5528a64d0dc9c50de23f97fe242f5b7c1a98fde9581aec",
+      "rating": 4,
+      "confidence": "medium",
+      "basis": "title-and-body",
+      "summary": "The author recommends short-term injury replacements, especially Isaiah Jackson, Grayson Allen and Jalen Smith, while treating Hachimura, Wagler and Morez Johnson as uncertain late fliers and Schroder as lower upside. Prices and roles are the author’s claims; Claxton’s absence is explicitly assumed rather than confirmed. Value depends on teammates’ availability and scoring format.",
+      "mentions": [
+        {
+          "playerId": 4432170,
+          "playerName": "Isaiah Jackson",
+          "rating": 4,
+          "note": "The author favors a late-round center opportunity and upside if he reaches roughly 25 minutes, while noting health and competition risks."
+        },
+        {
+          "playerId": 3135045,
+          "playerName": "Grayson Allen",
+          "rating": 4,
+          "note": "The author suggests around pick 120, expecting an early opportunity with injured teammates and possible longer usefulness; those assumptions are unverified."
+        },
+        {
+          "playerId": 4397189,
+          "playerName": "Jalen Smith",
+          "rating": 4,
+          "note": "Suggested within the final three picks as an injury replacement; the author explicitly assumes Claxton will miss time, so the opportunity is conditional."
+        },
+        {
+          "playerId": 3032979,
+          "playerName": "Dennis Schroder",
+          "rating": 2,
+          "note": "The author expects possible short-term production but prefers a roster spot with more upside."
+        },
+        {
+          "playerId": 4066648,
+          "playerName": "Rui Hachimura",
+          "rating": 4,
+          "note": "The author wants him rostered to evaluate a possible expanded role, while expressing skepticism about production."
+        },
+        {
+          "playerId": 5254165,
+          "playerName": "Keaton Wagler",
+          "rating": 4,
+          "note": "An injury-driven opportunity makes him a speculative roster candidate in the post; success in a larger role is uncertain."
+        },
+        {
+          "playerId": 4873153,
+          "playerName": "Morez Johnson Jr.",
+          "rating": 4,
+          "note": "The author suggests a flier around picks 130–140 based on an anticipated opening without Lively, acknowledging uncertain minutes and production.",
+          "aliases": [
+            "Morez Johnson"
+          ]
+        },
+        {
+          "playerId": 5108024,
+          "playerName": "Yanic Konan Niederhauser",
+          "rating": null,
+          "note": "Mentioned as injury or rotation context for another player’s opportunity. The post does not supply a verified diagnosis or a valuation for this player."
+        },
+        {
+          "playerId": 5061575,
+          "playerName": "Kon Knueppel",
+          "rating": null,
+          "note": "Mentioned as injury or rotation context for another player’s opportunity. The post does not supply a verified diagnosis or a valuation for this player."
+        },
+        {
+          "playerId": 4395651,
+          "playerName": "Coby White",
+          "rating": null,
+          "note": "Mentioned as injury or rotation context for another player’s opportunity. The post does not supply a verified diagnosis or a valuation for this player."
+        },
+        {
+          "playerId": 4278067,
+          "playerName": "Nic Claxton",
+          "rating": null,
+          "note": "Mentioned as injury or rotation context for another player’s opportunity. The post does not supply a verified diagnosis or a valuation for this player.",
+          "aliases": [
+            "Nicolas Claxton"
+          ]
+        },
+        {
+          "playerId": 4683688,
+          "playerName": "Dereck Lively II",
+          "rating": null,
+          "note": "Mentioned as injury or rotation context for another player’s opportunity. The post does not supply a verified diagnosis or a valuation for this player.",
+          "aliases": [
+            "Dereck Lively"
+          ]
+        },
+        {
+          "playerId": 3913176,
+          "playerName": "Brandon Ingram",
+          "rating": null,
+          "note": "Mentioned as injury or rotation context for another player’s opportunity. The post does not supply a verified diagnosis or a valuation for this player.",
+          "aliases": [
+            "Ingram"
+          ]
+        },
+        {
+          "playerId": 4065778,
+          "playerName": "Max Strus",
+          "rating": null,
+          "note": "Mentioned as injury or rotation context for another player’s opportunity. The post does not supply a verified diagnosis or a valuation for this player.",
+          "aliases": [
+            "Strus"
+          ]
+        },
+        {
+          "playerId": 6580,
+          "playerName": "Bradley Beal",
+          "rating": null,
+          "note": "Mentioned as injury or rotation context for another player’s opportunity. The post does not supply a verified diagnosis or a valuation for this player.",
+          "aliases": [
+            "Beal"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1x7j77a",
+      "subreddit": "fantasybball",
+      "url": "https://www.reddit.com/r/fantasybball/comments/1x7j77a/best_auction_strategy_h2h/",
+      "title": "Best Auction Strategy H2H",
+      "publishedAt": "2026-10-16T15:26:12.000Z",
+      "collectedAt": "2026-10-16T17:08:45.394Z",
+      "reviewedAt": "2026-10-16T17:15:06.708382Z",
+      "contentHash": "c8924ea5031f7d6dd30d0eec6ac948f0bc34bd77df626e9da5e2d5928a9f88cd",
+      "rating": 3,
+      "confidence": "low",
+      "basis": "title-and-body",
+      "summary": "An auction manager asks how to balance stars, depth and categories. No specific strategy or answer is present in the saved post.",
+      "mentions": []
+    },
+    {
+      "id": "1x7j2pr",
+      "subreddit": "fantasybball",
+      "url": "https://www.reddit.com/r/fantasybball/comments/1x7j2pr/is_sleeper_unpopular/",
+      "title": "Is Sleeper Unpopular",
+      "publishedAt": "2026-10-16T15:21:27.000Z",
+      "collectedAt": "2026-10-16T17:08:45.394Z",
+      "reviewedAt": "2026-10-16T17:15:06.708382Z",
+      "contentHash": "5895c9fd295cbd4cc6e425413b50340af142240e1c8007060e90c49f9a464423",
+      "rating": 3,
+      "confidence": "low",
+      "basis": "title-and-body",
+      "summary": "A new manager asks about Sleeper’s popularity and scoring-specific resources. Platform discussion without player recommendations.",
+      "mentions": []
+    },
+    {
+      "id": "1x7iu2h",
+      "subreddit": "nba",
+      "url": "https://www.reddit.com/r/nba/comments/1x7iu2h/windhorst_seattle_no_longer_lock_for_expansion/",
+      "title": "[Windhorst] Seattle No Longer Lock for Expansion, Mexico City a Possible Alternative",
+      "publishedAt": "2026-10-16T15:12:15.000Z",
+      "collectedAt": "2026-10-16T17:09:01.974Z",
+      "reviewedAt": "2026-10-16T17:15:06.708382Z",
+      "contentHash": "2c5ae129b0c24750aacd759c7d9240686662cbf294510b6988fd9069c56701d9",
+      "rating": 3,
+      "confidence": "high",
+      "basis": "title-and-body",
+      "summary": "An expansion analysis discusses Seattle, Las Vegas and Mexico City bidding. It does not provide current-player fantasy advice.",
+      "mentions": []
+    },
+    {
+      "id": "1x7ikx5",
+      "subreddit": "nba",
+      "url": "https://www.reddit.com/r/nba/comments/1x7ikx5/charania_the_nba_and_prominent_sportsbooks_have/",
+      "title": "[Charania] The NBA and prominent sportsbooks have agreed to ban multiple types of bets, per me and David Purdum",
+      "publishedAt": "2026-10-16T15:02:18.000Z",
+      "collectedAt": "2026-10-16T17:09:01.974Z",
+      "reviewedAt": "2026-10-16T17:15:06.708382Z",
+      "contentHash": "28d30df394152fbe53bae7d07b2dbca20ccea84f344015b61f05dc6366f73ee5",
+      "rating": 3,
+      "confidence": "high",
+      "basis": "title-and-body",
+      "summary": "A report discusses proposed restrictions on certain NBA wagering markets. No player outlook or fantasy roster advice.",
+      "mentions": []
+    },
+    {
+      "id": "1x7ifcl",
+      "subreddit": "nba",
+      "url": "https://www.reddit.com/r/nba/comments/1x7ifcl/game_7_of_the_2016_finals_completed_arguably_the/",
+      "title": "Game 7 of the 2016 Finals completed arguably the most memorable comeback in NBA history. Some trivia: It was also unexpectedly the last NBA game for Festus Ezeli (age 26, averaging 7-6) and Mo Williams (33, averaging 8 off the bench), but they combined to earn another $17 million",
+      "publishedAt": "2026-10-16T14:56:40.000Z",
+      "collectedAt": "2026-10-16T17:09:01.974Z",
+      "reviewedAt": "2026-10-16T17:15:06.708382Z",
+      "contentHash": "2e6e33d3f95087ef3a7ea999cb8d47613f1afd89d83d74e81ac1ee8a54cbf417",
+      "rating": 3,
+      "confidence": "high",
+      "basis": "title-and-body",
+      "summary": "A retrospective discusses the final NBA appearances and subsequent careers of Ezeli and Mo Williams after the 2016 Finals. Historical references are not current-season player evaluations.",
+      "mentions": [
+        {
+          "playerId": 2489716,
+          "playerName": "Matthew Dellavedova",
+          "rating": null,
+          "note": "Appears only in a retrospective about the 2016 Cavaliers; no current fantasy outlook."
+        },
+        {
+          "playerId": 3062892,
+          "playerName": "Kay Felder",
+          "rating": null,
+          "note": "Appears only in a retrospective about the 2016 Cavaliers; no current fantasy outlook."
+        }
+      ]
+    },
+    {
+      "id": "1x7icgu",
+      "subreddit": "nba",
+      "url": "https://www.reddit.com/r/nba/comments/1x7icgu/50_years_of_nba_war_day_18_sacramento_kings_top_50/",
+      "title": "50 Years of NBA WAR — Day 18: Sacramento Kings Top 50",
+      "publishedAt": "2026-10-16T14:53:31.000Z",
+      "collectedAt": "2026-10-16T17:09:01.974Z",
+      "reviewedAt": "2026-10-16T17:15:06.708382Z",
+      "contentHash": "d052186e1bf7cb18e0893c207aeaca9eeb438f8649e9758595e1f9709f85d934",
+      "rating": 3,
+      "confidence": "high",
+      "basis": "title-and-body",
+      "summary": "A historical Kings ranking uses cumulative franchise WAR over many seasons. Active players appear for past contributions; the list does not rank their current fantasy value. An ambiguous historical Marcus Thornton name was not linked to the different same-name ESPN record.",
+      "mentions": [
+        {
+          "playerId": 4396993,
+          "playerName": "Tyrese Haliburton",
+          "rating": null,
+          "note": "Included in a historical cumulative Kings contribution ranking, not a current fantasy ranking."
+        },
+        {
+          "playerId": 4066259,
+          "playerName": "De'Aaron Fox",
+          "rating": null,
+          "note": "Included in a historical cumulative Kings contribution ranking, not a current fantasy ranking."
+        },
+        {
+          "playerId": 3155942,
+          "playerName": "Domantas Sabonis",
+          "rating": null,
+          "note": "Included in a historical cumulative Kings contribution ranking, not a current fantasy ranking."
+        },
+        {
+          "playerId": 2990984,
+          "playerName": "Buddy Hield",
+          "rating": null,
+          "note": "Included in a historical cumulative Kings contribution ranking, not a current fantasy ranking."
+        },
+        {
+          "playerId": 6578,
+          "playerName": "Harrison Barnes",
+          "rating": null,
+          "note": "Included in a historical cumulative Kings contribution ranking, not a current fantasy ranking."
+        },
+        {
+          "playerId": 4594327,
+          "playerName": "Keegan Murray",
+          "rating": null,
+          "note": "Included in a historical cumulative Kings contribution ranking, not a current fantasy ranking."
+        },
+        {
+          "playerId": 3978,
+          "playerName": "DeMar DeRozan",
+          "rating": null,
+          "note": "Included in a historical cumulative Kings contribution ranking, not a current fantasy ranking."
+        },
+        {
+          "playerId": 4066262,
+          "playerName": "Malik Monk",
+          "rating": null,
+          "note": "Included in a historical cumulative Kings contribution ranking, not a current fantasy ranking."
+        },
+        {
+          "playerId": 3037789,
+          "playerName": "Bogdan Bogdanovic",
+          "rating": null,
+          "note": "Included in a historical cumulative Kings contribution ranking, not a current fantasy ranking."
+        },
+        {
+          "playerId": 4066372,
+          "playerName": "Kevin Huerter",
+          "rating": null,
+          "note": "Included in a historical cumulative Kings contribution ranking, not a current fantasy ranking."
+        }
+      ]
+    },
+    {
+      "id": "1x7i9w9",
+      "subreddit": "nba",
+      "url": "https://www.reddit.com/r/nba/comments/1x7i9w9/mavericks_are_averaging_the_most_threepoint/",
+      "title": "Mavericks are averaging the most three-point attempts in the league during pre-season, with 46.7 attempts per game. Only shooting at a 30% clip.",
+      "publishedAt": "2026-10-16T14:50:43.000Z",
+      "collectedAt": "2026-10-16T17:09:01.974Z",
+      "reviewedAt": "2026-10-16T17:15:06.708382Z",
+      "contentHash": "16bc41bcadc99b7ab587675470a32eae2a6c023937880563a6f7c9efe298f1d4",
+      "rating": 3,
+      "confidence": "medium",
+      "basis": "title-and-body",
+      "summary": "The poster describes a higher-volume Dallas preseason three-point approach alongside weak shooting accuracy. Several shooters are mentioned, but the small team sample does not establish individual minutes or a player-specific value change. Ambiguous or unmatched shorthand was left unlinked.",
+      "mentions": [
+        {
+          "playerId": 6442,
+          "playerName": "Kyrie Irving",
+          "rating": null,
+          "note": "Mentioned among shooters in a team-level preseason discussion; no individual minutes or production forecast.",
+          "aliases": [
+            "Kyrie"
+          ]
+        },
+        {
+          "playerId": 5148538,
+          "playerName": "Tarik Biberovic",
+          "rating": null,
+          "note": "Mentioned among shooters in a team-level preseason discussion; no individual minutes or production forecast.",
+          "aliases": [
+            "Tarik"
+          ]
+        },
+        {
+          "playerId": 4593125,
+          "playerName": "Santi Aldama",
+          "rating": null,
+          "note": "Mentioned among shooters in a team-level preseason discussion; no individual minutes or production forecast.",
+          "aliases": [
+            "Santi"
+          ]
+        },
+        {
+          "playerId": 4432107,
+          "playerName": "Marcus Sasser",
+          "rating": null,
+          "note": "Mentioned among shooters in a team-level preseason discussion; no individual minutes or production forecast.",
+          "aliases": [
+            "Sasser"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1x7hygd",
+      "subreddit": "nba",
+      "url": "https://www.reddit.com/r/nba/comments/1x7hygd/jalen_brunson_and_josh_harts_roommates/",
+      "title": "Jalen Brunson and Josh Hart's Roommates Podcast—Sponsored by Polymarket",
+      "publishedAt": "2026-10-16T14:37:52.000Z",
+      "collectedAt": "2026-10-16T17:09:01.974Z",
+      "reviewedAt": "2026-10-16T17:15:06.708382Z",
+      "contentHash": "31e813b3296d419b1871b1a08c794bdba945cb3f01ea6dd50101b4735bd42a60",
+      "rating": 3,
+      "confidence": "high",
+      "basis": "title-and-body",
+      "summary": "A discussion of advertising sponsors for Brunson and Hart’s podcast. No on-court fantasy implications.",
+      "mentions": [
+        {
+          "playerId": 3934672,
+          "playerName": "Jalen Brunson",
+          "rating": null,
+          "note": "Podcast sponsorship discussion only; no on-court implication."
+        },
+        {
+          "playerId": 3062679,
+          "playerName": "Josh Hart",
+          "rating": null,
+          "note": "Podcast sponsorship discussion only; no on-court implication."
+        }
+      ]
+    },
+    {
+      "id": "1x7htov",
+      "subreddit": "nba",
+      "url": "https://www.reddit.com/r/nba/comments/1x7htov/what_circumstances_would_it_take_for_a_purely/",
+      "title": "What circumstances would it take for a purely defensive star to win regular season MVP in the modern NBA? (think along the lines of Big Ben and Gobert)",
+      "publishedAt": "2026-10-16T14:32:23.000Z",
+      "collectedAt": "2026-10-16T17:09:01.974Z",
+      "reviewedAt": "2026-10-16T17:15:06.708382Z",
+      "contentHash": "36ddef29aa7af55c7c9c3fd2b1f3c24fa8fd6a02a8ea217885e03cb44ead3694",
+      "rating": 3,
+      "confidence": "low",
+      "basis": "title-and-body",
+      "summary": "A hypothetical discussion asks whether a defense-first player could win MVP, using Gobert as an example. It makes no forecast for his season.",
+      "mentions": [
+        {
+          "playerId": 3032976,
+          "playerName": "Rudy Gobert",
+          "rating": null,
+          "note": "Used as an example in a hypothetical defensive-MVP discussion, not a season prediction.",
+          "aliases": [
+            "Gobert"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1x7hobp",
+      "subreddit": "nba",
+      "url": "https://www.reddit.com/r/nba/comments/1x7hobp/okc_thunder_rookie_center_aday_mara_could_be/",
+      "title": "OKC Thunder rookie center Aday Mara could be blocked from playing for the team this season",
+      "publishedAt": "2026-10-16T14:26:27.000Z",
+      "collectedAt": "2026-10-16T17:09:01.974Z",
+      "reviewedAt": "2026-10-16T17:15:06.708382Z",
+      "contentHash": "9a5b5332f23fbd53d51ebc16f2e75b9442ba1ae1b090e8d43fbbebe53de6019b",
+      "rating": 2,
+      "confidence": "medium",
+      "basis": "title-and-body",
+      "summary": "The post reports that Mara’s former Spanish club intends to contest his transfer, creating a possible eligibility concern. It does not establish that he is barred from NBA games; a newer collected post relays the Thunder’s opposing view that he can play.",
+      "mentions": [
+        {
+          "playerId": 5174983,
+          "playerName": "Aday Mara",
+          "rating": 2,
+          "note": "The former club’s reported opposition creates a possible eligibility risk, but the post does not establish an NBA suspension or definitive ruling. A newer collected post presents the Thunder’s contrary position."
+        }
+      ]
+    },
+    {
+      "id": "1x7hi78",
+      "subreddit": "fantasybball",
+      "url": "https://www.reddit.com/r/fantasybball/comments/1x7hi78/leaguewinner_unicorns_part_iii/",
+      "title": "League-Winner Unicorns: Part III",
+      "publishedAt": "2026-10-16T14:19:41.000Z",
+      "collectedAt": "2026-10-16T17:08:45.394Z",
+      "reviewedAt": "2026-10-16T17:15:06.708382Z",
+      "contentHash": "dce188bc37bc9d53d7fdd4cd0a4ebc66c948d96c4cc50499e9bd73065f8f36b4",
+      "rating": 3,
+      "confidence": "low",
+      "basis": "title-and-body",
+      "summary": "The author promotes a three-point-shooting and category-contribution article plus an AMA. No named recommendations or the linked article’s analysis are present in the saved text.",
+      "mentions": []
+    },
+    {
+      "id": "1x7hd7p",
+      "subreddit": "nba",
+      "url": "https://www.reddit.com/r/nba/comments/1x7hd7p/what_was_the_most_hated_nba_team_despite_the/",
+      "title": "What was the most hated NBA team despite the players on the team being beloved or not disliked?",
+      "publishedAt": "2026-10-16T14:14:22.000Z",
+      "collectedAt": "2026-10-16T17:09:01.974Z",
+      "reviewedAt": "2026-10-16T17:15:06.708382Z",
+      "contentHash": "312b73fed6dd02ab663edc42e20ba9bab3694ada3a0243e00677303bd0637b94",
+      "rating": 3,
+      "confidence": "high",
+      "basis": "title-and-body",
+      "summary": "A fan-culture question compares disliked teams with well-liked players. No basketball fantasy recommendations.",
+      "mentions": []
+    },
+    {
+      "id": "1x7h022",
+      "subreddit": "nba",
+      "url": "https://www.reddit.com/r/nba/comments/1x7h022/daily_discussion_thread_game_thread_index/",
+      "title": "Daily Discussion Thread + Game Thread Index",
+      "publishedAt": "2026-10-16T14:00:15.000Z",
+      "collectedAt": "2026-10-16T17:09:01.974Z",
+      "reviewedAt": "2026-10-16T17:15:06.708382Z",
+      "contentHash": "51278fb24040c37f651db6ae52526c5a1c51b1c0b04a8d49c975cecf616c7cc5",
+      "rating": 3,
+      "confidence": "low",
+      "basis": "title-and-body",
+      "summary": "A daily discussion index whose RSS body only says the content is unsupported in old Reddit. The underlying discussion was not collected.",
+      "mentions": []
+    },
+    {
+      "id": "1x7gzgx",
+      "subreddit": "nba",
+      "url": "https://www.reddit.com/r/nba/comments/1x7gzgx/cade_i_still_feel_like_were_a_little_slept_on_man/",
+      "title": "Cade \"I still feel like we're a little slept on, man. I still feel like people don't really give us the credit that maybe we have earned. I think that's part of being in Detroit. That's part of being a team that is young and people don't really expect much versus other teams that have bigger names\"",
+      "publishedAt": "2026-10-16T13:59:36.000Z",
+      "collectedAt": "2026-10-16T17:09:01.974Z",
+      "reviewedAt": "2026-10-16T17:15:06.708382Z",
+      "contentHash": "771d687d26a6278c8779fafca743beb4f147238d3d94bf85cdbc7f345c962a21",
+      "rating": 3,
+      "confidence": "medium",
+      "basis": "title-and-body",
+      "summary": "Cunningham says Detroit remains underestimated and emphasizes the team’s work. Team confidence does not supply a new role, statistical projection or draft recommendation.",
+      "mentions": [
+        {
+          "playerId": 4432166,
+          "playerName": "Cade Cunningham",
+          "rating": null,
+          "note": "His comments express team confidence without a new individual role or fantasy projection.",
+          "aliases": [
+            "Cade"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1x7gwxv",
+      "subreddit": "nba",
+      "url": "https://www.reddit.com/r/nba/comments/1x7gwxv/windhorst_the_warriors_clippers_and_hawks_would/",
+      "title": "[Windhorst] The Warriors, Clippers, and Hawks would line up to extend “big offers” if Karl-Anthony Towns hits free agency. Orlando has been unwilling to offer Anthony Black the same $22 million AAV that Brandin Podziemski received.",
+      "publishedAt": "2026-10-16T13:56:34.000Z",
+      "collectedAt": "2026-10-16T17:09:01.974Z",
+      "reviewedAt": "2026-10-16T17:15:06.708382Z",
+      "contentHash": "eb37081f9bcded034f08ee4130cf2d0b02dddfb373615f4e35d8aef2ef92c293",
+      "rating": 3,
+      "confidence": "medium",
+      "basis": "title-and-body",
+      "summary": "A report discusses possible future Towns free agency and Black’s extension negotiations, with Podziemski and Suggs as contract comparisons. The speculation does not establish a current change in playing time or team assignment.",
+      "mentions": [
+        {
+          "playerId": 3136195,
+          "playerName": "Karl-Anthony Towns",
+          "rating": null,
+          "note": "Contract discussion or comparison, without a confirmed change to current playing time or team."
+        },
+        {
+          "playerId": 4712849,
+          "playerName": "Anthony Black",
+          "rating": null,
+          "note": "Contract discussion or comparison, without a confirmed change to current playing time or team."
+        },
+        {
+          "playerId": 4709138,
+          "playerName": "Brandin Podziemski",
+          "rating": null,
+          "note": "Contract discussion or comparison, without a confirmed change to current playing time or team."
+        },
+        {
+          "playerId": 4432165,
+          "playerName": "Jalen Suggs",
+          "rating": null,
+          "note": "Contract discussion or comparison, without a confirmed change to current playing time or team."
+        }
+      ]
+    },
+    {
+      "id": "1x7gwpm",
+      "subreddit": "fantasybball",
+      "url": "https://www.reddit.com/r/fantasybball/comments/1x7gwpm/best_tools_to_use_for_your_nba_fantasy_team/",
+      "title": "Best tools to use for your NBA fantasy team management",
+      "publishedAt": "2026-10-16T13:56:17.000Z",
+      "collectedAt": "2026-10-16T17:08:45.394Z",
+      "reviewedAt": "2026-10-16T17:15:06.708382Z",
+      "contentHash": "5ef41aa5c877fff4ee102e7e01eb10ce74d6cdeadc3b6bf3f0958283c905c622",
+      "rating": 3,
+      "confidence": "high",
+      "basis": "title-and-body",
+      "summary": "A manager shares fantasy research tools and podcasts and asks for additional resources. No player-specific draft outlook.",
+      "mentions": []
+    },
+    {
+      "id": "1x7ekpr",
+      "subreddit": "fantasybball",
+      "url": "https://www.reddit.com/r/fantasybball/comments/1x7ekpr/giddey_brunson_and_markkanen_scored_within_03/",
+      "title": "Giddey, Brunson and Markkanen scored within 0.3 points per game of each other last season. They finished 15th, 60th and 112th.",
+      "publishedAt": "2026-10-16T12:13:32.000Z",
+      "collectedAt": "2026-10-16T17:08:45.394Z",
+      "reviewedAt": "2026-10-16T17:15:06.708382Z",
+      "contentHash": "d3bbb002064d2cff32ba6a0de27f3e2517db26ce1aa4a10a99c8d3ebd0ca3f19",
+      "rating": 3,
+      "confidence": "medium",
+      "basis": "title-and-body",
+      "summary": "Using the author’s ESPN default-points calculations, Brunson, Giddey and Markkanen had similar per-game production but different season totals because of games played. The post favors pricing availability into drafts, while leaving Giddey’s future workload unresolved. The figures are retrospective and unverified, not a forecast.",
+      "mentions": [
+        {
+          "playerId": 3934672,
+          "playerName": "Jalen Brunson",
+          "rating": 4,
+          "note": "The poster uses his reported games played to illustrate higher full-season value despite similar per-game scoring. Historical availability is not guaranteed to repeat.",
+          "aliases": [
+            "Brunson"
+          ]
+        },
+        {
+          "playerId": 4871145,
+          "playerName": "Josh Giddey",
+          "rating": 3,
+          "note": "Strong per-game scoring is balanced against fewer games in the author’s comparison; the post asks whether future availability justifies a discount.",
+          "aliases": [
+            "Giddey"
+          ]
+        },
+        {
+          "playerId": 4066336,
+          "playerName": "Lauri Markkanen",
+          "rating": 2,
+          "note": "The author’s retrospective highlights how missed games reduced total value despite a strong per-game rate. No new injury or future games total is established.",
+          "aliases": [
+            "Markkanen"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1x7ds03",
+      "subreddit": "fantasybball",
+      "url": "https://www.reddit.com/r/fantasybball/comments/1x7ds03/yahoo_il_glitch/",
+      "title": "Yahoo IL Glitch?",
+      "publishedAt": "2026-10-16T11:32:42.000Z",
+      "collectedAt": "2026-10-16T17:08:45.394Z",
+      "reviewedAt": "2026-10-16T17:15:06.708382Z",
+      "contentHash": "125eaf96ed1e586d2a77cffb336eae3cee8a3264e54de24cc62416ffaf2f909b",
+      "rating": 3,
+      "confidence": "medium",
+      "basis": "title-and-body",
+      "summary": "A manager reports a Yahoo injured-list transaction problem, mentioning Butler and Mark Williams as examples. This is a platform question, not new evidence about either player’s health.",
+      "mentions": [
+        {
+          "playerId": 6430,
+          "playerName": "Jimmy Butler III",
+          "rating": null,
+          "note": "An example in a Yahoo injured-list transaction complaint, not a new medical report.",
+          "aliases": [
+            "Jimmy Butler"
+          ]
+        },
+        {
+          "playerId": 4701232,
+          "playerName": "Mark Williams",
+          "rating": null,
+          "note": "An example in a Yahoo injured-list transaction complaint, not a new medical report."
+        }
+      ]
+    },
+    {
+      "id": "1x7d844",
+      "subreddit": "fantasybball",
+      "url": "https://www.reddit.com/r/fantasybball/comments/1x7d844/official_anything_goes_morning_thread_october_16/",
+      "title": "Official: Anything Goes Morning Thread: October 16, 2026",
+      "publishedAt": "2026-10-16T11:02:36.000Z",
+      "collectedAt": "2026-10-16T17:08:45.394Z",
+      "reviewedAt": "2026-10-16T17:15:06.708382Z",
+      "contentHash": "1b3744b1d67da670c677f57ba0f430e832a676e15c4b797f8ee46ed10b391104",
+      "rating": 3,
+      "confidence": "high",
+      "basis": "title-and-body",
+      "summary": "A general team-advice thread lists posting guidance and resources. No individual recommendations are included in the collected introduction.",
+      "mentions": []
+    },
+    {
+      "id": "1x7c68z",
+      "subreddit": "fantasybball",
+      "url": "https://www.reddit.com/r/fantasybball/comments/1x7c68z/daily_points_league_discussion_october_16_2026/",
+      "title": "Daily Points League Discussion - October 16, 2026",
+      "publishedAt": "2026-10-16T10:01:41.000Z",
+      "collectedAt": "2026-10-16T17:08:45.394Z",
+      "reviewedAt": "2026-10-16T17:15:06.708382Z",
+      "contentHash": "6e925768ac47ff683d40abcd7020c6e9f112e1cd7e4dc61d3b5322d1aa8c6592",
+      "rating": 3,
+      "confidence": "high",
+      "basis": "title-and-body",
+      "summary": "A daily points-league discussion hub. No player evaluations appear in the saved introductory text.",
+      "mentions": []
+    },
+    {
+      "id": "1x7byv7",
+      "subreddit": "fantasybball",
+      "url": "https://www.reddit.com/r/fantasybball/comments/1x7byv7/trade_dispute/",
+      "title": "Trade Dispute:",
+      "publishedAt": "2026-10-16T09:49:22.000Z",
+      "collectedAt": "2026-10-16T17:08:45.394Z",
+      "reviewedAt": "2026-10-16T17:15:06.708382Z",
+      "contentHash": "a7f706a9ae060eb07b524dfce28ab3fe19f8a0bd3c63ac622f1551d550409152",
+      "rating": 3,
+      "confidence": "medium",
+      "basis": "title-and-body",
+      "summary": "A manager asks whether trades between relatives should be vetoed, presenting conflicting valuations and no evidence establishing collusion. Hachimura is valued more highly by some members and Larsson has a supporter, but no independent evaluation or scoring context is supplied.",
+      "mentions": [
+        {
+          "playerId": 4066648,
+          "playerName": "Rui Hachimura",
+          "rating": null,
+          "note": "Named in a trade-veto dispute with conflicting manager opinions and no independent, scoring-specific valuation."
+        },
+        {
+          "playerId": 4601025,
+          "playerName": "Pelle Larsson",
+          "rating": null,
+          "note": "Named in a trade-veto dispute with conflicting manager opinions and no independent, scoring-specific valuation."
+        },
+        {
+          "playerId": 4702382,
+          "playerName": "Tristan da Silva",
+          "rating": null,
+          "note": "Named in a trade-veto dispute with conflicting manager opinions and no independent, scoring-specific valuation."
+        },
+        {
+          "playerId": 5105565,
+          "playerName": "Donovan Clingan",
+          "rating": null,
+          "note": "Named in a trade-veto dispute with conflicting manager opinions and no independent, scoring-specific valuation."
+        },
+        {
+          "playerId": 5095151,
+          "playerName": "Caleb Wilson",
+          "rating": null,
+          "note": "Named in a trade-veto dispute with conflicting manager opinions and no independent, scoring-specific valuation."
+        },
+        {
+          "playerId": 4593803,
+          "playerName": "Jalen Williams",
+          "rating": null,
+          "note": "Named in a trade-veto dispute with conflicting manager opinions and no independent, scoring-specific valuation."
+        },
+        {
+          "playerId": 5174563,
+          "playerName": "Kyshawn George",
+          "rating": null,
+          "note": "Named in a trade-veto dispute with conflicting manager opinions and no independent, scoring-specific valuation."
+        },
+        {
+          "playerId": 4396909,
+          "playerName": "Aaron Nesmith",
+          "rating": null,
+          "note": "Mentioned in a rejected alternative trade offer, not a supported player recommendation.",
+          "aliases": [
+            "Nesmith"
+          ]
+        },
+        {
+          "playerId": 3133603,
+          "playerName": "Kelly Oubre Jr.",
+          "rating": null,
+          "note": "Mentioned in a rejected alternative trade offer, not a supported player recommendation.",
+          "aliases": [
+            "Oubre"
+          ]
+        },
+        {
+          "playerId": 4278129,
+          "playerName": "Deandre Ayton",
+          "rating": null,
+          "note": "Mentioned in a rejected alternative trade offer, not a supported player recommendation.",
+          "aliases": [
+            "Ayton"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1x7bajt",
+      "subreddit": "fantasybball",
+      "url": "https://www.reddit.com/r/fantasybball/comments/1x7bajt/best_tools_you_used_to_prepare_for_next_season/",
+      "title": "Best tools you used to prepare for next season?",
+      "publishedAt": "2026-10-16T09:06:22.000Z",
+      "collectedAt": "2026-10-16T17:08:45.394Z",
+      "reviewedAt": "2026-10-16T17:15:06.708382Z",
+      "contentHash": "3c6ab96a4bfed5c6ce1eddf84d4701904e74bec20b31b72794d5790eceba6175",
+      "rating": 3,
+      "confidence": "low",
+      "basis": "title-and-body",
+      "summary": "A request for useful draft rankings, rotation projections and sleeper resources. No actual player picks or replies are included.",
+      "mentions": []
+    },
+    {
+      "id": "1x7afdl",
+      "subreddit": "fantasybball",
+      "url": "https://www.reddit.com/r/fantasybball/comments/1x7afdl/stephen_curry/",
+      "title": "Stephen Curry",
+      "publishedAt": "2026-10-16T08:09:43.000Z",
+      "collectedAt": "2026-10-16T17:08:45.394Z",
+      "reviewedAt": "2026-10-16T17:15:06.708382Z",
+      "contentHash": "0a21276fcc1347b16d87b3e4d357d6adbabb94eb5b9bc2cb6f2c29f831bb9e50",
+      "rating": 2,
+      "confidence": "medium",
+      "basis": "title-and-body",
+      "summary": "The poster questions Curry’s late-second- or third-round price because of possible rest, attributing a caution about attendance to Kerr without a source in the saved text. This is a draft-price availability concern, not a confirmed rest schedule.",
+      "mentions": [
+        {
+          "playerId": 3975,
+          "playerName": "Stephen Curry",
+          "rating": 2,
+          "note": "The poster questions his second/third-round cost because of possible missed games. The attributed coaching comment is unsourced here and provides no confirmed schedule.",
+          "aliases": [
+            "Steph"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1x79nza",
+      "subreddit": "fantasybball",
+      "url": "https://www.reddit.com/r/fantasybball/comments/1x79nza/tips_for_building_around_wemby_9cat_8t/",
+      "title": "Tips for building around Wemby? 9-Cat, 8T",
+      "publishedAt": "2026-10-16T07:21:23.000Z",
+      "collectedAt": "2026-10-16T17:08:45.394Z",
+      "reviewedAt": "2026-10-16T17:15:06.708382Z",
+      "contentHash": "9c082a0ad8ff642808403f7735ecd3595b23844f05e44ec7e95d8de7ee2760d5",
+      "rating": 3,
+      "confidence": "low",
+      "basis": "title-and-body",
+      "summary": "A first-time eight-team nine-category manager asks how to build around Wembanyama with third-round reversal. No complementary picks or answers are included.",
+      "mentions": [
+        {
+          "playerId": 5104157,
+          "playerName": "Victor Wembanyama",
+          "rating": null,
+          "note": "The proposed centerpiece of an unanswered eight-team nine-category build question.",
+          "aliases": [
+            "Wemby"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1x78eor",
+      "subreddit": "fantasybball",
+      "url": "https://www.reddit.com/r/fantasybball/comments/1x78eor/dylan_harper_is_getting_overdrafted/",
+      "title": "Dylan Harper is getting over-drafted.",
+      "publishedAt": "2026-10-16T06:03:53.000Z",
+      "collectedAt": "2026-10-16T17:08:45.394Z",
+      "reviewedAt": "2026-10-16T17:15:06.708382Z",
+      "contentHash": "736008f3ef6dd50c9c084fd9b6102e34eb4786e8c92c55d65d96d0bd973933e5",
+      "rating": 2,
+      "confidence": "high",
+      "basis": "title-and-body",
+      "summary": "The author argues Harper is too expensive around picks 70–80 in category formats, citing modest assists, steals and threes despite efficient shooting and guard rebounding. The stated preference is a price in the 90s; this is a price-sensitive opinion, not a projection for custom points scoring.",
+      "mentions": [
+        {
+          "playerId": 5037871,
+          "playerName": "Dylan Harper",
+          "rating": 2,
+          "note": "The author dislikes a 70–80 price in categories and prefers the 90s, citing limited assists, steals and threes while acknowledging efficiency and rebounding."
+        }
+      ]
+    },
+    {
+      "id": "1x78b56",
+      "subreddit": "fantasybball",
+      "url": "https://www.reddit.com/r/fantasybball/comments/1x78b56/hey_presti_run_free_realtime_auction_drafts/",
+      "title": "Hey Presti: Run Free Real-Time Auction Drafts (personal project)",
+      "publishedAt": "2026-10-16T05:58:18.000Z",
+      "collectedAt": "2026-10-16T17:08:45.394Z",
+      "reviewedAt": "2026-10-16T17:15:06.708382Z",
+      "contentHash": "6e11855b31ed638fecd4e3c85ff543e6db064e83c554b2735465cd61c980906b",
+      "rating": 3,
+      "confidence": "high",
+      "basis": "title-and-body",
+      "summary": "A developer promotes an auction-draft application and describes its features. No player outlook or draft valuation.",
+      "mentions": []
+    },
+    {
+      "id": "1x77lfn",
+      "subreddit": "fantasybball",
+      "url": "https://www.reddit.com/r/fantasybball/comments/1x77lfn/best_draft_slot_in_fantasy_basketball_2026/",
+      "title": "Best Draft Slot in Fantasy Basketball 2026?",
+      "publishedAt": "2026-10-16T05:14:43.000Z",
+      "collectedAt": "2026-10-16T17:08:45.394Z",
+      "reviewedAt": "2026-10-16T17:15:06.708382Z",
+      "contentHash": "7dd8efae1b02383271732eabe1ff8f1fb9aa7219ebe4350f1f5f3a56a8b08833",
+      "rating": 3,
+      "confidence": "low",
+      "basis": "title-and-body",
+      "summary": "A 14-team points-league manager asks about the best draft slot and tier breaks. No supported answer or named players are supplied.",
+      "mentions": []
+    },
+    {
+      "id": "1x77c9k",
+      "subreddit": "fantasybball",
+      "url": "https://www.reddit.com/r/fantasybball/comments/1x77c9k/can_we_try_to_be_good_at_assist_and_to_at_the/",
+      "title": "Can we try to be good at assist and TO at the same time in 9-CAT?",
+      "publishedAt": "2026-10-16T05:00:23.000Z",
+      "collectedAt": "2026-10-16T17:08:45.394Z",
+      "reviewedAt": "2026-10-16T17:15:06.708382Z",
+      "contentHash": "48515868586c15a44ca57b25d68f26ad39644878d6aec5ca0dc23d70c27b6c24",
+      "rating": 3,
+      "confidence": "medium",
+      "basis": "title-and-body",
+      "summary": "A nine-category analysis explores strong assists without punting turnovers using the author’s projections. It favors Haliburton, Tre Jones, Pritchard and Dyson Daniels for that particular balance and questions high-turnover creators. Those fit judgments are not overall talent rankings or recommendations for this league’s points scoring.",
+      "mentions": [
+        {
+          "playerId": 4396993,
+          "playerName": "Tyrese Haliburton",
+          "rating": 5,
+          "note": "The author’s strongest fit for a nine-category assists/turnovers balance, using unverified projections; not an overall points-league ranking.",
+          "aliases": [
+            "Haliburton"
+          ]
+        },
+        {
+          "playerId": 4395626,
+          "playerName": "Tre Jones",
+          "rating": 4,
+          "note": "Suggested as a cheap or waiver option for assists without excessive turnovers in this category-specific build."
+        },
+        {
+          "playerId": 4066354,
+          "playerName": "Payton Pritchard",
+          "rating": 4,
+          "note": "Suggested as a middle-tier option for balancing assists and turnovers in nine-category play.",
+          "aliases": [
+            "Pritchard"
+          ]
+        },
+        {
+          "playerId": 3112335,
+          "playerName": "Nikola Jokic",
+          "rating": 4,
+          "note": "A favorable assist/turnover fit in the table, with the author noting his high acquisition cost.",
+          "aliases": [
+            "Jokić"
+          ]
+        },
+        {
+          "playerId": 4869342,
+          "playerName": "Dyson Daniels",
+          "rating": 4,
+          "note": "Tentatively identified as an underrated assist source for the category balance; the projections are not verified.",
+          "aliases": [
+            "Dyson"
+          ]
+        },
+        {
+          "playerId": 4432166,
+          "playerName": "Cade Cunningham",
+          "rating": 2,
+          "note": "The author sees his projected turnovers as a poor fit for preserving that category. This is a build-specific judgment, not a points-league avoid.",
+          "aliases": [
+            "Cade"
+          ]
+        },
+        {
+          "playerId": 4277905,
+          "playerName": "Trae Young",
+          "rating": 2,
+          "note": "The author suggests punting turnovers with him in nine-category formats, not avoiding him universally.",
+          "aliases": [
+            "Trae"
+          ]
+        },
+        {
+          "playerId": 3945274,
+          "playerName": "Luka Doncic",
+          "rating": 2,
+          "note": "The author sees projected turnovers as conflicting with this particular nine-category build.",
+          "aliases": [
+            "Luka"
+          ]
+        },
+        {
+          "playerId": 3032977,
+          "playerName": "Giannis Antetokounmpo",
+          "rating": 3,
+          "note": "The author questions whether his projected assists are too low rather than reaching a firm fit conclusion.",
+          "aliases": [
+            "Giannis"
+          ]
+        },
+        {
+          "playerId": 3202,
+          "playerName": "Kevin Durant",
+          "rating": 3,
+          "note": "Discussed as a limited facilitator in an assists/turnovers comparison, without an overall draft recommendation.",
+          "aliases": [
+            "Durant"
+          ]
+        },
+        {
+          "playerId": 4594268,
+          "playerName": "Anthony Edwards",
+          "rating": 2,
+          "note": "The author is surprised by the low projected assists-to-turnovers ratio; unfavorable only for this category-specific objective.",
+          "aliases": [
+            "Ant"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1x6z268",
+      "subreddit": "nba",
+      "url": "https://www.reddit.com/r/nba/comments/1x6z268/how_a_supersonics_return_reshuffles_nba/",
+      "title": "How a Supersonics return re-shuffles NBA leaderboards",
+      "publishedAt": "2026-10-15T22:07:33.000Z",
+      "collectedAt": "2026-10-15T22:17:01.970Z",
+      "reviewedAt": "2026-10-15T22:22:09.733131+00:00",
+      "contentHash": "d82cc88636be0fb48d76472649d8caa380b2cd296f3fbc1a2706b3c2db049e95",
+      "rating": 3,
+      "confidence": "high",
+      "basis": "title-and-body",
+      "summary": "Historical franchise-record discussion. It offers no current-season fantasy recommendation; older players with similar names should not be mapped to current players.",
+      "mentions": [
+        {
+          "playerId": 3468,
+          "playerName": "Russell Westbrook",
+          "rating": null,
+          "note": "Historical franchise records only."
+        },
+        {
+          "playerId": 4278073,
+          "playerName": "Shai Gilgeous-Alexander",
+          "rating": null,
+          "note": "Historical rate-stat comparison only."
+        },
+        {
+          "playerId": 3202,
+          "playerName": "Kevin Durant",
+          "rating": null,
+          "note": "Historical franchise records only."
+        }
+      ]
+    },
+    {
+      "id": "1x6yw45",
+      "subreddit": "nba",
+      "url": "https://www.reddit.com/r/nba/comments/1x6yw45/karlanthony_towns_monster_46pt_doubledouble/",
+      "title": "Karl-Anthony Towns' MONSTER 46-PT Double-Double Performance at MSG! 😤| November 13, 2024",
+      "publishedAt": "2026-10-15T22:00:26.000Z",
+      "collectedAt": "2026-10-15T22:17:01.970Z",
+      "reviewedAt": "2026-10-15T22:22:09.733131+00:00",
+      "contentHash": "c86781bd0daa77809dce2fe4476e4a02f7949c16a4b564c280c40a01de0c54be",
+      "rating": 3,
+      "confidence": "low",
+      "basis": "title",
+      "summary": "A highlight from November 2024, despite its recent post date. No current-season fantasy signal is established.",
+      "mentions": [
+        {
+          "playerId": 3136195,
+          "playerName": "Karl-Anthony Towns",
+          "rating": null,
+          "note": "An old performance highlight, not current form."
+        }
+      ]
+    },
+    {
+      "id": "1x6yq4f",
+      "subreddit": "nba",
+      "url": "https://www.reddit.com/r/nba/comments/1x6yq4f/new_documentary_kat_opens_up_about_the_knicks/",
+      "title": "New Documentary: KAT Opens Up About the Knicks' Magical 2026 NBA Title Run",
+      "publishedAt": "2026-10-15T21:53:06.000Z",
+      "collectedAt": "2026-10-15T22:17:01.970Z",
+      "reviewedAt": "2026-10-15T22:22:09.733131+00:00",
+      "contentHash": "cd2ed7babf2e0354df76f3889a131d97672e2875d68357583b651343198d0b23",
+      "rating": 3,
+      "confidence": "low",
+      "basis": "title",
+      "summary": "Title advertises a retrospective documentary about a title run. The linked video was not collected.",
+      "mentions": [
+        {
+          "playerId": 3136195,
+          "playerName": "Karl-Anthony Towns",
+          "rating": null,
+          "note": "Retrospective documentary mention; no current draft recommendation.",
+          "aliases": [
+            "KAT"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1x6yens",
+      "subreddit": "nba",
+      "url": "https://www.reddit.com/r/nba/comments/1x6yens/a_new_jersey_family_recreated_og_anunobys_iconic/",
+      "title": "A New Jersey family recreated OG Anunoby's iconic NBA Finals tip-in with their Halloween decorations",
+      "publishedAt": "2026-10-15T21:39:18.000Z",
+      "collectedAt": "2026-10-15T22:17:01.970Z",
+      "reviewedAt": "2026-10-15T22:22:09.733131+00:00",
+      "contentHash": "8687174b75326cad7aab6368f71971bc97467eb79deb51bfc1edec89969b3a62",
+      "rating": 3,
+      "confidence": "low",
+      "basis": "title",
+      "summary": "A Halloween display recreating a basketball moment. No fantasy outlook in the RSS title.",
+      "mentions": [
+        {
+          "playerId": 3934719,
+          "playerName": "OG Anunoby",
+          "rating": null,
+          "note": "Cultural reference, not a player evaluation."
+        }
+      ]
+    },
+    {
+      "id": "1x6y92i",
+      "subreddit": "nba",
+      "url": "https://www.reddit.com/r/nba/comments/1x6y92i/carmelo_anthony_defends_lebron_james_and_calls/",
+      "title": "Carmelo Anthony defends LeBron James and calls out NBA owners and Pablo Torre for being snitches: \"You got to take the stand and tell us which owners. Say the owner of the XYZ teams that are asking about LeBron's transportation.\"",
+      "publishedAt": "2026-10-15T21:32:33.000Z",
+      "collectedAt": "2026-10-15T22:17:01.970Z",
+      "reviewedAt": "2026-10-15T22:22:09.733131+00:00",
+      "contentHash": "4bf560a46ef83a3c8d1274bd894d2c8bfd7419f683aa639125bf27002cf6fa3f",
+      "rating": 3,
+      "confidence": "low",
+      "basis": "title",
+      "summary": "Title describes a dispute about owners and reporting. It does not establish a fantasy availability or performance change.",
+      "mentions": [
+        {
+          "playerId": 1966,
+          "playerName": "LeBron James",
+          "rating": null,
+          "note": "Off-court discussion; no draft-value assessment in the sampled title."
+        }
+      ]
+    },
+    {
+      "id": "1x6xswe",
+      "subreddit": "nba",
+      "url": "https://www.reddit.com/r/nba/comments/1x6xswe/magic_johnson_and_steph_curry_have_some_really/",
+      "title": "Magic Johnson and Steph Curry have some really interesting parallels",
+      "publishedAt": "2026-10-15T21:13:42.000Z",
+      "collectedAt": "2026-10-15T22:17:01.970Z",
+      "reviewedAt": "2026-10-15T22:22:09.733131+00:00",
+      "contentHash": "d9487a7c5780737b3fd380d29bc3fd9c4cbae227084f33575c9ee01586018cfd",
+      "rating": 3,
+      "confidence": "high",
+      "basis": "title-and-body",
+      "summary": "The author praises historical offensive skills while comparing Curry and Magic Johnson. It is not a current-season fantasy evaluation.",
+      "mentions": [
+        {
+          "playerId": 3975,
+          "playerName": "Stephen Curry",
+          "rating": null,
+          "note": "Historical offensive comparison; not a current draft recommendation.",
+          "aliases": [
+            "Steph Curry",
+            "Curry"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1x6xocu",
+      "subreddit": "nba",
+      "url": "https://www.reddit.com/r/nba/comments/1x6xocu/oc_i_analyzed_179_million_rnba_comments_again/",
+      "title": "[OC] I analyzed 1.79 million r/NBA comments again. Draymond lost the belt.",
+      "publishedAt": "2026-10-15T21:08:29.000Z",
+      "collectedAt": "2026-10-15T22:17:01.970Z",
+      "reviewedAt": "2026-10-15T22:22:09.733131+00:00",
+      "contentHash": "e4b736fc739e769ff081c131df76bcac51d80d08d1bedfbd39437ca4753e0de7",
+      "rating": 3,
+      "confidence": "low",
+      "basis": "title",
+      "summary": "The title refers to an analysis of Reddit comments, but neither the analysis nor those comments are in the RSS text. No sentiment metric can be verified here.",
+      "mentions": [
+        {
+          "playerId": 6589,
+          "playerName": "Draymond Green",
+          "rating": null,
+          "note": "Named in an unexplained analysis headline; no player rating assigned.",
+          "aliases": [
+            "Draymond"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1x6xnzw",
+      "subreddit": "fantasybball",
+      "url": "https://www.reddit.com/r/fantasybball/comments/1x6xnzw/i_couldnt_decide_on_a_trophy_so_i_made_league/",
+      "title": "I couldn't decide on a trophy so I made League Champion banners instead",
+      "publishedAt": "2026-10-15T21:08:06.000Z",
+      "collectedAt": "2026-10-15T22:16:22.346Z",
+      "reviewedAt": "2026-10-15T22:22:09.733131+00:00",
+      "contentHash": "5e842a70eb8aebbdba599db58dd01dcd6484d6458d5ab42ee5f4957bf7839bee",
+      "rating": 3,
+      "confidence": "low",
+      "basis": "title",
+      "summary": "League-champion banner idea. General league discussion, with no player assessment.",
+      "mentions": []
+    },
+    {
+      "id": "1x6xl3h",
+      "subreddit": "fantasybball",
+      "url": "https://www.reddit.com/r/fantasybball/comments/1x6xl3h/made_a_9cat_draft_sheet_top_250_with_positional/",
+      "title": "Made a 9-cat draft sheet: Top 250 with positional tabs and last season's stats",
+      "publishedAt": "2026-10-15T21:04:45.000Z",
+      "collectedAt": "2026-10-15T22:16:22.346Z",
+      "reviewedAt": "2026-10-15T22:22:09.733131+00:00",
+      "contentHash": "beebc2a027a875d93c3daf5132a1f4e7723734fb30ae635aecec31874da1d682",
+      "rating": 3,
+      "confidence": "high",
+      "basis": "title-and-body",
+      "summary": "Community spreadsheet for nine-category drafts, using late-September rankings and prior-season stats. Category and punt tools may not transfer to this custom points league; the sheet itself was not fetched.",
+      "mentions": []
+    },
+    {
+      "id": "1x6xkum",
+      "subreddit": "nba",
+      "url": "https://www.reddit.com/r/nba/comments/1x6xkum/siegel_the_knicks_and_the_lakers_are_actively/",
+      "title": "[Siegel] The Knicks and the Lakers are actively exploring trades involving former 1st round picks from the 2024 Draft Pacome Dadiet and Dalton Knecht, respectively, as both teams look to resolve roster crunches before the start of the season.",
+      "publishedAt": "2026-10-15T21:04:27.000Z",
+      "collectedAt": "2026-10-15T22:17:01.970Z",
+      "reviewedAt": "2026-10-15T22:22:09.733131+00:00",
+      "contentHash": "8441521dd9b60c0dc7c96f0b7e7689965647e0116e96f955002fb95f8e18e1eb",
+      "rating": 2,
+      "confidence": "medium",
+      "basis": "title-and-body",
+      "summary": "Post reports roster uncertainty and possible trades for Dadiet and Knecht, with possible openings for others. These are reported possibilities, not confirmed transactions.",
+      "mentions": [
+        {
+          "playerId": 5211983,
+          "playerName": "Pacome Dadiet",
+          "rating": 2,
+          "note": "Reportedly being shopped amid a roster squeeze; destination and role unresolved."
+        },
+        {
+          "playerId": 4897943,
+          "playerName": "Dalton Knecht",
+          "rating": 2,
+          "note": "Post describes a reduced role and trade exploration; watch for an actual move."
+        },
+        {
+          "playerId": 3914285,
+          "playerName": "Drew Eubanks",
+          "rating": null,
+          "note": "Mentioned as a reported waiver in roster background."
+        },
+        {
+          "playerId": 4065673,
+          "playerName": "Tony Bradley",
+          "rating": null,
+          "note": "Mentioned as a reported waiver in roster background."
+        },
+        {
+          "playerId": 4397018,
+          "playerName": "Ochai Agbaji",
+          "rating": null,
+          "note": "Mentioned as a reported waiver in roster background."
+        },
+        {
+          "playerId": 4432808,
+          "playerName": "James Wiseman",
+          "rating": 3,
+          "note": "A roster opening is possible only if the reported moves occur."
+        },
+        {
+          "playerId": 4065670,
+          "playerName": "Bruce Brown",
+          "rating": 3,
+          "note": "Roster retention remains conditional in the post."
+        },
+        {
+          "playerId": 4868423,
+          "playerName": "Jaden Hardy",
+          "rating": 2,
+          "note": "Described as part of an unresolved roster competition."
+        }
+      ]
+    },
+    {
+      "id": "1x6xj8n",
+      "subreddit": "nba",
+      "url": "https://www.reddit.com/r/nba/comments/1x6xj8n/with_8_different_champions_in_the_past_8_years/",
+      "title": "With 8 different champions in the past 8 years and the quality of players the NBA has now compared to before. My question is. Do you think the “Face of the league” conversation will be a thing of the past?",
+      "publishedAt": "2026-10-15T21:02:38.000Z",
+      "collectedAt": "2026-10-15T22:17:01.970Z",
+      "reviewedAt": "2026-10-15T22:22:09.733131+00:00",
+      "contentHash": "1d2bbb2fe5a6d8746b11c0b1695471c275aedfba6f622edf052ace4143532331",
+      "rating": 3,
+      "confidence": "high",
+      "basis": "title-and-body",
+      "summary": "Speculation about parity and future league superstars. No individual current-season fantasy recommendation.",
+      "mentions": [
+        {
+          "playerId": 1966,
+          "playerName": "LeBron James",
+          "rating": null,
+          "note": "Historical example in a parity argument.",
+          "aliases": [
+            "LeBron"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1x6xdp0",
+      "subreddit": "fantasybball",
+      "url": "https://www.reddit.com/r/fantasybball/comments/1x6xdp0/whoever_prompted_the_ai_to_design_this_years/",
+      "title": "Whoever prompted the AI to design this year’s version of the yahoo fantasy app should be fired",
+      "publishedAt": "2026-10-15T20:56:51.000Z",
+      "collectedAt": "2026-10-15T22:16:22.346Z",
+      "reviewedAt": "2026-10-15T22:22:09.733131+00:00",
+      "contentHash": "40aab16dd7f119dd1b9348ab5d3917b889a18c1a9eccc0269142b3822862c589",
+      "rating": 3,
+      "confidence": "high",
+      "basis": "title-and-body",
+      "summary": "Complaint about the Yahoo app design. Negative app feedback is not negative sentiment about any player.",
+      "mentions": []
+    },
+    {
+      "id": "1x6xajl",
+      "subreddit": "nba",
+      "url": "https://www.reddit.com/r/nba/comments/1x6xajl/highlights_austin_reaves_full_highlights_vs/",
+      "title": "[Highlights] Austin Reaves full highlights vs. Golden State Warriors (101-89 L) - preseason: 28 Points on 10/18 FG (55.6%), 4/7 from 3 (57.1%), 4/4 from the line, 4 Rebounds, 7 Assists (7 TOV), 4 PF, and a +/- of +5 in 25:19 minutes played.",
+      "publishedAt": "2026-10-15T20:53:12.000Z",
+      "collectedAt": "2026-10-15T22:17:01.970Z",
+      "reviewedAt": "2026-10-15T22:22:09.733131+00:00",
+      "contentHash": "d909efece1d722ac0663fc081db20c6279b49a3bd760598b85e435aac38bb9e1",
+      "rating": 4,
+      "confidence": "medium",
+      "basis": "title",
+      "summary": "The title reports a productive preseason scoring and assist line, tempered by seven turnovers. One exhibition game gives limited predictive evidence.",
+      "mentions": [
+        {
+          "playerId": 4066457,
+          "playerName": "Austin Reaves",
+          "rating": 4,
+          "note": "Reported 28 points and seven assists are encouraging; seven turnovers matter in this points league."
+        }
+      ]
+    },
+    {
+      "id": "1x6vyb8",
+      "subreddit": "nba",
+      "url": "https://www.reddit.com/r/nba/comments/1x6vyb8/former_nba_player_tyler_cook_in_signing_with_the/",
+      "title": "Former NBA player Tyler Cook in signing with the Jilin Northeast Tigers of the Chinese Basketball League. After the end of his NBA stint, Cook has traveled the world: in the last 3 years he played with teams in Australia, Spain, Turkey, Japan and Puerto Rico. Now he adds China to the list.",
+      "publishedAt": "2026-10-15T20:00:45.000Z",
+      "collectedAt": "2026-10-15T22:17:01.970Z",
+      "reviewedAt": "2026-10-15T22:22:09.733131+00:00",
+      "contentHash": "42b15cf2168b66850491be4e431e6a93823ebca3d4ed28ee85428c1c7e8a0c45",
+      "rating": 3,
+      "confidence": "medium",
+      "basis": "title-and-body",
+      "summary": "Post reports a move to a Chinese club. This is career context rather than an NBA fantasy endorsement.",
+      "mentions": [
+        {
+          "playerId": 4066367,
+          "playerName": "Tyler Cook",
+          "rating": null,
+          "note": "Reported non-NBA signing; not a current NBA draft target from this post."
+        }
+      ]
+    },
+    {
+      "id": "1x6vfme",
+      "subreddit": "nba",
+      "url": "https://www.reddit.com/r/nba/comments/1x6vfme/7_of_nba_gms_would_not_sign_victor_wembanyama_as/",
+      "title": "7% of NBA GM's would not sign Victor Wembanyama as their player to start a franchise",
+      "publishedAt": "2026-10-15T19:40:59.000Z",
+      "collectedAt": "2026-10-15T22:17:01.970Z",
+      "reviewedAt": "2026-10-15T22:22:09.733131+00:00",
+      "contentHash": "0a217b07c69562e3e05f5146880aa543ac39028e3144b47ba7657b4c514fc628",
+      "rating": 5,
+      "confidence": "medium",
+      "basis": "title-and-body",
+      "summary": "Despite the negatively phrased title, the post says 93% of surveyed GMs chose Wembanyama to build around. That is strong endorsement in a quoted survey, not a Reddit consensus or fantasy projection.",
+      "mentions": [
+        {
+          "playerId": 5104157,
+          "playerName": "Victor Wembanyama",
+          "rating": 5,
+          "note": "Strong franchise-building endorsement in the quoted GM survey; fantasy format still matters."
+        },
+        {
+          "playerId": 4278073,
+          "playerName": "Shai Gilgeous-Alexander",
+          "rating": null,
+          "note": "Listed among other survey vote recipients; no separate fantasy argument."
+        },
+        {
+          "playerId": 5041939,
+          "playerName": "Cooper Flagg",
+          "rating": null,
+          "note": "Listed among other survey vote recipients; no separate fantasy argument."
+        }
+      ]
+    },
+    {
+      "id": "1x6v2nu",
+      "subreddit": "fantasybball",
+      "url": "https://www.reddit.com/r/fantasybball/comments/1x6v2nu/wild_auction_draft_last_night/",
+      "title": "Wild auction draft last night!!",
+      "publishedAt": "2026-10-15T19:27:05.000Z",
+      "collectedAt": "2026-10-15T22:16:22.346Z",
+      "reviewedAt": "2026-10-15T22:22:09.733131+00:00",
+      "contentHash": "9896b1ec78afd7fb90e34668b36f778cad5edcb0fbdd538d1d03cb14ff546ce4",
+      "rating": 3,
+      "confidence": "high",
+      "basis": "title-and-body",
+      "summary": "An auction anecdote about confusing Jovic with Jokic. It illustrates a bidding and identity mistake rather than a reliable market price.",
+      "mentions": [
+        {
+          "playerId": 4997528,
+          "playerName": "Nikola Jovic",
+          "rating": 2,
+          "note": "The reported $80 of $200 purchase followed a mistaken identity; not evidence of an $80 valuation."
+        },
+        {
+          "playerId": 3112335,
+          "playerName": "Nikola Jokic",
+          "rating": null,
+          "note": "The intended comparison in an auction-name mix-up.",
+          "aliases": [
+            "Jokic"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1x6uu2q",
+      "subreddit": "fantasybball",
+      "url": "https://www.reddit.com/r/fantasybball/comments/1x6uu2q/lets_talk_about_handcuffs/",
+      "title": "Let's Talk About Handcuffs",
+      "publishedAt": "2026-10-15T19:17:42.000Z",
+      "collectedAt": "2026-10-15T22:16:22.346Z",
+      "reviewedAt": "2026-10-15T22:22:09.733131+00:00",
+      "contentHash": "8378817bba80cd0dfa8dafd6eb994767754f1f106aea8b22e1c08a563c8cb9ae",
+      "rating": 3,
+      "confidence": "medium",
+      "basis": "title-and-body",
+      "summary": "An exploratory handcuff question: the author expects absences and suggests possible beneficiaries. Proposed roles and substitutions are speculative, not confirmed lineup news.",
+      "mentions": [
+        {
+          "playerId": 6583,
+          "playerName": "Anthony Davis",
+          "rating": 2,
+          "note": "Author expects missed games; no new medical report is supplied.",
+          "aliases": [
+            "AD"
+          ]
+        },
+        {
+          "playerId": 3059318,
+          "playerName": "Joel Embiid",
+          "rating": 2,
+          "note": "Author expects missed games and asks about a backup; no new medical report.",
+          "aliases": [
+            "Embiid"
+          ]
+        },
+        {
+          "playerId": 5105637,
+          "playerName": "Adem Bona",
+          "rating": 4,
+          "note": "Proposed beneficiary of Embiid absences; opportunity remains conditional."
+        },
+        {
+          "playerId": 4278129,
+          "playerName": "Deandre Ayton",
+          "rating": 4,
+          "note": "Proposed beneficiary of Davis absences; role not established here.",
+          "aliases": [
+            "Ayton"
+          ]
+        },
+        {
+          "playerId": 5104155,
+          "playerName": "Bilal Coulibaly",
+          "rating": 4,
+          "note": "Floated as a possible beneficiary, with explicit uncertainty.",
+          "aliases": [
+            "Coulibaly"
+          ]
+        },
+        {
+          "playerId": 5093267,
+          "playerName": "Collin Murray-Boyles",
+          "rating": 4,
+          "note": "Proposed injury-contingent opportunity; verify the actual rotation.",
+          "aliases": [
+            "CMB"
+          ]
+        },
+        {
+          "playerId": 4684272,
+          "playerName": "Ja'Kobe Walter",
+          "rating": 4,
+          "note": "Proposed injury-contingent opportunity; verify the actual rotation."
+        },
+        {
+          "playerId": 6450,
+          "playerName": "Kawhi Leonard",
+          "rating": 2,
+          "note": "Named as an availability-risk premise, not new injury news.",
+          "aliases": [
+            "Kawhi"
+          ]
+        },
+        {
+          "playerId": 4900671,
+          "playerName": "Ajay Mitchell",
+          "rating": 4,
+          "note": "Proposed beneficiary if Jalen Williams misses time."
+        },
+        {
+          "playerId": 4593803,
+          "playerName": "Jalen Williams",
+          "rating": 2,
+          "note": "Availability concern is implied by the handcuff question, not confirmed here.",
+          "aliases": [
+            "JDub"
+          ]
+        },
+        {
+          "playerId": 3978,
+          "playerName": "DeMar DeRozan",
+          "rating": 4,
+          "note": "Proposed beneficiary of teammate absences; no guaranteed minutes claim.",
+          "aliases": [
+            "DeRozan"
+          ]
+        },
+        {
+          "playerId": 3064482,
+          "playerName": "Bobby Portis",
+          "rating": 4,
+          "note": "Proposed opportunity if Giannis misses games; conditional only."
+        },
+        {
+          "playerId": 3032977,
+          "playerName": "Giannis Antetokounmpo",
+          "rating": null,
+          "note": "Appears as the contingency for a Portis handcuff; no specific new absence reported.",
+          "aliases": [
+            "Giannis"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1x6uqyo",
+      "subreddit": "nba",
+      "url": "https://www.reddit.com/r/nba/comments/1x6uqyo/early_playoff_prediction_matchup_76ers_vs_raptors/",
+      "title": "Early playoff prediction matchup: 76ers vs Raptors",
+      "publishedAt": "2026-10-15T19:14:29.000Z",
+      "collectedAt": "2026-10-15T22:17:01.970Z",
+      "reviewedAt": "2026-10-15T22:22:09.733131+00:00",
+      "contentHash": "1d170b682b29204d51ead807a86be27c13b9ab665591106dee98896805d0ec13",
+      "rating": 3,
+      "confidence": "high",
+      "basis": "title-and-body",
+      "summary": "Hypothetical playoff matchup question with no named-player recommendation or collected replies.",
+      "mentions": []
+    },
+    {
+      "id": "1x6unj8",
+      "subreddit": "nba",
+      "url": "https://www.reddit.com/r/nba/comments/1x6unj8/ja_morant_hitting_the_dame_time/",
+      "title": "Ja Morant hitting the Dame time",
+      "publishedAt": "2026-10-15T19:10:46.000Z",
+      "collectedAt": "2026-10-15T22:17:01.970Z",
+      "reviewedAt": "2026-10-15T22:22:09.733131+00:00",
+      "contentHash": "0b4f91cf6ff0a25e5673b32283049a04917fcdd5a4fa81640cb70a62501f0c94",
+      "rating": 3,
+      "confidence": "low",
+      "basis": "title",
+      "summary": "A brief highlight title with no stats or role context. The clip itself was not collected.",
+      "mentions": [
+        {
+          "playerId": 4279888,
+          "playerName": "Ja Morant",
+          "rating": null,
+          "note": "Highlight mention without enough text to assess fantasy outlook."
+        }
+      ]
+    },
+    {
+      "id": "1x6u5lj",
+      "subreddit": "fantasybball",
+      "url": "https://www.reddit.com/r/fantasybball/comments/1x6u5lj/lauri_markannen_is_the_league_winner_this_yearand/",
+      "title": "Lauri Markannen is THE league winner this year...and I'm tired of pretending he isn't.",
+      "publishedAt": "2026-10-15T18:52:21.000Z",
+      "collectedAt": "2026-10-15T22:16:22.346Z",
+      "reviewedAt": "2026-10-15T22:22:09.733131+00:00",
+      "contentHash": "8f6fc12aff82e7dea8f3cd267d93ac6400dddde38b3f8b94418fa438826a220b",
+      "rating": 5,
+      "confidence": "high",
+      "basis": "title-and-body",
+      "summary": "A strongly bullish Markkanen opinion based on efficient scoring, threes, low turnovers, and an expectation of less rest. The team-motivation claim is the author’s assumption.",
+      "mentions": [
+        {
+          "playerId": 4066336,
+          "playerName": "Lauri Markkanen",
+          "rating": 5,
+          "note": "Author strongly favors his category profile and expects more availability; verify the rest assumption.",
+          "aliases": [
+            "Lauri Markannen",
+            "Lauri"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1x6u4rb",
+      "subreddit": "fantasybball",
+      "url": "https://www.reddit.com/r/fantasybball/comments/1x6u4rb/yahoo_fantasy_appno_player_pictures/",
+      "title": "Yahoo Fantasy App..No Player pictures?",
+      "publishedAt": "2026-10-15T18:51:28.000Z",
+      "collectedAt": "2026-10-15T22:16:22.346Z",
+      "reviewedAt": "2026-10-15T22:22:09.733131+00:00",
+      "contentHash": "385bfd617d589612623899f84e70d0749f8ee5a9ee3e91718393132458d1f27f",
+      "rating": 3,
+      "confidence": "high",
+      "basis": "title-and-body",
+      "summary": "Yahoo player-photo display question. No player outlook.",
+      "mentions": []
+    },
+    {
+      "id": "1x6tyxb",
+      "subreddit": "nba",
+      "url": "https://www.reddit.com/r/nba/comments/1x6tyxb/giannis_on_the_miami_heat_squad_after_last_nights/",
+      "title": "Giannis on the Miami Heat squad after last night's game: “I feel like our chemistry is at an all-time high — obviously it can get better, but we have such a good group of guys that try to do the right thing and guys are cheering for one another…it’s fun. It’s fun being part of a group like that.\"",
+      "publishedAt": "2026-10-15T18:45:30.000Z",
+      "collectedAt": "2026-10-15T22:17:01.970Z",
+      "reviewedAt": "2026-10-15T22:22:09.733131+00:00",
+      "contentHash": "24eba1ae2b178190033f59ce1cb8a3f0c0b1224c2b7c3251bb63a6142b6b4e89",
+      "rating": 4,
+      "confidence": "low",
+      "basis": "title",
+      "summary": "Title attributes positive team-chemistry remarks to Giannis. This is a modest mood signal, with no new usage or minutes evidence.",
+      "mentions": [
+        {
+          "playerId": 3032977,
+          "playerName": "Giannis Antetokounmpo",
+          "rating": 4,
+          "note": "Positive chemistry quote; limited connection to fantasy output.",
+          "aliases": [
+            "Giannis"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1x6txqp",
+      "subreddit": "nba",
+      "url": "https://www.reddit.com/r/nba/comments/1x6txqp/highlights_victor_wembanyama_goes_for_the_block/",
+      "title": "[Highlights] Victor Wembanyama goes for the block, deflects the shot, but it still goes in, twice, in a span of 40 seconds.Ryan Dunn and Koa Peat with the bucket",
+      "publishedAt": "2026-10-15T18:44:20.000Z",
+      "collectedAt": "2026-10-15T22:17:01.970Z",
+      "reviewedAt": "2026-10-15T22:22:09.733131+00:00",
+      "contentHash": "eca18f969063c17cffe850c14311d314d77b39c08bc286cd65e6b9f50b8d22a5",
+      "rating": 3,
+      "confidence": "low",
+      "basis": "title",
+      "summary": "Two unusual preseason scoring plays in a highlight title. A pair of plays does not establish fantasy value.",
+      "mentions": [
+        {
+          "playerId": 5104157,
+          "playerName": "Victor Wembanyama",
+          "rating": null,
+          "note": "Highlight anecdote, not meaningful negative defensive evidence."
+        },
+        {
+          "playerId": 4888725,
+          "playerName": "Ryan Dunn",
+          "rating": null,
+          "note": "Named scorer in a brief highlight."
+        },
+        {
+          "playerId": 5041953,
+          "playerName": "Koa Peat",
+          "rating": null,
+          "note": "Named scorer in a brief highlight."
+        }
+      ]
+    },
+    {
+      "id": "1x6tqpf",
+      "subreddit": "fantasybball",
+      "url": "https://www.reddit.com/r/fantasybball/comments/1x6tqpf/who_are_some_players_you_think_will_be_rested_on/",
+      "title": "Who are some players you think will be rested on back to backs?",
+      "publishedAt": "2026-10-15T18:36:59.000Z",
+      "collectedAt": "2026-10-15T22:16:22.346Z",
+      "reviewedAt": "2026-10-15T22:22:09.733131+00:00",
+      "contentHash": "81701df65b4e3bf16ffeaf443818c3d1c3dcd58bfe7e629a9888608a9bb0f56f",
+      "rating": 2,
+      "confidence": "low",
+      "basis": "title-and-body",
+      "summary": "An unanswered question about possible back-to-back rest. The listed names are concerns to investigate, not a confirmed rest schedule.",
+      "mentions": [
+        {
+          "playerId": 6450,
+          "playerName": "Kawhi Leonard",
+          "rating": 2,
+          "note": "Named in a speculative rest question; no confirmed restriction.",
+          "aliases": [
+            "Kawhi"
+          ]
+        },
+        {
+          "playerId": 6606,
+          "playerName": "Damian Lillard",
+          "rating": 2,
+          "note": "Named in a speculative rest question; no confirmed restriction.",
+          "aliases": [
+            "Dame"
+          ]
+        },
+        {
+          "playerId": 6442,
+          "playerName": "Kyrie Irving",
+          "rating": 2,
+          "note": "Named in a speculative rest question; no confirmed restriction.",
+          "aliases": [
+            "Kyrie"
+          ]
+        },
+        {
+          "playerId": 4277905,
+          "playerName": "Trae Young",
+          "rating": 2,
+          "note": "Named in a speculative rest question; no confirmed restriction.",
+          "aliases": [
+            "Trae"
+          ]
+        },
+        {
+          "playerId": 4396993,
+          "playerName": "Tyrese Haliburton",
+          "rating": 2,
+          "note": "Named in a speculative rest question; no confirmed restriction.",
+          "aliases": [
+            "Hali"
+          ]
+        },
+        {
+          "playerId": 4065648,
+          "playerName": "Jayson Tatum",
+          "rating": 2,
+          "note": "Named in a speculative rest question; no confirmed restriction.",
+          "aliases": [
+            "Tatum"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1x6tnwc",
+      "subreddit": "fantasybball",
+      "url": "https://www.reddit.com/r/fantasybball/comments/1x6tnwc/what_do_people_think_about_third_round_reversal/",
+      "title": "What do people think about third round reversal for drafts?",
+      "publishedAt": "2026-10-15T18:34:00.000Z",
+      "collectedAt": "2026-10-15T22:16:22.346Z",
+      "reviewedAt": "2026-10-15T22:22:09.733131+00:00",
+      "contentHash": "6e028e23862a7012586de40e797fdd0e3e68c53d831229e16088bedf03b95aca",
+      "rating": 3,
+      "confidence": "medium",
+      "basis": "title-and-body",
+      "summary": "Discussion of third-round reversal as a response to first-pick advantage. The author uses their own league projections to argue that Jokic gives a large category edge.",
+      "mentions": [
+        {
+          "playerId": 3112335,
+          "playerName": "Nikola Jokic",
+          "rating": 4,
+          "note": "Author views him as a substantial category advantage even for an autopicked team; league-specific anecdote.",
+          "aliases": [
+            "Jokic"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1x6t5p0",
+      "subreddit": "fantasybball",
+      "url": "https://www.reddit.com/r/fantasybball/comments/1x6t5p0/issue_in_auto_draft_with_pre_ranking/",
+      "title": "Issue in auto draft with pre ranking",
+      "publishedAt": "2026-10-15T18:14:54.000Z",
+      "collectedAt": "2026-10-15T22:16:22.346Z",
+      "reviewedAt": "2026-10-15T22:22:09.733131+00:00",
+      "contentHash": "152e1f596843de1ff8f7df0dc6a242f06a9268fb595c03705542a1c42d7929eb",
+      "rating": 3,
+      "confidence": "high",
+      "basis": "title-and-body",
+      "summary": "Autodraft ordering question. The named players illustrate a software-selection problem, not a fantasy comparison.",
+      "mentions": [
+        {
+          "playerId": 5175737,
+          "playerName": "Yaxel Lendeborg",
+          "rating": null,
+          "note": "Appears in an autodraft-ordering example.",
+          "aliases": [
+            "Lendeborg"
+          ]
+        },
+        {
+          "playerId": 4278078,
+          "playerName": "P.J. Washington",
+          "rating": null,
+          "note": "Appears in an autodraft-ordering example.",
+          "aliases": [
+            "PJ Washington",
+            "PJ"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1x6t3sf",
+      "subreddit": "fantasybball",
+      "url": "https://www.reddit.com/r/fantasybball/comments/1x6t3sf/how_we_feeling_on_jaren_jackson_jr/",
+      "title": "How we feeling on Jaren Jackson Jr?",
+      "publishedAt": "2026-10-15T18:12:44.000Z",
+      "collectedAt": "2026-10-15T22:16:22.346Z",
+      "reviewedAt": "2026-10-15T22:22:09.733131+00:00",
+      "contentHash": "fa86eb7bae76bb7e42079af2304f2e5d80e9640ccf791272b43efae91fe5af6d",
+      "rating": 4,
+      "confidence": "high",
+      "basis": "title-and-body",
+      "summary": "Author likes Jackson around the fourth round for blocks, threes, and scoring, while questioning Kessler’s price premium. This is a category-value opinion.",
+      "mentions": [
+        {
+          "playerId": 4277961,
+          "playerName": "Jaren Jackson Jr.",
+          "rating": 4,
+          "note": "Author favors the quoted fourth-round cost for blocks plus scoring and threes.",
+          "aliases": [
+            "JJJ"
+          ]
+        },
+        {
+          "playerId": 4433136,
+          "playerName": "Walker Kessler",
+          "rating": 2,
+          "note": "Author questions paying a premium relative to Jackson; the objection is price.",
+          "aliases": [
+            "Kessler"
+          ]
+        },
+        {
+          "playerId": 5105565,
+          "playerName": "Donovan Clingan",
+          "rating": null,
+          "note": "Draft-cost comparison; no separate recommendation.",
+          "aliases": [
+            "Clingan"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1x6t2pw",
+      "subreddit": "nba",
+      "url": "https://www.reddit.com/r/nba/comments/1x6t2pw/i_think_the_minutes_disparity_of_the_player/",
+      "title": "I think the minutes disparity of the player rotations in the preseason is better than the regular season",
+      "publishedAt": "2026-10-15T18:11:42.000Z",
+      "collectedAt": "2026-10-15T22:17:01.970Z",
+      "reviewedAt": "2026-10-15T22:22:09.733131+00:00",
+      "contentHash": "257fd24629eca67f3dc9b28bc591aa6b4bcce8fea9c94288068c5352e486610f",
+      "rating": 3,
+      "confidence": "high",
+      "basis": "title-and-body",
+      "summary": "Hypothetical league-wide minutes cap. It is an idea from a fan, not a rule change or a projection adjustment.",
+      "mentions": []
+    },
+    {
+      "id": "1x6t0dj",
+      "subreddit": "fantasybball",
+      "url": "https://www.reddit.com/r/fantasybball/comments/1x6t0dj/fantasy_name_help/",
+      "title": "Fantasy name help!",
+      "publishedAt": "2026-10-15T18:09:12.000Z",
+      "collectedAt": "2026-10-15T22:16:22.346Z",
+      "reviewedAt": "2026-10-15T22:22:09.733131+00:00",
+      "contentHash": "8754e4fff6564787ba73d50ba30e7d1699658d6c191aba8bed49c1d91237585c",
+      "rating": 3,
+      "confidence": "high",
+      "basis": "title-and-body",
+      "summary": "Team-name brainstorming based on a roster. Owning or naming these players does not constitute an endorsement.",
+      "mentions": [
+        {
+          "playerId": 4432166,
+          "playerName": "Cade Cunningham",
+          "rating": null,
+          "note": "Listed for team-name wordplay."
+        },
+        {
+          "playerId": 3936299,
+          "playerName": "Jamal Murray",
+          "rating": null,
+          "note": "Listed for team-name wordplay."
+        },
+        {
+          "playerId": 3136193,
+          "playerName": "Devin Booker",
+          "rating": null,
+          "note": "Listed for team-name wordplay."
+        },
+        {
+          "playerId": 4433621,
+          "playerName": "Jalen Duren",
+          "rating": null,
+          "note": "Listed for team-name wordplay."
+        },
+        {
+          "playerId": 4683021,
+          "playerName": "Deni Avdija",
+          "rating": null,
+          "note": "Listed for team-name wordplay; source has a spelling error.",
+          "aliases": [
+            "Demi Avdija"
+          ]
+        },
+        {
+          "playerId": 5041935,
+          "playerName": "Cameron Boozer",
+          "rating": null,
+          "note": "Listed for team-name wordplay."
+        },
+        {
+          "playerId": 4591725,
+          "playerName": "Ryan Rollins",
+          "rating": null,
+          "note": "Listed for team-name wordplay."
+        },
+        {
+          "playerId": 4066328,
+          "playerName": "Jarrett Allen",
+          "rating": null,
+          "note": "Listed for team-name wordplay."
+        },
+        {
+          "playerId": 4251,
+          "playerName": "Paul George",
+          "rating": null,
+          "note": "Listed for team-name wordplay."
+        },
+        {
+          "playerId": 4432639,
+          "playerName": "Jabari Smith Jr.",
+          "rating": null,
+          "note": "Listed for team-name wordplay.",
+          "aliases": [
+            "Jabari Smith"
+          ]
+        },
+        {
+          "playerId": 4432165,
+          "playerName": "Jalen Suggs",
+          "rating": null,
+          "note": "Listed for team-name wordplay."
+        },
+        {
+          "playerId": 4278067,
+          "playerName": "Nic Claxton",
+          "rating": null,
+          "note": "Listed for team-name wordplay."
+        },
+        {
+          "playerId": 4278585,
+          "playerName": "Collin Gillespie",
+          "rating": null,
+          "note": "Listed for team-name wordplay."
+        }
+      ]
+    },
+    {
+      "id": "1x6suyn",
+      "subreddit": "fantasybball",
+      "url": "https://www.reddit.com/r/fantasybball/comments/1x6suyn/ben_simmons_projections/",
+      "title": "Ben Simmons Projections",
+      "publishedAt": "2026-10-15T18:03:40.000Z",
+      "collectedAt": "2026-10-15T22:16:22.346Z",
+      "reviewedAt": "2026-10-15T22:22:09.733131+00:00",
+      "contentHash": "f958a754206b54b037fac0fb573efd5bfe7751893b6d8ff67cd1cc882e14f72f",
+      "rating": 3,
+      "confidence": "low",
+      "basis": "title-and-body",
+      "summary": "Author asks how to project Simmons after saying he is listed as a starter. Minutes and the premise are unverified in this sample; replies were not collected.",
+      "mentions": [
+        {
+          "playerId": 3907387,
+          "playerName": "Ben Simmons",
+          "rating": 3,
+          "note": "Possible starting role is the poster’s premise, with minutes unresolved."
+        }
+      ]
+    },
+    {
+      "id": "1x6suti",
+      "subreddit": "nba",
+      "url": "https://www.reddit.com/r/nba/comments/1x6suti/bill_simmons_talking_about_the_kings_sub_when/",
+      "title": "Bill Simmons talking about the Kings sub: “When something bad happens, it’s one of the funniest places on the internet. All of them are stand up comedians at this point...”",
+      "publishedAt": "2026-10-15T18:03:31.000Z",
+      "collectedAt": "2026-10-15T22:17:01.970Z",
+      "reviewedAt": "2026-10-15T22:22:09.733131+00:00",
+      "contentHash": "f4176441a5cb4df573da16f1b4658ab65c539dd07d439bb499d410ff985b5360",
+      "rating": 3,
+      "confidence": "low",
+      "basis": "title",
+      "summary": "A joke about a fan community. No player outlook.",
+      "mentions": []
+    },
+    {
+      "id": "1x6srug",
+      "subreddit": "nba",
+      "url": "https://www.reddit.com/r/nba/comments/1x6srug/if_the_warriors_had_gotten_lebron_in_2014_how/",
+      "title": "If the Warriors had gotten Lebron in 2014, how many rings do you think Steph and Lebron would've won together? Would they eventually have clashed like Shaq and Kobe?",
+      "publishedAt": "2026-10-15T18:00:37.000Z",
+      "collectedAt": "2026-10-15T22:17:01.970Z",
+      "reviewedAt": "2026-10-15T22:22:09.733131+00:00",
+      "contentHash": "13f653aa2a2255770c3fcd993c4c2b8d8bc9aa113444396a9c2f5173a2c9172f",
+      "rating": 3,
+      "confidence": "low",
+      "basis": "title",
+      "summary": "Historical hypothetical about a team-up in 2014. No current-season fantasy outlook.",
+      "mentions": [
+        {
+          "playerId": 3975,
+          "playerName": "Stephen Curry",
+          "rating": null,
+          "note": "Historical counterfactual only.",
+          "aliases": [
+            "Steph"
+          ]
+        },
+        {
+          "playerId": 1966,
+          "playerName": "LeBron James",
+          "rating": null,
+          "note": "Historical counterfactual only.",
+          "aliases": [
+            "Lebron"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1x6s9fd",
+      "subreddit": "nba",
+      "url": "https://www.reddit.com/r/nba/comments/1x6s9fd/highlight_kasparas_jakučionis_banks_in_the_circus/",
+      "title": "[Highlight] Kasparas Jakučionis banks in the circus shot And-1 against the Bulls - preseason (with replays)",
+      "publishedAt": "2026-10-15T17:40:54.000Z",
+      "collectedAt": "2026-10-15T22:17:01.970Z",
+      "reviewedAt": "2026-10-15T22:22:09.733131+00:00",
+      "contentHash": "214f8de37a8275819fa0eaee25f4f1aab2e40acd5a90a7fc3cc87600c1d311ef",
+      "rating": 3,
+      "confidence": "low",
+      "basis": "title",
+      "summary": "One preseason highlight with no broader line or role evidence.",
+      "mentions": [
+        {
+          "playerId": 5214640,
+          "playerName": "Kasparas Jakucionis",
+          "rating": null,
+          "note": "A single highlight is insufficient for a fantasy assessment."
+        }
+      ]
+    },
+    {
+      "id": "1x6s4bd",
+      "subreddit": "nba",
+      "url": "https://www.reddit.com/r/nba/comments/1x6s4bd/highlights_kam_jones_full_highlights_vs_chicago/",
+      "title": "[Highlights] Kam Jones full highlights vs. Chicago Bulls (125-104 L) - preseason:23 Points on 9/14 FG (64.3%), 2/6 from 3, 3/5 FT, 4 Rebounds (1 Off. Reb), 1 Assist (3 TOV), 1 Steal, 3 PF, and a +/- of -2 in 22:16 minutes played off the bench.",
+      "publishedAt": "2026-10-15T17:35:28.000Z",
+      "collectedAt": "2026-10-15T22:17:01.970Z",
+      "reviewedAt": "2026-10-15T22:22:09.733131+00:00",
+      "contentHash": "5c79227e2d24ab54bbe368bd39dda048d7978240e171e318ad02751238dd7e85",
+      "rating": 4,
+      "confidence": "medium",
+      "basis": "title",
+      "summary": "Title reports efficient preseason scoring off the bench. Encouraging production in one game does not establish a regular-season rotation role.",
+      "mentions": [
+        {
+          "playerId": 4697268,
+          "playerName": "Kam Jones",
+          "rating": 4,
+          "note": "Reported 23 points in roughly 22 bench minutes are encouraging; sustained role unknown."
+        }
+      ]
+    },
+    {
+      "id": "1x6ry2a",
+      "subreddit": "nba",
+      "url": "https://www.reddit.com/r/nba/comments/1x6ry2a/highlights_brayden_burries_full_highlights_vs/",
+      "title": "[Highlights] Brayden Burries full highlights vs. Chicago Bulls (125-104 L) - preseason:19 Points on 5/12 FG (41.7%), 1/6 from 3 (16.7%), 8/8 from the line, 5 Rebounds (3 Off. Rebs), 5 Assists (3 TOV), 4 Steals, 1 PF, and a +/- of -15 in 28:33 minutes played.",
+      "publishedAt": "2026-10-15T17:28:46.000Z",
+      "collectedAt": "2026-10-15T22:17:01.970Z",
+      "reviewedAt": "2026-10-15T22:22:09.733131+00:00",
+      "contentHash": "e6cc4b5c97f223a19d3ab72869c8a5231b1f1b3a2df884c92ce916c233cf4251",
+      "rating": 4,
+      "confidence": "medium",
+      "basis": "title",
+      "summary": "Title reports a broad preseason line with steals and free throws, offset by poor three-point shooting. One-game evidence only.",
+      "mentions": [
+        {
+          "playerId": 5082206,
+          "playerName": "Brayden Burries",
+          "rating": 4,
+          "note": "Reported scoring, five assists and four steals suggest upside; one preseason sample."
+        }
+      ]
+    },
+    {
+      "id": "1x6ruie",
+      "subreddit": "nba",
+      "url": "https://www.reddit.com/r/nba/comments/1x6ruie/yaxel_on_vogel_telling_him_he_had_to_guard_luka/",
+      "title": "Yaxel on Vogel telling him he had to guard Luka: “I’m on my phone chilling. He walks up to me, ‘Hey, you're guarding Luka tonight.’ I said, ‘What the fuck?’ Like, he's just going to throw me in. I'm like, ‘What the hell?’ I was spooked, man. He’s like, ‘Nobody can stop him. Do your best.’",
+      "publishedAt": "2026-10-15T17:25:00.000Z",
+      "collectedAt": "2026-10-15T22:17:01.970Z",
+      "reviewedAt": "2026-10-15T22:22:09.733131+00:00",
+      "contentHash": "e7b8a17e24e42d9b01cea8328fa745c9a86d8c13a45e8eeb3ad95fa35ec73146",
+      "rating": 3,
+      "confidence": "low",
+      "basis": "title",
+      "summary": "A defensive-assignment anecdote praising Doncic’s difficulty to guard. It adds no usage or minutes evidence.",
+      "mentions": [
+        {
+          "playerId": 5175737,
+          "playerName": "Yaxel Lendeborg",
+          "rating": null,
+          "note": "Defensive-assignment anecdote rather than fantasy evaluation.",
+          "aliases": [
+            "Yaxel"
+          ]
+        },
+        {
+          "playerId": 3945274,
+          "playerName": "Luka Doncic",
+          "rating": null,
+          "note": "Praise within an anecdote; no new season outlook.",
+          "aliases": [
+            "Luka"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1x6rs3i",
+      "subreddit": "nba",
+      "url": "https://www.reddit.com/r/nba/comments/1x6rs3i/highlights_jonathan_kuminga_full_highlights_vs/",
+      "title": "[Highlights] Jonathan Kuminga full highlights vs. Detroit Pistons (128-106 L) - preseason:16 Points on 5/6 FG (83.3%), 2/3 from 3, 4/5 FT, 4 Rebounds (1 Off. Reb), 3 Assists (1 TOV), 1 Steal, 3 PF, and a +/- of -4 in 21:55 minutes played.",
+      "publishedAt": "2026-10-15T17:22:31.000Z",
+      "collectedAt": "2026-10-15T22:17:01.970Z",
+      "reviewedAt": "2026-10-15T22:22:09.733131+00:00",
+      "contentHash": "a9fff9390e1b84ffed910cf4c93dfb4345e08e85a204b4610655d72ed1ed8e83",
+      "rating": 4,
+      "confidence": "medium",
+      "basis": "title",
+      "summary": "Efficient preseason scoring and some secondary stats in the title. A small exhibition sample, with no firm role forecast.",
+      "mentions": [
+        {
+          "playerId": 4433247,
+          "playerName": "Jonathan Kuminga",
+          "rating": 4,
+          "note": "Reported efficient 16-point line is encouraging; role and consistency untested here."
+        }
+      ]
+    },
+    {
+      "id": "1x6rjkl",
+      "subreddit": "nba",
+      "url": "https://www.reddit.com/r/nba/comments/1x6rjkl/highlights_cade_cunningham_full_highlights_vs/",
+      "title": "[Highlights] Cade Cunningham full highlights vs. Minnesota Timberwolves (128-106 W) - preseason:16 Points on 5/11 FG (45.5%), 2/4 from 3, 4/4 from the line, 2 Rebounds, 9 Assists (5 TOV), 1 Steal, 3 PF, and a +/- of +11 in 25:09 minutes",
+      "publishedAt": "2026-10-15T17:13:47.000Z",
+      "collectedAt": "2026-10-15T22:17:01.970Z",
+      "reviewedAt": "2026-10-15T22:22:09.733131+00:00",
+      "contentHash": "28f94e28584834c0c0153bc56d3927b76c53b1af99da8f35e09e2f7671296312",
+      "rating": 4,
+      "confidence": "medium",
+      "basis": "title",
+      "summary": "Title reports scoring and nine assists, with five turnovers. Positive creation evidence from one preseason game.",
+      "mentions": [
+        {
+          "playerId": 4432166,
+          "playerName": "Cade Cunningham",
+          "rating": 4,
+          "note": "Nine reported assists are encouraging; five turnovers reduce points-league value in this sample."
+        }
+      ]
+    },
+    {
+      "id": "1x6rctq",
+      "subreddit": "fantasybball",
+      "url": "https://www.reddit.com/r/fantasybball/comments/1x6rctq/cats_kessler_vs_gobert/",
+      "title": "[Cats] Kessler vs Gobert",
+      "publishedAt": "2026-10-15T17:06:51.000Z",
+      "collectedAt": "2026-10-15T22:16:22.346Z",
+      "reviewedAt": "2026-10-15T22:22:09.733131+00:00",
+      "contentHash": "02eb9212b1871701743e83a48227bb6b24afd73143872afcdabecdb6d3aadbb3",
+      "rating": 3,
+      "confidence": "medium",
+      "basis": "title-and-body",
+      "summary": "Author questions the category-price gap between Kessler and Gobert, citing similar projections and a perceived health edge for Gobert. No replies or consensus were collected.",
+      "mentions": [
+        {
+          "playerId": 4433136,
+          "playerName": "Walker Kessler",
+          "rating": 3,
+          "note": "Author questions whether extra blocks justify the quoted price premium.",
+          "aliases": [
+            "Kessler"
+          ]
+        },
+        {
+          "playerId": 3032976,
+          "playerName": "Rudy Gobert",
+          "rating": 4,
+          "note": "Author frames the lower quoted price and perceived availability as potential value.",
+          "aliases": [
+            "Gobert"
+          ]
+        },
+        {
+          "playerId": 3945274,
+          "playerName": "Luka Doncic",
+          "rating": null,
+          "note": "Possible explanation for Kessler’s projections, not a separate recommendation.",
+          "aliases": [
+            "Luka"
+          ]
+        },
+        {
+          "playerId": 4433621,
+          "playerName": "Jalen Duren",
+          "rating": null,
+          "note": "Mentioned as another center for comparison.",
+          "aliases": [
+            "Duren"
+          ]
+        },
+        {
+          "playerId": 5105565,
+          "playerName": "Donovan Clingan",
+          "rating": null,
+          "note": "Mentioned as another center for comparison.",
+          "aliases": [
+            "Clingan"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1x6qhuj",
+      "subreddit": "fantasybball",
+      "url": "https://www.reddit.com/r/fantasybball/comments/1x6qhuj/fantasy_basketball_punt_assists_and_blocks_guide/",
+      "title": "Fantasy basketball punt assists and blocks guide",
+      "publishedAt": "2026-10-15T16:34:27.000Z",
+      "collectedAt": "2026-10-15T22:16:22.346Z",
+      "reviewedAt": "2026-10-15T22:22:09.733131+00:00",
+      "contentHash": "55eb3cc6f76713d935b58db59c66fa2771bdfeba04747d201cbc873148bf1954",
+      "rating": 3,
+      "confidence": "high",
+      "basis": "title-and-body",
+      "summary": "Links to community punt-assists and punt-blocks guides. The linked pages were not collected, and category punts do not directly apply to this points league.",
+      "mentions": []
+    },
+    {
+      "id": "1x6ot46",
+      "subreddit": "fantasybball",
+      "url": "https://www.reddit.com/r/fantasybball/comments/1x6ot46/who_should_i_draft_player_vs_player_discussion/",
+      "title": "Who Should I Draft / Player vs Player Discussion - October 15, 2026",
+      "publishedAt": "2026-10-15T15:31:02.000Z",
+      "collectedAt": "2026-10-15T22:16:22.346Z",
+      "reviewedAt": "2026-10-15T22:22:09.733131+00:00",
+      "contentHash": "69a326fc9cb26d8f75ba482651fca30891b4b35ed7976e3338afc4de45d3faec",
+      "rating": 3,
+      "confidence": "high",
+      "basis": "title-and-body",
+      "summary": "Daily draft discussion container. Player advice would be in the replies, which this RSS collection does not include.",
+      "mentions": []
+    },
+    {
+      "id": "1x6ocpu",
+      "subreddit": "fantasybball",
+      "url": "https://www.reddit.com/r/fantasybball/comments/1x6ocpu/20262027_fantasy_basketball_cheat_sheet_categories/",
+      "title": "2026-2027 Fantasy Basketball Cheat Sheet (Categories)",
+      "publishedAt": "2026-10-15T15:14:25.000Z",
+      "collectedAt": "2026-10-15T22:16:22.346Z",
+      "reviewedAt": "2026-10-15T22:22:09.733131+00:00",
+      "contentHash": "b5a032b991d94bc7b8cfbc53b7a9fd85025e1cb3675178c091dc3d7398cac02e",
+      "rating": 3,
+      "confidence": "low",
+      "basis": "title",
+      "summary": "Title advertises a categories cheat sheet. The sheet was not fetched; no player rankings are available in the RSS title.",
+      "mentions": []
+    },
+    {
+      "id": "1x6nhu9",
+      "subreddit": "fantasybball",
+      "url": "https://www.reddit.com/r/fantasybball/comments/1x6nhu9/confused_on_league_scoring_2fgm_1fga/",
+      "title": "Confused on League scoring 2FGM - 1FGA",
+      "publishedAt": "2026-10-15T14:42:32.000Z",
+      "collectedAt": "2026-10-15T22:16:22.346Z",
+      "reviewedAt": "2026-10-15T22:22:09.733131+00:00",
+      "contentHash": "679ddc1c13a8c18858f64c0c217946a74c91a9edfaae5234afdae21736afaed4",
+      "rating": 3,
+      "confidence": "high",
+      "basis": "title-and-body",
+      "summary": "Scoring question corrected by the author after realizing points scored also count. Do not treat the initial mistaken totals as a negative player evaluation.",
+      "mentions": [
+        {
+          "playerId": 4432166,
+          "playerName": "Cade Cunningham",
+          "rating": null,
+          "note": "Example in an acknowledged scoring misunderstanding.",
+          "aliases": [
+            "Cade"
+          ]
+        },
+        {
+          "playerId": 4594268,
+          "playerName": "Anthony Edwards",
+          "rating": null,
+          "note": "Example in an acknowledged scoring misunderstanding.",
+          "aliases": [
+            "ANT"
+          ]
+        },
+        {
+          "playerId": 4351852,
+          "playerName": "Mitchell Robinson",
+          "rating": null,
+          "note": "Hypothetical concern based on the scoring misunderstanding, not a supported avoid signal."
+        }
+      ]
+    },
+    {
+      "id": "1x6l9cb",
+      "subreddit": "fantasybball",
+      "url": "https://www.reddit.com/r/fantasybball/comments/1x6l9cb/gms_that_has_been_playing_for_decades/",
+      "title": "GMs that has been playing for decades.",
+      "publishedAt": "2026-10-15T13:11:50.000Z",
+      "collectedAt": "2026-10-15T22:16:22.346Z",
+      "reviewedAt": "2026-10-15T22:22:09.733131+00:00",
+      "contentHash": "399cbfd807c9508c64b1d2a59cc273da48c7cad971ff486ae4b43a1e3b962b6d",
+      "rating": 3,
+      "confidence": "high",
+      "basis": "title-and-body",
+      "summary": "General question about identifying preseason bench opportunities. No named players or collected answers.",
+      "mentions": []
+    },
+    {
+      "id": "1x6l5cc",
+      "subreddit": "fantasybball",
+      "url": "https://www.reddit.com/r/fantasybball/comments/1x6l5cc/how_to_change_continuous_fab_on_espn/",
+      "title": "How to change continuous FAB on ESPN",
+      "publishedAt": "2026-10-15T13:07:00.000Z",
+      "collectedAt": "2026-10-15T22:16:22.346Z",
+      "reviewedAt": "2026-10-15T22:22:09.733131+00:00",
+      "contentHash": "a116d92c91d4bedbdbabfffcd5e331da339bc9eb3b61a7db4ceddbabc90c68d3",
+      "rating": 3,
+      "confidence": "high",
+      "basis": "title-and-body",
+      "summary": "ESPN waiver-settings question. No player outlook.",
+      "mentions": []
+    },
+    {
+      "id": "1x6jtkw",
+      "subreddit": "fantasybball",
+      "url": "https://www.reddit.com/r/fantasybball/comments/1x6jtkw/dynasty_rankings_risersfallers/",
+      "title": "Dynasty Rankings + Risers/Fallers",
+      "publishedAt": "2026-10-15T12:03:53.000Z",
+      "collectedAt": "2026-10-15T22:16:22.346Z",
+      "reviewedAt": "2026-10-15T22:22:09.733131+00:00",
+      "contentHash": "894c9b64fb77ae74e53b65cb139714a2bf5347ef7716e1a0737de8e692af4ee2",
+      "rating": 3,
+      "confidence": "low",
+      "basis": "title",
+      "summary": "Title advertises dynasty risers and fallers, but the rankings are absent from the RSS content. No player ratings can be extracted.",
+      "mentions": []
+    },
+    {
+      "id": "1x6jltt",
+      "subreddit": "fantasybball",
+      "url": "https://www.reddit.com/r/fantasybball/comments/1x6jltt/team_names/",
+      "title": "Team names",
+      "publishedAt": "2026-10-15T11:53:24.000Z",
+      "collectedAt": "2026-10-15T22:16:22.346Z",
+      "reviewedAt": "2026-10-15T22:22:09.733131+00:00",
+      "contentHash": "55eda615a7ea21bbfc1145b5e9f4e9e4cfed2231adaae5d85b7bedbfe7971900",
+      "rating": 3,
+      "confidence": "high",
+      "basis": "title-and-body",
+      "summary": "Team-name request. Named players appear only for wordplay.",
+      "mentions": [
+        {
+          "playerId": 4065648,
+          "playerName": "Jayson Tatum",
+          "rating": null,
+          "note": "Team-name wordplay only.",
+          "aliases": [
+            "Tatum"
+          ]
+        },
+        {
+          "playerId": 4871144,
+          "playerName": "Alperen Sengun",
+          "rating": null,
+          "note": "Team-name wordplay only.",
+          "aliases": [
+            "Sengun"
+          ]
+        },
+        {
+          "playerId": 4432573,
+          "playerName": "Paolo Banchero",
+          "rating": null,
+          "note": "Team-name wordplay only.",
+          "aliases": [
+            "Paolo"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "1x6iokq",
+      "subreddit": "fantasybball",
+      "url": "https://www.reddit.com/r/fantasybball/comments/1x6iokq/official_anything_goes_morning_thread_october_15/",
+      "title": "Official: Anything Goes Morning Thread: October 15, 2026",
+      "publishedAt": "2026-10-15T11:02:34.000Z",
+      "collectedAt": "2026-10-15T22:16:22.346Z",
+      "reviewedAt": "2026-10-15T22:22:09.733131+00:00",
+      "contentHash": "657508b14c57bc04af5e52bf4547297360ffce8cdbaee54d26e9d9111f7b35b5",
+      "rating": 3,
+      "confidence": "high",
+      "basis": "title-and-body",
+      "summary": "Daily discussion container with posting guidance and resource links. No player-specific advice in the original post; replies were not collected.",
+      "mentions": []
+    },
+    {
+      "id": "1x6hvn9",
+      "subreddit": "fantasybball",
+      "url": "https://www.reddit.com/r/fantasybball/comments/1x6hvn9/punt_blocks_strategy_in_auction_draft/",
+      "title": "Punt Blocks Strategy in Auction Draft",
+      "publishedAt": "2026-10-15T10:15:28.000Z",
+      "collectedAt": "2026-10-15T22:16:22.346Z",
+      "reviewedAt": "2026-10-15T22:22:09.733131+00:00",
+      "contentHash": "766bcfdec96b1466d3de75519a9e8cd7d9e5c9301f828ecdb027857890b1312e",
+      "rating": 4,
+      "confidence": "medium",
+      "basis": "title-and-body",
+      "summary": "Author proposes paying extra for players who fit a punt-blocks build. These are conditional category targets, not recommendations for this points league.",
+      "mentions": [
+        {
+          "playerId": 3155942,
+          "playerName": "Domantas Sabonis",
+          "rating": 4,
+          "note": "Proposed target specifically for a punt-blocks category build.",
+          "aliases": [
+            "Sabonis"
+          ]
+        },
+        {
+          "playerId": 4395724,
+          "playerName": "Immanuel Quickley",
+          "rating": 4,
+          "note": "Proposed target specifically for a punt-blocks category build.",
+          "aliases": [
+            "Quickley"
+          ]
+        },
+        {
+          "playerId": 4066354,
+          "playerName": "Payton Pritchard",
+          "rating": 4,
+          "note": "Proposed target specifically for a punt-blocks category build.",
+          "aliases": [
+            "Pritchard"
+          ]
+        },
+        {
+          "playerId": 4066259,
+          "playerName": "De'Aaron Fox",
+          "rating": 4,
+          "note": "Proposed target specifically for a punt-blocks category build.",
+          "aliases": [
+            "Fox"
+          ]
+        },
+        {
+          "playerId": 3064514,
+          "playerName": "Julius Randle",
+          "rating": 4,
+          "note": "Proposed target specifically for a punt-blocks category build.",
+          "aliases": [
+            "Randle"
+          ]
+        },
+        {
+          "playerId": 3908845,
+          "playerName": "John Collins",
+          "rating": 4,
+          "note": "Proposed target specifically for a punt-blocks category build."
+        }
+      ]
+    },
+    {
+      "id": "1x6hqgb",
+      "subreddit": "fantasybball",
+      "url": "https://www.reddit.com/r/fantasybball/comments/1x6hqgb/any_proven_punt_strategy_that_win_leagues_any_tips/",
+      "title": "Any proven punt strategy that win leagues any tips",
+      "publishedAt": "2026-10-15T10:07:17.000Z",
+      "collectedAt": "2026-10-15T22:16:22.346Z",
+      "reviewedAt": "2026-10-15T22:22:09.733131+00:00",
+      "contentHash": "d4a8ae4a3cf75104016484292cf0a55b436057416ab61d000c326d7d24bc8d1e",
+      "rating": 3,
+      "confidence": "high",
+      "basis": "title-and-body",
+      "summary": "Open-ended request for punt-strategy advice. No players or answers in the collected original post.",
+      "mentions": []
+    }
+  ]
+}

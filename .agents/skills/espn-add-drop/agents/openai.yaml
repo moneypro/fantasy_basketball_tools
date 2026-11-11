@@ -1,0 +1,4 @@
+interface:
+  display_name: "ESPN Add / Drop"
+  short_description: "Handle paired pickups, waiver claims, and activation"
+  default_prompt: "Use $espn-add-drop for my authorized free-agent replacement or waiver claim, verify its status, and activate the pickup once acquired."
