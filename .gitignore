@@ -27,3 +27,4 @@ logs/
 *.log
 .DS_Store
 tools/FANTASY_ASSISTANT.md
+.codex/config.toml*
